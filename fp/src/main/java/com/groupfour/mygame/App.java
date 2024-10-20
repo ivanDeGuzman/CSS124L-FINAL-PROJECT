@@ -209,7 +209,7 @@ public class App extends GameApplication {
                 server.startAsync();
                 waitingForPlayers();
             } else {
-                var client = getNetService().newTCPClient("10.1.21.51", 55555);
+                var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
                     getExecutor().startAsyncFX(() -> {
