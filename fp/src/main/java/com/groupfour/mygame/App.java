@@ -10,12 +10,18 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
+import com.groupfour.Collisions.BulletZombieHandler;
+import com.groupfour.Collisions.ZombiePlayerHandler;
 import com.groupfour.Components.BulletComponent;
+import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
-import com.groupfour.Components.EntityTypes.EntityType;
+import com.groupfour.Factories.SpawnFactory;
+import com.groupfour.Factories.ZombieFactory;
+import com.groupfour.mygame.EntityTypes.EntityType;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -37,7 +43,8 @@ public class App extends GameApplication {
     private boolean isShootingP2 = false;
     private double timeSinceLastShotP1 = 0;
     private double timeSinceLastShotP2 = 0;
-    private double shootInterval = 0.2; 
+    private double shootInterval = 0.2;
+    private PhysicsWorld physics;
 
     private Input gameInput;
     private Connection<Bundle> connection;
@@ -67,14 +74,51 @@ public class App extends GameApplication {
             }
         });
 }
+
     @Override
     protected void initInput() {
         if (!isServer) {
-            onKey(KeyCode.W, () -> player1.translateY(-2));
-            onKey(KeyCode.S, () -> player1.translateY(2));
-            onKey(KeyCode.A, () -> player1.translateX(-2));
-            onKey(KeyCode.D, () -> player1.translateX(2));
-    
+            Input playerInput = getInput();
+            playerInput.addAction(new UserAction("Move Up") {
+                @Override
+                protected void onAction() {
+                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
+                        if (isShootingP1) player1.translateY(-0.7);
+                        else player1.translateY(-2);
+                    }
+                }
+            }, KeyCode.W);
+
+            playerInput.addAction(new UserAction("Move Down") {
+                @Override
+                protected void onAction() {
+                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
+                        if (isShootingP1) player1.translateY(0.7);
+                        else player1.translateY(2);
+                    }
+                }
+            }, KeyCode.S);
+
+            playerInput.addAction(new UserAction("Move Left") {
+                @Override
+                protected void onAction() {
+                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
+                        if (isShootingP1) player1.translateX(-0.7);
+                        else player1.translateX(-2);
+                    }
+                }
+            }, KeyCode.A);
+
+            playerInput.addAction(new UserAction("Move Right") {
+                @Override
+                protected void onAction() {
+                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
+                        if (isShootingP1) player1.translateX(0.7);
+                        else player1.translateX(2);
+                    }
+                }
+            }, KeyCode.D);
+
             getInput().addAction(new UserAction("Start Shooting for Player 1") {
                 @Override
                 protected void onActionBegin() {
@@ -86,46 +130,45 @@ public class App extends GameApplication {
                 }
             }, MouseButton.PRIMARY);
         }
-    
-        gameInput = new Input();
         
-        onKeyBuilder(gameInput, KeyCode.W)
-                .onAction(() -> player2.translateY(-2));
-        onKeyBuilder(gameInput, KeyCode.S)
-                .onAction(() -> player2.translateY(2));
-        onKeyBuilder(gameInput, KeyCode.A)
-                .onAction(() -> player2.translateX(-2));
-        onKeyBuilder(gameInput, KeyCode.D)
-                .onAction(() -> player2.translateX(2));
-        
-        gameInput.addAction(new UserAction("Start Shooting for Player 2") {
-            @Override
-            protected void onActionBegin() {
-                isShootingP2 = true; 
-            }
-            @Override
-            protected void onActionEnd() {
-                isShootingP2 = false; 
-            }
-        }, MouseButton.PRIMARY);
-    }
+            gameInput = new Input();
+            
+            onKeyBuilder(gameInput, KeyCode.W)
+                    .onAction(() -> player2.translateY(-2));
+            onKeyBuilder(gameInput, KeyCode.S)
+                    .onAction(() -> player2.translateY(2));
+            onKeyBuilder(gameInput, KeyCode.A)
+                    .onAction(() -> player2.translateX(-2));
+            onKeyBuilder(gameInput, KeyCode.D)
+                    .onAction(() -> player2.translateX(2));
+            
+            gameInput.addAction(new UserAction("Start Shooting for Player 2") {
+                @Override
+                protected void onActionBegin() {
+                    isShootingP2 = true; 
+                }
+                @Override
+                protected void onActionEnd() {
+                    isShootingP2 = false; 
+                }
+            }, MouseButton.PRIMARY);
+        }
     
     @Override
     public void initPhysics() {
-        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BULLET, EntityType.ZOMBIE) {
-            @Override
-            protected void onCollisionBegin(Entity bullet, Entity zombie) {
-                bullet.removeFromWorld(); 
-                if (isServer) {
-                    zombie.removeFromWorld();
-                    getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                } else {
-                    zombie.removeFromWorld();
-                }
-            }
-        });
+        physics = getPhysicsWorld();
+        if (isServer) {
+            physics.addCollisionHandler(new BulletZombieHandler());
+            physics.addCollisionHandler(new ZombiePlayerHandler());
+            getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+            FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+        } else
+            physics.addCollisionHandler(new BulletZombieHandler());
+            physics.addCollisionHandler(new ZombiePlayerHandler());
+            FXGL.run(() -> checkCollisions(), Duration.seconds(1));
     }
-        public void shoot(Point2D shootPoint, Entity player) {
+
+    public void shoot(Point2D shootPoint, Entity player) {
         Point2D position = player.getCenter();
         Point2D vectorToMouse = shootPoint.subtract(position).normalize();
 
@@ -135,34 +178,12 @@ public class App extends GameApplication {
     private void spawnBullet(Point2D position, Point2D direction) {
         var data = new SpawnData(position.getX(), position.getY())
                 .put("direction", direction);
-
         Entity bullet = spawn("bullet", data);
         bullet.getComponent(BulletComponent.class).setDirection(direction);
 
         if (isServer) {
             getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
         }
-    }
-
-
-
-     @Override
-     protected void initGame() {
-
-        getPhysicsWorld().addCollisionHandler(new CollisionHandler("bullet", "zombie") {
-            @Override
-            protected void onCollisionBegin(Entity bullet, Entity zombie) {
-                bullet.removeFromWorld();
-                zombie.removeFromWorld();
-    
-                if (isServer) {
-                    getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                } else {
-                    zombie.removeFromWorld();
-                }
-            }
-        });
-
     }
         
      @Override
@@ -178,6 +199,7 @@ public class App extends GameApplication {
         getSceneService().popSubScene();
 
         getGameWorld().addEntityFactory(new SpawnFactory());
+        getGameWorld().addEntityFactory(new ZombieFactory());
 
         player1 = spawn("player");
         getInput();
@@ -196,6 +218,7 @@ public class App extends GameApplication {
         getDialogService().showConfirmationBox("Are you the host?", yes -> {
             isServer = yes;
             getGameWorld().addEntityFactory(new SpawnFactory());
+            getGameWorld().addEntityFactory(new ZombieFactory());
             if (yes) {
                 var server = getNetService().newTCPServer(55555);
                 server.setOnConnected(conn -> {
@@ -279,9 +302,20 @@ public class App extends GameApplication {
                 timeSinceLastShotP2 = 0;
             }
         }
+
+    }
+
+    private void checkCollisions() {
+        getGameWorld().getEntitiesByType(EntityType.ZOMBIE).forEach(zombie -> {
+            getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
+                if (zombie.isColliding(player)) {
+                    new ZombiePlayerHandler().inflictDamage(zombie, player);
+                }
+            });
+        });    
     }
         public static void main(String[] args) {
-        launch(args);
-    }
+            launch(args);
+        }
     
 }

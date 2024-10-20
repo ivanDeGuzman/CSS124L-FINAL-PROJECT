@@ -1,4 +1,4 @@
-module com.groupfour.mygame {
+open module com.groupfour.mygame {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -7,8 +7,7 @@ module com.groupfour.mygame {
     requires javafx.base;
     requires com.almasb.fxgl.core;
     requires com.almasb.fxgl.io;
-
-    opens com.groupfour.mygame to javafx.fxml;
+    
     exports com.groupfour.Components;
     exports com.groupfour.mygame;
 }
