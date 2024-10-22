@@ -34,23 +34,25 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-
-
 public class App extends GameApplication {
+
+    //Plan to just add players into this array to allow code to be looped iterating through each player
+    
     private Entity player1, player2, zombie;
+    private Entity[] players;
     private boolean isServer;
-    private boolean isShootingP1 = false;
     private boolean isShootingP2 = false;
-    private double timeSinceLastShotP1 = 0;
     private double timeSinceLastShotP2 = 0;
     private double shootInterval = 0.2;
     private PhysicsWorld physics;
+    private boolean gameStarted=false;
 
     private Input gameInput;
     private Connection<Bundle> connection;
 
     @Override
     protected void initSettings(GameSettings settings) {
+
         settings.setTitle("Flatline; Miami");
         settings.setVersion("Alpha 0.3");
         settings.addEngineService(MultiplayerService.class);
@@ -75,84 +77,54 @@ public class App extends GameApplication {
         });
 }
 
-    @Override
-    protected void initInput() {
+    protected void setupInput() {
         if (!isServer) {
-            Input playerInput = getInput();
-            playerInput.addAction(new UserAction("Move Up") {
-                @Override
-                protected void onAction() {
-                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
-                        if (isShootingP1) player1.translateY(-0.7);
-                        else player1.translateY(-2);
-                    }
+            for(Entity player:players){
+                if(player!=null){
+                PlayerComponent playerComponents = player.getComponent(PlayerComponent.class);
+                // if(players[count]!=null){
+                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.W).onAction(() -> moveY(player,false));
+                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.S).onAction(() -> moveY(player,true));
+                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.A).onAction(() -> moveX(player,true));
+                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.D).onAction(() -> moveX(player,false));
+                onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(player,false));
+                onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(player,true));
+                onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(player,true));
+                onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(player,false));
+                
+                getInput().addAction(new UserAction(playerComponents.getName()+"Shooting") {
+                            @Override
+                            protected void onActionBegin() {playerComponents.setShooting(true);}
+                            @Override
+                            protected void onActionEnd() {playerComponents.setShooting(false);}
+                    }, MouseButton.PRIMARY);
                 }
-            }, KeyCode.W);
-
-            playerInput.addAction(new UserAction("Move Down") {
-                @Override
-                protected void onAction() {
-                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
-                        if (isShootingP1) player1.translateY(0.7);
-                        else player1.translateY(2);
-                    }
-                }
-            }, KeyCode.S);
-
-            playerInput.addAction(new UserAction("Move Left") {
-                @Override
-                protected void onAction() {
-                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
-                        if (isShootingP1) player1.translateX(-0.7);
-                        else player1.translateX(-2);
-                    }
-                }
-            }, KeyCode.A);
-
-            playerInput.addAction(new UserAction("Move Right") {
-                @Override
-                protected void onAction() {
-                    if (!player1.getComponent(PlayerComponent.class).isDead()) {
-                        if (isShootingP1) player1.translateX(0.7);
-                        else player1.translateX(2);
-                    }
-                }
-            }, KeyCode.D);
-
-            getInput().addAction(new UserAction("Start Shooting for Player 1") {
-                @Override
-                protected void onActionBegin() {
-                    isShootingP1 = true; 
-                }
-                @Override
-                protected void onActionEnd() {
-                    isShootingP1 = false; 
-                }
-            }, MouseButton.PRIMARY);
+            }
         }
+    }
         
-            gameInput = new Input();
+            // gameInput = new Input();
             
-            onKeyBuilder(gameInput, KeyCode.W)
-                    .onAction(() -> player2.translateY(-2));
-            onKeyBuilder(gameInput, KeyCode.S)
-                    .onAction(() -> player2.translateY(2));
-            onKeyBuilder(gameInput, KeyCode.A)
-                    .onAction(() -> player2.translateX(-2));
-            onKeyBuilder(gameInput, KeyCode.D)
-                    .onAction(() -> player2.translateX(2));
+            // //this one why it wasnt changing onShooting
+            // onKeyBuilder(gameInput, KeyCode.W)
+            //         .onAction(() -> player2.translateY(-2));
+            // onKeyBuilder(gameInput, KeyCode.S)
+            //         .onAction(() -> player2.translateY(2));
+            // onKeyBuilder(gameInput, KeyCode.A)
+            //         .onAction(() -> player2.translateX(-2));
+            // onKeyBuilder(gameInput, KeyCode.D)
+            //         .onAction(() -> player2.translateX(2));
             
-            gameInput.addAction(new UserAction("Start Shooting for Player 2") {
-                @Override
-                protected void onActionBegin() {
-                    isShootingP2 = true; 
-                }
-                @Override
-                protected void onActionEnd() {
-                    isShootingP2 = false; 
-                }
-            }, MouseButton.PRIMARY);
-        }
+            // gameInput.addAction(new UserAction("Start Shooting for Player 2") {
+            //     @Override
+            //     protected void onActionBegin() {
+            //         isShootingP2 = true; 
+            //     }
+            //     @Override
+            //     protected void onActionEnd() {
+            //         isShootingP2 = false; 
+            //     }
+            // }, MouseButton.PRIMARY);
     
     @Override
     public void initPhysics() {
@@ -200,11 +172,13 @@ public class App extends GameApplication {
 
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
-
-        player1 = spawn("player");
+        players = new Entity[1];
+        players[0] = spawn("player");
+        setupInput();
+        gameStarted=true;
         getInput();
         FXGL.run(() -> {
-            zombie = spawn("zombie", player1.getCenter().getX() + 5, player1.getCenter().getY() + 5);
+            zombie = spawn("zombie", players[0].getCenter().getX() + 5, players[0].getCenter().getY() + 5);
     
             if (zombie.hasComponent(ZombieComponent.class)) {
                 zombie.getComponent(ZombieComponent.class).findClosestPlayer();
@@ -255,6 +229,7 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).spawn(connection, player1, "player");
 
         player2 = spawn("player");
+
         getService(MultiplayerService.class).spawn(connection, player2, "player");
         
         FXGL.run(() -> {
@@ -267,7 +242,7 @@ public class App extends GameApplication {
     }
 
     private void onClient() {
-        player1 = spawn("player");
+        players[0] = spawn("player");
 
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
@@ -283,15 +258,18 @@ public class App extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
+        if(!gameStarted){
+            return;
+        }
         if (isServer) {
             gameInput.update(tpf);
         }
 
-        if (isShootingP1) {
-            timeSinceLastShotP1 += tpf;
-            if (timeSinceLastShotP1 >= shootInterval) {
-                shoot(getInput().getMousePositionWorld(), player1); 
-                timeSinceLastShotP1 = 0;
+        if (players[0].getComponent(PlayerComponent.class).isShooting()) {
+            players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
+            if (players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
+                shoot(getInput().getMousePositionWorld(), players[0]); 
+                players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
             }
         }
 
@@ -302,7 +280,31 @@ public class App extends GameApplication {
                 timeSinceLastShotP2 = 0;
             }
         }
+    }
 
+    private void moveX(Entity player, boolean isLeft){
+        double speed = player.getComponent(PlayerComponent.class).getSpeed();
+        if (!player.getComponent(PlayerComponent.class).isDead()) {
+            if (player.getComponent(PlayerComponent.class).isShooting()){
+                speed = speed/2;
+            }
+            if (isLeft){
+                speed = -speed;
+            }
+            player.translateX(speed);
+        }
+    }
+    private void moveY(Entity player, boolean isDown){
+        double speed = player.getComponent(PlayerComponent.class).getSpeed();
+        if (!player.getComponent(PlayerComponent.class).isDead()) {
+            if (player.getComponent(PlayerComponent.class).isShooting()){
+                speed = speed/2;
+            }
+            if (!isDown){
+                speed = -speed;
+            }
+            player.translateY(speed);
+        }
     }
 
     private void checkCollisions() {
