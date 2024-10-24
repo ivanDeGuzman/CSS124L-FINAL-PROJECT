@@ -1,41 +1,75 @@
 package com.groupfour.Components;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.multiplayer.MultiplayerService;
+import com.almasb.fxgl.net.Connection;
 
-public class WeaponComponent extends Component {
-    private boolean isDead = false;
-    private int health;
-    private boolean isShooting = false;
-    private double timeSinceLastShotP1 = 0;
-    
-    public WeaponComponent(int initialHealth) {
-        this.health = initialHealth;
+import javafx.geometry.Point2D;
+import javafx.util.Duration;
+import static com.almasb.fxgl.dsl.FXGL.runOnce;
+
+public abstract class WeaponComponent {
+    protected boolean hasAmmo = true;
+    protected String name;
+    protected int ammoCount;
+    protected int ammo;
+    protected double fireRate;
+    protected boolean isServer;
+    protected Connection<Bundle> connection;
+    protected boolean isReloading = false;
+
+    public WeaponComponent(String name, int ammoCount, int ammo, double fireRate, boolean isServer, Connection<Bundle> connection) {
+        this.name = name;
+        this.ammoCount = ammoCount;
+        this.ammo = ammo;
+        this.fireRate = fireRate;
+        this.isServer = isServer;
+        this.connection = connection;
     }
 
-    public int getHealth() {
-        return health;
-    }
+    public abstract void fire(Entity player);
 
-    public void takeDamage(int damage) {
-        if (!isDead) {
-            health -= damage;
-            System.out.println("Player health: " + health);
-            if (health <= 0) {
-                onDeath();
-            }
+    public void reload() {
+        if (ammoCount > 0 && !isReloading) {
+            int ammoNeeded = 15 - ammo;
+            int ammoToReload = Math.min(ammoCount, ammoNeeded);
+            isReloading = true;
+
+            
+            runOnce(() -> {
+                ammo += ammoToReload;
+                ammoCount -= ammoToReload;
+                isReloading = false;
+                System.out.println("Reloaded! Ammo: " + ammo);
+            }, Duration.seconds(1.5));
         }
     }
-
-    private void onDeath() {
-        isDead = true;
-        FXGL.getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
-            FXGL.getGameController().gotoMainMenu();
-        });
+    
+    public int getAmmo() {
+        return ammo;
     }
 
-    public boolean isDead() {
-        return isDead;
+    public int getAmmoCount() {
+        return ammoCount;
+    }
+
+    public double getFireRate() {
+        return fireRate;
+    }
+
+    public boolean getIsReloading() {
+        return isReloading;
+    }
+
+    protected void spawnBullet(Point2D position, Point2D direction) {
+        var data = new SpawnData(position.getX(), position.getY()).put("direction", direction);
+        Entity bullet = FXGL.spawn("bullet", data);
+        bullet.getComponent(BulletComponent.class).setDirection(direction);
+        if (isServer) {
+            FXGL.getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
+        }
     }
 }
-    

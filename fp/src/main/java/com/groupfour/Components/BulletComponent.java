@@ -23,6 +23,8 @@ public class BulletComponent extends Component {
     public void onUpdate(double tpf) {
         if (direction != null) {
             entity.translate(direction.multiply(speed * tpf));
+            double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
+            entity.setRotation(angle);
         }
     }
 }

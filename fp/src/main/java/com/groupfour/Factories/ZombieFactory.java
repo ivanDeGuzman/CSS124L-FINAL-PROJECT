@@ -46,7 +46,7 @@ public class ZombieFactory implements EntityFactory {
             .viewWithBBox(new Rectangle(30, 30, Color.GREEN))
             .with((new NetworkComponent()))
             .with(new CellMoveComponent(40, 40, 150))
-            .with(new ZombieComponent(100))
+            .with(new ZombieComponent(60))
             .build();
 }
 }

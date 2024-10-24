@@ -21,6 +21,8 @@ import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
+import com.groupfour.UI.MainUI;
+import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import java.util.Arrays;
@@ -53,7 +55,7 @@ public class App extends GameApplication {
     @Override
     protected void initSettings(GameSettings settings) {
 
-        settings.setTitle("Flatline; Miami");
+        settings.setTitle("Flatline: Oregon");
         settings.setVersion("Alpha 0.3");
         settings.addEngineService(MultiplayerService.class);
         settings.setMainMenuEnabled(true);
@@ -79,7 +81,7 @@ public class App extends GameApplication {
 
     protected void setupInput() {
         if (!isServer) {
-            for(Entity player:players){
+            for(Entity player:players) {
                 if(player!=null){
                 PlayerComponent playerComponents = player.getComponent(PlayerComponent.class);
                 // if(players[count]!=null){
@@ -87,17 +89,26 @@ public class App extends GameApplication {
                 // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.S).onAction(() -> moveY(player,true));
                 // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.A).onAction(() -> moveX(player,true));
                 // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.D).onAction(() -> moveX(player,false));
-                onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(player,false));
-                onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(player,true));
-                onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(player,true));
-                onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(player,false));
-                
-                getInput().addAction(new UserAction(playerComponents.getName()+"Shooting") {
-                            @Override
-                            protected void onActionBegin() {playerComponents.setShooting(true);}
-                            @Override
-                            protected void onActionEnd() {playerComponents.setShooting(false);}
+                    onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(player,false));
+                    onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(player,true));
+                    onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(player,true));
+                    onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(player,false));
+                    
+
+                    getInput().addAction(new UserAction("Start Shooting") {
+                        @Override
+                        protected void onActionBegin() {
+                            playerComponents.getCurrentWeapon().fire(player);
+                        }
                     }, MouseButton.PRIMARY);
+            
+                    getInput().addAction(new UserAction("Reload") {
+                        @Override
+                        protected void onActionBegin() {
+                            System.out.println("Reloading"); //test, remove in the future
+                            playerComponents.getCurrentWeapon().reload();
+                        }
+                    }, KeyCode.R);
                 }
             }
         }
@@ -139,33 +150,13 @@ public class App extends GameApplication {
             physics.addCollisionHandler(new ZombiePlayerHandler());
             FXGL.run(() -> checkCollisions(), Duration.seconds(1));
     }
-
-    public void shoot(Point2D shootPoint, Entity player) {
-        Point2D position = player.getCenter();
-        Point2D vectorToMouse = shootPoint.subtract(position).normalize();
-
-        spawnBullet(position, vectorToMouse);
-    }
-
-    private void spawnBullet(Point2D position, Point2D direction) {
-        var data = new SpawnData(position.getX(), position.getY())
-                .put("direction", direction);
-        Entity bullet = spawn("bullet", data);
-        bullet.getComponent(BulletComponent.class).setDirection(direction);
-
-        if (isServer) {
-            getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
-        }
-    }
         
      @Override
      protected void initUI() {
         FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startGame2P)), Duration.seconds(.01));
+        var ui = new MainUI();
+        addUINode(ui, 30, 50);
      }
-
-     public void showPlayerCountMenu() {
-        PlayerCountMenu menu = new PlayerCountMenu(this::startGame1P, this::startGame2P);
-    }
 
     public void startGame1P() {
         getSceneService().popSubScene();
@@ -178,7 +169,7 @@ public class App extends GameApplication {
         gameStarted=true;
         getInput();
         FXGL.run(() -> {
-            zombie = spawn("zombie", players[0].getCenter().getX() + 5, players[0].getCenter().getY() + 5);
+            zombie = spawn("zombie", players[0].getCenter().getX() + 20, players[0].getCenter().getY() + 20);
     
             if (zombie.hasComponent(ZombieComponent.class)) {
                 zombie.getComponent(ZombieComponent.class).findClosestPlayer();
@@ -227,7 +218,12 @@ public class App extends GameApplication {
     private void onServer() {
         player1 = spawn("player");
         getService(MultiplayerService.class).spawn(connection, player1, "player");
-
+        if (player1 == null) {
+            System.out.println("Failed to spawn player1!");
+        } else {
+            System.out.println("player1 spawned successfully!");
+            getService(MultiplayerService.class).spawn(connection, player1, "player");
+        }
         player2 = spawn("player");
 
         getService(MultiplayerService.class).spawn(connection, player2, "player");
@@ -265,21 +261,23 @@ public class App extends GameApplication {
             gameInput.update(tpf);
         }
 
-        if (players[0].getComponent(PlayerComponent.class).isShooting()) {
-            players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
-            if (players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
-                shoot(getInput().getMousePositionWorld(), players[0]); 
-                players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
-            }
-        }
+        //dont need this for now because m9 is semi auto. we add it once we decide on auto guns - padua
 
-        if (isShootingP2) {
-            timeSinceLastShotP2 += tpf;
-            if (timeSinceLastShotP2 >= shootInterval) {
-                shoot(getInput().getMousePositionWorld(), player2); 
-                timeSinceLastShotP2 = 0;
-            }
-        }
+        // if (players[0].getComponent(PlayerComponent.class).isShooting()) {
+        //     players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
+        //     if (players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
+        //         shoot(getInput().getMousePositionWorld(), players[0]); 
+        //         players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
+        //     }
+        // }
+
+        // if (isShootingP2) {
+        //     timeSinceLastShotP2 += tpf;
+        //     if (timeSinceLastShotP2 >= shootInterval) {
+        //         shoot(getInput().getMousePositionWorld(), player2); 
+        //         timeSinceLastShotP2 = 0;
+        //     }
+        // }
     }
 
     private void moveX(Entity player, boolean isLeft){

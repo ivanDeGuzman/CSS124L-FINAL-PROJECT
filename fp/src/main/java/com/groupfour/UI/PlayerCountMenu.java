@@ -1,4 +1,4 @@
-package com.groupfour.mygame;
+package com.groupfour.UI;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
