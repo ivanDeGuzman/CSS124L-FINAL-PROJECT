@@ -4,6 +4,7 @@ import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.net.Connection;
+import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.WeaponComponent;
 
 import javafx.geometry.Point2D;
@@ -12,7 +13,8 @@ public class BerettaM9 extends WeaponComponent {
 
     public BerettaM9(
         //implement int ammoCount and ammo when enemy drops gets coded in
-        //int ammoCount, int ammo 
+        //int ammoCount, int ammo
+        //change ammoCount to whatever if 100 for playtesting isnt enough 
         boolean isServer, Connection<Bundle> connection) {
         super("Beretta M9", 100, 15, 1.0, isServer, connection);
     }

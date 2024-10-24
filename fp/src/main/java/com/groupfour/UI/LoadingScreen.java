@@ -1,4 +1,4 @@
-package com.groupfour.mygame;
+package com.groupfour.UI;
 
 import com.almasb.fxgl.scene.SubScene;
 import javafx.scene.layout.StackPane;

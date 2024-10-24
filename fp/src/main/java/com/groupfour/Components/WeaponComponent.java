@@ -20,6 +20,7 @@ public abstract class WeaponComponent {
     protected boolean isServer;
     protected Connection<Bundle> connection;
     protected boolean isReloading = false;
+    protected Entity player;
 
     public WeaponComponent(String name, int ammoCount, int ammo, double fireRate, boolean isServer, Connection<Bundle> connection) {
         this.name = name;

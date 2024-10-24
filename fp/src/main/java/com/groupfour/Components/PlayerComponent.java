@@ -92,7 +92,6 @@ public class PlayerComponent extends Component {
         Point2D vector = playerPosition.subtract(mousePosition);
         double angle = Math.toDegrees(Math.atan2(vector.getY(), vector.getX()));
         entity.setRotation(angle - 90);
-        
     }
     
     

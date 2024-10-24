@@ -21,6 +21,7 @@ import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
+import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
@@ -99,6 +100,7 @@ public class App extends GameApplication {
                         @Override
                         protected void onActionBegin() {
                             playerComponents.getCurrentWeapon().fire(player);
+                            playerComponents.setShooting(true);
                         }
                     }, MouseButton.PRIMARY);
             
@@ -291,6 +293,7 @@ public class App extends GameApplication {
             }
             player.translateX(speed);
         }
+        player.getComponent(PlayerComponent.class).setShooting(false);
     }
     private void moveY(Entity player, boolean isDown){
         double speed = player.getComponent(PlayerComponent.class).getSpeed();
@@ -303,6 +306,7 @@ public class App extends GameApplication {
             }
             player.translateY(speed);
         }
+        player.getComponent(PlayerComponent.class).setShooting(false);
     }
 
     private void checkCollisions() {
