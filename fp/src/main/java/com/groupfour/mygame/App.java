@@ -63,7 +63,6 @@ public class App extends GameApplication {
         settings.setGameMenuEnabled(true);
 
         //implement later
-
         // settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         // settings.getCredits().addAll(Arrays.asList(
         //         "PutCreditsHere- PlaceHolderName"
@@ -78,14 +77,14 @@ public class App extends GameApplication {
                 );
             }
         });
-}
+    }
 
     protected void setupInput() {
         if (!isServer) {
             for(Entity player:players) {
                 if(player!=null){
                 PlayerComponent playerComponents = player.getComponent(PlayerComponent.class);
-                // if(players[count]!=null){
+                //This is for multiplayer, trying to figure out how to work it
                 // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.W).onAction(() -> moveY(player,false));
                 // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.S).onAction(() -> moveY(player,true));
                 // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.A).onAction(() -> moveX(player,true));
@@ -94,28 +93,26 @@ public class App extends GameApplication {
                     onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(player,true));
                     onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(player,true));
                     onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(player,false));
+                    onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{ 
+                            System.out.println("Reloading"); //test, remove in the future
+                            playerComponents.getCurrentWeapon().reload();
+                    });
                     
-
                     getInput().addAction(new UserAction("Start Shooting") {
                         @Override
                         protected void onActionBegin() {
                             playerComponents.getCurrentWeapon().fire(player);
                             playerComponents.setShooting(true);
                         }
-                    }, MouseButton.PRIMARY);
-            
-                    getInput().addAction(new UserAction("Reload") {
-                        @Override
-                        protected void onActionBegin() {
-                            System.out.println("Reloading"); //test, remove in the future
-                            playerComponents.getCurrentWeapon().reload();
+                        protected void onActionEnd() {
+                            playerComponents.setShooting(false);
                         }
-                    }, KeyCode.R);
+                    }, MouseButton.PRIMARY);
                 }
             }
         }
     }
-        
+        //Idk yet, likely wont need this
             // gameInput = new Input();
             
             // //this one why it wasnt changing onShooting
@@ -282,6 +279,7 @@ public class App extends GameApplication {
         // }
     }
 
+    //I think we can totally move these to playercomponent class
     private void moveX(Entity player, boolean isLeft){
         double speed = player.getComponent(PlayerComponent.class).getSpeed();
         if (!player.getComponent(PlayerComponent.class).isDead()) {
@@ -293,7 +291,6 @@ public class App extends GameApplication {
             }
             player.translateX(speed);
         }
-        player.getComponent(PlayerComponent.class).setShooting(false);
     }
     private void moveY(Entity player, boolean isDown){
         double speed = player.getComponent(PlayerComponent.class).getSpeed();
@@ -306,7 +303,6 @@ public class App extends GameApplication {
             }
             player.translateY(speed);
         }
-        player.getComponent(PlayerComponent.class).setShooting(false);
     }
 
     private void checkCollisions() {
