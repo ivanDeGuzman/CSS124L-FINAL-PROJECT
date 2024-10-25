@@ -36,7 +36,6 @@ public class SpawnFactory implements EntityFactory {
             .viewWithBBox(p1Texture)
             .with(new NetworkComponent())
             .collidable()
-            .with(new InBoundsComponent(new Rectangle2D(0, 0, getAppWidth(), getAppHeight())))
             .with(new PlayerComponent(100))
             .build();
     }
@@ -52,7 +51,6 @@ public class SpawnFactory implements EntityFactory {
             .type(EntityType.BULLET)
             .viewWithBBox(bulletShape)
             .with(new NetworkComponent())
-            .with()
             .collidable()
             .with(new BulletComponent()) 
             .with(expireClean)
