@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
@@ -93,11 +94,6 @@ public class App extends GameApplication {
                     onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(player,true));
                     onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(player,true));
                     onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(player,false));
-                    onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{ 
-                            System.out.println("Reloading"); //test, remove in the future
-                            playerComponents.getCurrentWeapon().reload();
-                    });
-                    
                     getInput().addAction(new UserAction("Start Shooting") {
                         @Override
                         protected void onActionBegin() {
@@ -115,7 +111,7 @@ public class App extends GameApplication {
         //Idk yet, likely wont need this
             // gameInput = new Input();
             
-            // //this one why it wasnt changing onShooting
+            //this one why it wasnt changing onShooting
             // onKeyBuilder(gameInput, KeyCode.W)
             //         .onAction(() -> player2.translateY(-2));
             // onKeyBuilder(gameInput, KeyCode.S)
@@ -164,8 +160,12 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new ZombieFactory());
         players = new Entity[1];
         players[0] = spawn("player");
+
         setupInput();
         gameStarted=true;
+
+        playerCamera();
+
         getInput();
         FXGL.run(() -> {
             zombie = spawn("zombie", players[0].getCenter().getX() + 20, players[0].getCenter().getY() + 20);
@@ -243,6 +243,17 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
     }
 
+        // maybe tthis should also be moved to player component, but i'll just leave this here for now -yuri
+        private void playerCamera() {
+        Viewport viewport = getGameScene().getViewport();
+        viewport.setLazy(true); 
+
+        if (players[0] != null) {
+            viewport.bindToEntity(players[0], getAppWidth() / 2.0, getAppHeight() / 2.0);
+            
+        }
+    }
+
     private void updateFollower() {
         if (zombie.hasComponent(ZombieComponent.class)) {
             zombie.getComponent(ZombieComponent.class).onUpdate(0);
@@ -279,31 +290,34 @@ public class App extends GameApplication {
         // }
     }
 
-    //I think we can totally move these to playercomponent class
-    private void moveX(Entity player, boolean isLeft){
-        double speed = player.getComponent(PlayerComponent.class).getSpeed();
-        if (!player.getComponent(PlayerComponent.class).isDead()) {
-            if (player.getComponent(PlayerComponent.class).isShooting()){
-                speed = speed/2;
+        //I think we can totally move these to playercomponent class
+        private void moveX(Entity player, boolean isLeft) {
+            double speed = player.getComponent(PlayerComponent.class).getSpeed();
+            
+            if (!player.getComponent(PlayerComponent.class).isDead()) {
+                if (player.getComponent(PlayerComponent.class).isShooting()) {
+                    speed /= 2;
+                }
+                if (isLeft) {
+                    speed = -speed;
+                }
+                player.translateX(speed);
             }
-            if (isLeft){
-                speed = -speed;
-            }
-            player.translateX(speed);
         }
-    }
-    private void moveY(Entity player, boolean isDown){
-        double speed = player.getComponent(PlayerComponent.class).getSpeed();
-        if (!player.getComponent(PlayerComponent.class).isDead()) {
-            if (player.getComponent(PlayerComponent.class).isShooting()){
-                speed = speed/2;
+
+        private void moveY(Entity player, boolean isDown) {
+            double speed = player.getComponent(PlayerComponent.class).getSpeed();
+            
+            if (!player.getComponent(PlayerComponent.class).isDead()) {
+                if (player.getComponent(PlayerComponent.class).isShooting()) {
+                    speed /= 2; 
+                }
+                if (!isDown) {
+                    speed = -speed;
+                }
+                player.translateY(speed);
             }
-            if (!isDown){
-                speed = -speed;
-            }
-            player.translateY(speed);
         }
-    }
 
     private void checkCollisions() {
         getGameWorld().getEntitiesByType(EntityType.ZOMBIE).forEach(zombie -> {
