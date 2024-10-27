@@ -13,7 +13,6 @@ public class PlayerComponent extends Component {
     private double timeSinceLastShot = 0;
     private WeaponComponent currentWeapon;
     private double speed =2;
-    private boolean initialized=false;
     private String name="test";
 
     public PlayerComponent(int initialHealth) {
@@ -80,16 +79,10 @@ public class PlayerComponent extends Component {
         return isDead;
     }
 
-    public boolean isInitialized(){
-        return initialized;
-    }
-
     public void setUpPlayer() {
-
         Viewport viewport = getGameScene().getViewport();
         viewport.setLazy(true); 
         viewport.bindToEntity(entity, getAppWidth() / 2.0, getAppHeight() / 2.0);
-        initialized=true;
     }
  
     public void moveX(boolean isLeft) {
@@ -103,10 +96,6 @@ public class PlayerComponent extends Component {
             }
         entity.translateX(tempSpeed);
         }
-    }
-
-    public void copy(PlayerComponent placeholder){
-
     }
 
     public void moveY(boolean isDown) {
