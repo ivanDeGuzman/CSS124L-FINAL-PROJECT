@@ -29,6 +29,9 @@ import com.groupfour.mygame.EntityTypes.EntityType;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.almasb.fxgl.app.MenuItem;
 
 import javafx.geometry.Point2D;
@@ -39,18 +42,12 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class App extends GameApplication {
-
-    //Plan to just add players into this array to allow code to be looped iterating through each player
     
-    private Entity player1, player2, zombie;
-    private Entity[] players;
+    private List<Entity> players= new ArrayList<>();
+    private Entity zombie;
     private boolean isServer;
-    private boolean isShootingP2 = false;
-    private double timeSinceLastShotP2 = 0;
-    private double shootInterval = 0.2;
     private PhysicsWorld physics;
     private boolean gameStarted=false;
-
     private Input gameInput;
     private Connection<Bundle> connection;
 
@@ -79,30 +76,6 @@ public class App extends GameApplication {
             }
         });
     }
-
-        //Idk yet, likely wont need this
-            // gameInput = new Input();
-            
-            //this one why it wasnt changing onShooting
-            // onKeyBuilder(gameInput, KeyCode.W)
-            //         .onAction(() -> player2.translateY(-2));
-            // onKeyBuilder(gameInput, KeyCode.S)
-            //         .onAction(() -> player2.translateY(2));
-            // onKeyBuilder(gameInput, KeyCode.A)
-            //         .onAction(() -> player2.translateX(-2));
-            // onKeyBuilder(gameInput, KeyCode.D)
-            //         .onAction(() -> player2.translateX(2));
-            
-            // gameInput.addAction(new UserAction("Start Shooting for Player 2") {
-            //     @Override
-            //     protected void onActionBegin() {
-            //         isShootingP2 = true; 
-            //     }
-            //     @Override
-            //     protected void onActionEnd() {
-            //         isShootingP2 = false; 
-            //     }
-            // }, MouseButton.PRIMARY);
     
     @Override
     public void initPhysics() {
@@ -127,21 +100,14 @@ public class App extends GameApplication {
 
     public void startGame1P() {
         getSceneService().popSubScene();
-
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
 
-        players = new Entity[1];
-        players[0] = spawn("player");
-        players[0].getComponent(PlayerComponent.class).setupInput();
-
+        players.add(spawn("player"));
+        players.get(0).getComponent(PlayerComponent.class).setUpPlayer();
         gameStarted=true;
-
-        playerCamera();
-
-        getInput();
         FXGL.run(() -> {
-            zombie = spawn("zombie", players[0].getCenter().getX() + 20, players[0].getCenter().getY() + 20);
+            zombie = spawn("zombie", players.get(0).getCenter().getX() + 20, players.get(0).getCenter().getY() + 20);
     
             if (zombie.hasComponent(ZombieComponent.class)) {
                 zombie.getComponent(ZombieComponent.class).findClosestPlayer();
@@ -152,79 +118,67 @@ public class App extends GameApplication {
     }
 
     public void startGame2P() {
-        getDialogService().showConfirmationBox("Are you the host?", yes -> {
-            isServer = yes;
-            getGameWorld().addEntityFactory(new SpawnFactory());
-            getGameWorld().addEntityFactory(new ZombieFactory());
-            if (yes) {
-                var server = getNetService().newTCPServer(55555);
-                server.setOnConnected(conn -> {
-                    connection = conn;
-                    getExecutor().startAsyncFX(() -> {
-                        onServer();
-                        getSceneService().popSubScene();
-                        getSceneService().popSubScene();
-                    });
-                });
-                server.startAsync();
-                waitingForPlayers();
-            } else {
-                var client = getNetService().newTCPClient("localhost", 55555);
-                client.setOnConnected(conn -> {
-                    connection = conn;
-                    getExecutor().startAsyncFX(() -> {
-                        onClient();
-                        getSceneService().popSubScene();
-                    });
-                });
-                client.connectAsync();
-            }
-        });
+        // getDialogService().showConfirmationBox("Are you the host?", yes -> {
+        //     isServer = yes;
+        //     getGameWorld().addEntityFactory(new SpawnFactory());
+        //     getGameWorld().addEntityFactory(new ZombieFactory());
+        //     if (yes) {
+        //         var server = getNetService().newTCPServer(55555);
+        //         server.setOnConnected(conn -> {
+        //             connection = conn;
+        //             getExecutor().startAsyncFX(() -> {
+        //                 onServer();
+        //                 getSceneService().popSubScene();
+        //                 getSceneService().popSubScene();
+        //             });
+        //         });
+        //         server.startAsync();
+        //         waitingForPlayers();
+        //     } else {
+        //         var client = getNetService().newTCPClient("localhost", 55555);
+        //         client.setOnConnected(conn -> {
+        //             connection = conn;
+        //             getExecutor().startAsyncFX(() -> {
+        //                 onClient();
+        //                 getSceneService().popSubScene();
+        //             });
+        //         });
+        //         client.connectAsync();
+        //     }
+        // });
     }
 
     private void waitingForPlayers() {
-        LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
-        FXGL.getSceneService().pushSubScene(loadingScreen);
+        // LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
+        // FXGL.getSceneService().pushSubScene(loadingScreen);
     }
 
     private void onServer() {
-        player1 = spawn("player");
-        getService(MultiplayerService.class).spawn(connection, player1, "player");
-        if (player1 == null) {
-            System.out.println("Failed to spawn player1!");
-        } else {
-            System.out.println("player1 spawned successfully!");
-            getService(MultiplayerService.class).spawn(connection, player1, "player");
-        }
-        player2 = spawn("player");
+        // player1 = spawn("player");
+        // getService(MultiplayerService.class).spawn(connection, player1, "player");
+        // if (player1 == null) {
+        //     System.out.println("Failed to spawn player1!");
+        // } else {
+        //     System.out.println("player1 spawned successfully!");
+        //     getService(MultiplayerService.class).spawn(connection, player1, "player");
+        // }
+        // player2 = spawn("player");
 
-        getService(MultiplayerService.class).spawn(connection, player2, "player");
+        // getService(MultiplayerService.class).spawn(connection, player2, "player");
         
-        FXGL.run(() -> {
-            zombie = spawn("zombie", player1.getCenter().getX() + 5, player1.getCenter().getY() + 5);
-            getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
-        }, Duration.seconds(1));
+        // FXGL.run(() -> {
+        //     zombie = spawn("zombie", player1.getCenter().getX() + 5, player1.getCenter().getY() + 5);
+        //     getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
+        // }, Duration.seconds(1));
 
-        getService(MultiplayerService.class).addInputReplicationReceiver(connection, gameInput);
-        FXGL.run(() -> updateFollower(), Duration.seconds(1));
+        // getService(MultiplayerService.class).addInputReplicationReceiver(connection, gameInput);
+        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
     }
 
     private void onClient() {
-        players[0] = spawn("player");
-
-        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
-    }
-
-        // maybe tthis should also be moved to player component, but i'll just leave this here for now -yuri
-        private void playerCamera() {
-        Viewport viewport = getGameScene().getViewport();
-        viewport.setLazy(true); 
-
-        if (players[0] != null) {
-            viewport.bindToEntity(players[0], getAppWidth() / 2.0, getAppHeight() / 2.0);
-            
-        }
+        // players.set(0,spawn("player"));
+        // getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+        // getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
     }
 
     private void updateFollower() {
@@ -246,11 +200,11 @@ public class App extends GameApplication {
 
         //dont need this for now because m9 is semi auto. we add it once we decide on auto guns - padua
 
-        // if (players[0].getComponent(PlayerComponent.class).isShooting()) {
-        //     players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
-        //     if (players[0].getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
-        //         shoot(getInput().getMousePositionWorld(), players[0]); 
-        //         players[0].getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
+        // if (players.get(0).getComponent(PlayerComponent.class).isShooting()) {
+        //     players.get(0).getComponent(PlayerComponent.class).setTimeSinceLastShot(players.get(0).getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
+        //     if (players.get(0).getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
+        //         shoot(getInput().getMousePositionWorld(), players.get(0)); 
+        //         players.get(0).getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
         //     }
         // }
 
@@ -263,8 +217,6 @@ public class App extends GameApplication {
         // }
     }
 
-        //I think we can totally move these to playercomponent class
-
     private void checkCollisions() {
         getGameWorld().getEntitiesByType(EntityType.ZOMBIE).forEach(zombie -> {
             getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
@@ -274,8 +226,8 @@ public class App extends GameApplication {
             });
         });    
     }
-        public static void main(String[] args) {
-            launch(args);
-        }
+    public static void main(String[] args) {
+        launch(args);
+    }
     
 }

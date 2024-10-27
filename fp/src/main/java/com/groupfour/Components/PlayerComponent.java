@@ -11,6 +11,8 @@ import javafx.scene.input.MouseButton;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+import com.almasb.fxgl.app.scene.Viewport;
+
 public class PlayerComponent extends Component {
     private boolean isDead = false;
     private int health;
@@ -88,23 +90,29 @@ public class PlayerComponent extends Component {
         return isDead;
     }
 
-    public void setupInput() {
+
+
+    public void setUpPlayer() {
         onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(false));
         onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(true));
         onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(true));
         onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(false));
         onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{getCurrentWeapon().reload();});
-            getInput().addAction(new UserAction("Start Shooting") {
-                @Override
-                protected void onActionBegin() {
-                    getCurrentWeapon().fire(entity);
-                    setShooting(true);
-                }
-                protected void onActionEnd() {
-                    setShooting(false);
-                }
-            }, MouseButton.PRIMARY);
-        }
+        getInput().addAction(new UserAction("Start Shooting") {
+            @Override
+            protected void onActionBegin() {
+                getCurrentWeapon().fire(entity);
+                setShooting(true);
+            }
+            protected void onActionEnd() {
+                setShooting(false);
+            }
+        }, MouseButton.PRIMARY);
+
+        Viewport viewport = getGameScene().getViewport();
+        viewport.setLazy(true); 
+        viewport.bindToEntity(entity, getAppWidth() / 2.0, getAppHeight() / 2.0);
+    }
  
     private void moveX(boolean isLeft) {
         double tempSpeed = speed;
