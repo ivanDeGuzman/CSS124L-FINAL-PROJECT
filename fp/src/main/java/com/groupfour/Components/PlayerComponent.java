@@ -1,16 +1,9 @@
 package com.groupfour.Components;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.input.UserAction;
 import com.groupfour.Weapons.BerettaM9;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-
 import static com.almasb.fxgl.dsl.FXGL.*;
-
 import com.almasb.fxgl.app.scene.Viewport;
 
 public class PlayerComponent extends Component {
@@ -20,7 +13,7 @@ public class PlayerComponent extends Component {
     private double timeSinceLastShot = 0;
     private WeaponComponent currentWeapon;
     private double speed =2;
-    private Input gameInput = getInput();
+    private boolean initialized=false;
     private String name="test";
 
     public PlayerComponent(int initialHealth) {
@@ -57,7 +50,7 @@ public class PlayerComponent extends Component {
             health -= damage;
             System.out.println("Player health: " + health);
             if (health <= 0) {
-                onDeath();
+                setDeath(true);
             }
         }
     }
@@ -70,11 +63,8 @@ public class PlayerComponent extends Component {
         this.currentWeapon = weapon;
     }
 
-    private void onDeath() {
-        isDead = true;
-        getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
-            getGameController().gotoMainMenu();
-        });
+    public void setDeath(boolean dead) {
+        isDead = dead;
     }
 
     @Override
@@ -90,31 +80,19 @@ public class PlayerComponent extends Component {
         return isDead;
     }
 
-
+    public boolean isInitialized(){
+        return initialized;
+    }
 
     public void setUpPlayer() {
-        onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(false));
-        onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(true));
-        onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(true));
-        onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(false));
-        onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{getCurrentWeapon().reload();});
-        getInput().addAction(new UserAction("Start Shooting") {
-            @Override
-            protected void onActionBegin() {
-                getCurrentWeapon().fire(entity);
-                setShooting(true);
-            }
-            protected void onActionEnd() {
-                setShooting(false);
-            }
-        }, MouseButton.PRIMARY);
 
         Viewport viewport = getGameScene().getViewport();
         viewport.setLazy(true); 
         viewport.bindToEntity(entity, getAppWidth() / 2.0, getAppHeight() / 2.0);
+        initialized=true;
     }
  
-    private void moveX(boolean isLeft) {
+    public void moveX(boolean isLeft) {
         double tempSpeed = speed;
         if (!isDead()) {
             if (isShooting()) {
@@ -127,7 +105,11 @@ public class PlayerComponent extends Component {
         }
     }
 
-    private void moveY(boolean isDown) {
+    public void copy(PlayerComponent placeholder){
+
+    }
+
+    public void moveY(boolean isDown) {
         double tempSpeed = speed;
         if (!isDead()) {
             if (isShooting()) {

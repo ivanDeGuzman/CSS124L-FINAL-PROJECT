@@ -27,8 +27,7 @@ import com.groupfour.UI.MainUI;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
-import java.util.Arrays;
-import java.util.EnumSet;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,12 +43,15 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class App extends GameApplication {
     
     private List<Entity> players= new ArrayList<>();
+    private Entity player;
+    private Entity playerPlaceHolder;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
     private boolean gameStarted=false;
     private Input gameInput;
     private Connection<Bundle> connection;
+    PlayerComponent placeholder;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -76,7 +78,37 @@ public class App extends GameApplication {
             }
         });
     }
+
+    @Override
+    protected void initInput(){
+        player = new  Entity();
+        player.addComponent(new PlayerComponent(100));
+        
+        onKeyBuilder(getInput(), KeyCode.W).onAction(() ->player.getComponent(PlayerComponent.class).moveY(false));
+        onKeyBuilder(getInput(), KeyCode.S).onAction(() ->player.getComponent(PlayerComponent.class).moveY(true));
+        onKeyBuilder(getInput(), KeyCode.A).onAction(() ->player.getComponent(PlayerComponent.class).moveX(true));
+        onKeyBuilder(getInput(), KeyCode.D).onAction(() ->player.getComponent(PlayerComponent.class).moveX(false));
+        onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{player.getComponent(PlayerComponent.class).getCurrentWeapon().reload();});
+        getInput().addAction(new UserAction("Start Shooting") {
+            @Override
+            protected void onActionBegin() {
+               player.getComponent(PlayerComponent.class).getCurrentWeapon().fire(player);
+               player.getComponent(PlayerComponent.class).setShooting(true);
+            }
+            protected void onActionEnd() {
+               player.getComponent(PlayerComponent.class).setShooting(false);
+            }
+        }, MouseButton.PRIMARY);
+    }
     
+    @Override
+    public void initGame() {
+        getGameWorld().addEntityFactory(new SpawnFactory());
+        getGameWorld().addEntityFactory(new ZombieFactory());
+        player = spawn("player");
+        player.getComponent(PlayerComponent.class).setUpPlayer();
+    }
+
     @Override
     public void initPhysics() {
         physics = getPhysicsWorld();
@@ -96,25 +128,35 @@ public class App extends GameApplication {
         FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startGame2P)), Duration.seconds(.01));
         var ui = new MainUI();
         addUINode(ui, 30, 50);
-     }
-
+    }
+    
     public void startGame1P() {
         getSceneService().popSubScene();
-        getGameWorld().addEntityFactory(new SpawnFactory());
-        getGameWorld().addEntityFactory(new ZombieFactory());
-
-        players.add(spawn("player"));
-        players.get(0).getComponent(PlayerComponent.class).setUpPlayer();
         gameStarted=true;
         FXGL.run(() -> {
-            zombie = spawn("zombie", players.get(0).getCenter().getX() + 20, players.get(0).getCenter().getY() + 20);
-    
-            if (zombie.hasComponent(ZombieComponent.class)) {
-                zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-            }
+            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
         }, Duration.seconds(1));
 
         FXGL.run(() -> updateFollower(), Duration.seconds(1));
+        FXGL.run(()->{
+            if(player.getComponent(PlayerComponent.class).isDead()){
+                player.getComponent(PlayerComponent.class).setDeath(false);
+                getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
+                getGameController().gotoMainMenu();
+                FXGL.run(() -> {
+                    resetGameWorld();
+                }, Duration.seconds(5));
+                });
+            }
+        },Duration.seconds(0.1));
+    }
+
+    public void resetGameWorld() {
+        getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
+        zombie = null;
+        gameStarted = false;
+        getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startGame2P));
     }
 
     public void startGame2P() {
@@ -226,6 +268,7 @@ public class App extends GameApplication {
             });
         });    
     }
+
     public static void main(String[] args) {
         launch(args);
     }
