@@ -1,9 +1,13 @@
 package com.groupfour.Components;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.input.UserAction;
 import com.groupfour.Weapons.BerettaM9;
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -14,27 +18,14 @@ public class PlayerComponent extends Component {
     private double timeSinceLastShot = 0;
     private WeaponComponent currentWeapon;
     private double speed =2;
-    private Input gameInput;
+    private Input gameInput = getInput();
     private String name="test";
-
-
-    public String getName(){
-        return name;
-    }
 
     public PlayerComponent(int initialHealth) {
         this.health = initialHealth;
         this.currentWeapon = new BerettaM9(false, null);
     }
-
-    public void setGameInput(Input gameInput){
-        this.gameInput = gameInput;
-    }
     
-    public Input getGameInput(){
-        return gameInput;
-    }
-
     public int getHealth() {
         return health;
     }
@@ -56,7 +47,6 @@ public class PlayerComponent extends Component {
     }
 
     public void setTimeSinceLastShot(double  timeSinceLastShot){
-
         this.timeSinceLastShot = timeSinceLastShot;
     }
 
@@ -94,9 +84,58 @@ public class PlayerComponent extends Component {
         entity.setRotation(angle - 90);
     }
     
-    
     public boolean isDead() {
         return isDead;
     }
+
+    public void setupInput() {
+        onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(false));
+        onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(true));
+        onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(true));
+        onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(false));
+        onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{getCurrentWeapon().reload();});
+            getInput().addAction(new UserAction("Start Shooting") {
+                @Override
+                protected void onActionBegin() {
+                    getCurrentWeapon().fire(entity);
+                    setShooting(true);
+                }
+                protected void onActionEnd() {
+                    setShooting(false);
+                }
+            }, MouseButton.PRIMARY);
+        }
+ 
+    private void moveX(boolean isLeft) {
+        double tempSpeed = speed;
+        if (!isDead()) {
+            if (isShooting()) {
+                tempSpeed /= 2;
+            }
+            if (isLeft) {
+                tempSpeed = -tempSpeed;
+            }
+        entity.translateX(tempSpeed);
+        }
+    }
+
+    private void moveY(boolean isDown) {
+        double tempSpeed = speed;
+        if (!isDead()) {
+            if (isShooting()) {
+                tempSpeed /= 2;
+            }
+            if (!isDown) {
+                tempSpeed = -tempSpeed;
+            }
+        entity.translateY(tempSpeed);
+        }
+    }
+
+    public String getName(){
+    return name;
+    }
+
+
 }
     

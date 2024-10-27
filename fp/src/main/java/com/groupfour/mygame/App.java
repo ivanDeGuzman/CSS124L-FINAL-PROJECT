@@ -80,34 +80,6 @@ public class App extends GameApplication {
         });
     }
 
-    protected void setupInput() {
-        if (!isServer) {
-            for(Entity player:players) {
-                if(player!=null){
-                PlayerComponent playerComponents = player.getComponent(PlayerComponent.class);
-                //This is for multiplayer, trying to figure out how to work it
-                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.W).onAction(() -> moveY(player,false));
-                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.S).onAction(() -> moveY(player,true));
-                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.A).onAction(() -> moveX(player,true));
-                // onKeyBuilder(player.getComponent(PlayerComponent.class).getGameInput(), KeyCode.D).onAction(() -> moveX(player,false));
-                    onKeyBuilder(getInput(), KeyCode.W).onAction(() -> moveY(player,false));
-                    onKeyBuilder(getInput(), KeyCode.S).onAction(() -> moveY(player,true));
-                    onKeyBuilder(getInput(), KeyCode.A).onAction(() -> moveX(player,true));
-                    onKeyBuilder(getInput(), KeyCode.D).onAction(() -> moveX(player,false));
-                    getInput().addAction(new UserAction("Start Shooting") {
-                        @Override
-                        protected void onActionBegin() {
-                            playerComponents.getCurrentWeapon().fire(player);
-                            playerComponents.setShooting(true);
-                        }
-                        protected void onActionEnd() {
-                            playerComponents.setShooting(false);
-                        }
-                    }, MouseButton.PRIMARY);
-                }
-            }
-        }
-    }
         //Idk yet, likely wont need this
             // gameInput = new Input();
             
@@ -158,10 +130,11 @@ public class App extends GameApplication {
 
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
+
         players = new Entity[1];
         players[0] = spawn("player");
+        players[0].getComponent(PlayerComponent.class).setupInput();
 
-        setupInput();
         gameStarted=true;
 
         playerCamera();
@@ -291,33 +264,6 @@ public class App extends GameApplication {
     }
 
         //I think we can totally move these to playercomponent class
-        private void moveX(Entity player, boolean isLeft) {
-            double speed = player.getComponent(PlayerComponent.class).getSpeed();
-            
-            if (!player.getComponent(PlayerComponent.class).isDead()) {
-                if (player.getComponent(PlayerComponent.class).isShooting()) {
-                    speed /= 2;
-                }
-                if (isLeft) {
-                    speed = -speed;
-                }
-                player.translateX(speed);
-            }
-        }
-
-        private void moveY(Entity player, boolean isDown) {
-            double speed = player.getComponent(PlayerComponent.class).getSpeed();
-            
-            if (!player.getComponent(PlayerComponent.class).isDead()) {
-                if (player.getComponent(PlayerComponent.class).isShooting()) {
-                    speed /= 2; 
-                }
-                if (!isDown) {
-                    speed = -speed;
-                }
-                player.translateY(speed);
-            }
-        }
 
     private void checkCollisions() {
         getGameWorld().getEntitiesByType(EntityType.ZOMBIE).forEach(zombie -> {
