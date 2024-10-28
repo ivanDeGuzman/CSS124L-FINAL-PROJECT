@@ -82,15 +82,38 @@ public class App extends GameApplication {
     @Override
     protected void initInput(){
         player = new  Entity();
-        player.addComponent(new PlayerComponent(100));
-        
-        onKeyBuilder(getInput(), KeyCode.W).onAction(() ->player.getComponent(PlayerComponent.class).moveY(false));
-        onKeyBuilder(getInput(), KeyCode.S).onAction(() ->player.getComponent(PlayerComponent.class).moveY(true));
-        onKeyBuilder(getInput(), KeyCode.A).onAction(() ->player.getComponent(PlayerComponent.class).moveX(true));
-        onKeyBuilder(getInput(), KeyCode.D).onAction(() ->player.getComponent(PlayerComponent.class).moveX(false));
-        onKeyBuilder(getInput(), KeyCode.R).onActionBegin(() ->{player.getComponent(PlayerComponent.class).getCurrentWeapon().reload();});
-        getInput().addAction(new UserAction("Start Shooting") {
-            @Override
+
+        getInput().addAction(new UserAction("Move Upwards"){
+            protected void onAction(){
+                player.getComponent(PlayerComponent.class).moveY(false);
+            }
+        },KeyCode.W);
+
+        getInput().addAction(new UserAction("Move Down"){
+            protected void onAction(){
+                player.getComponent(PlayerComponent.class).moveY(true);
+            }
+        },KeyCode.S);
+
+        getInput().addAction(new UserAction("Move Left"){
+            protected void onAction(){
+                player.getComponent(PlayerComponent.class).moveX(true);
+            }
+        },KeyCode.A);
+
+        getInput().addAction(new UserAction("Move Right"){
+            protected void onAction(){
+                player.getComponent(PlayerComponent.class).moveX(false);
+            }
+        },KeyCode.D);
+
+        getInput().addAction(new UserAction("Reload"){
+            protected void onActionBegin(){
+                player.getComponent(PlayerComponent.class).getCurrentWeapon().reload();
+            }
+        },KeyCode.R);
+
+        getInput().addAction(new UserAction("Shoot") {
             protected void onActionBegin() {
                player.getComponent(PlayerComponent.class).getCurrentWeapon().fire(player);
                player.getComponent(PlayerComponent.class).setShooting(true);
@@ -106,6 +129,7 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         player = spawn("player");
+        player.setPosition(50, 50);
         player.getComponent(PlayerComponent.class).setUpPlayer();
     }
 
