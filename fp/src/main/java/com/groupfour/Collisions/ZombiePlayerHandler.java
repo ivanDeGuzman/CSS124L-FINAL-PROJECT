@@ -6,6 +6,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.App;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
@@ -38,11 +39,11 @@ public class ZombiePlayerHandler extends CollisionHandler {
         inflictDamage(zombie, player);
     }
 
-    // set how much you want the screen to shake here when player takes damage - yuri
     public void inflictDamage(Entity zombie, Entity player) {
-        PlayerComponent playerComp = player.getComponent(PlayerComponent.class);
-        playerComp.takeDamage(10);
-        flashTintRed();
+        
+        player.getComponent(PlayerComponent.class).takeDamage(10);
+        MainUI mainUI = new MainUI();
+        mainUI.flashTintRed();
         getGameScene().getViewport().shake(15, 5);
     }
 }

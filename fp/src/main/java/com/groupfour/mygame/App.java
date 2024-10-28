@@ -59,6 +59,7 @@ public class App extends GameApplication {
         settings.setTitle("Flatline: Oregon");
         settings.setVersion("Alpha 0.3");
         settings.addEngineService(MultiplayerService.class);
+        settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
 
@@ -81,7 +82,7 @@ public class App extends GameApplication {
 
     @Override
     protected void initInput(){
-        player = new  Entity();
+        player = new Entity();
 
         getInput().addAction(new UserAction("Move Upwards"){
             protected void onAction(){
@@ -122,6 +123,11 @@ public class App extends GameApplication {
                player.getComponent(PlayerComponent.class).setShooting(false);
             }
         }, MouseButton.PRIMARY);
+        getInput().addAction(new UserAction("Switch Weapons") {
+            protected void onActionBegin() {
+                player.getComponent(PlayerComponent.class).switchWeapon();
+            }
+        }, KeyCode.Q);
     }
     
     @Override
@@ -159,6 +165,7 @@ public class App extends GameApplication {
         gameStarted=true;
         FXGL.run(() -> {
             zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
         }, Duration.seconds(1));
 

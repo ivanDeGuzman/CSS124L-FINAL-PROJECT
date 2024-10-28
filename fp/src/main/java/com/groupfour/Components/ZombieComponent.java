@@ -22,7 +22,14 @@ public class ZombieComponent extends Component {
             Point2D targetPosition = target.getPosition();
             moveTowardsTarget(targetPosition, tpf);
         }
+
+        Point2D zombiePosition = entity.getPosition();
+        Point2D targetPosition = target.getPosition();
+        Point2D direction = targetPosition.subtract(zombiePosition);
+        double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
+        entity.setRotation(angle + 75);
     }
+    
 
     public void findClosestPlayer() {
         var players = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER);
@@ -45,7 +52,7 @@ public class ZombieComponent extends Component {
     }
 
     private void moveTowardsTarget(Point2D targetPosition, double tpf) {
-        Point2D zombiePosition = entity.getPosition();
+        Point2D zombiePosition = entity.getPosition(); 
         Point2D direction = targetPosition.subtract(zombiePosition).normalize();
 
         entity.translate(direction.multiply(100 * tpf));

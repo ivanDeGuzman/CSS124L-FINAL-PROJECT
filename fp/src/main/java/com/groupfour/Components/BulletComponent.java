@@ -19,6 +19,9 @@ public class BulletComponent extends Component {
         this.speed = speed;
     }
 
+    public void getbulletDamage() {
+
+    }
     @Override
     public void onUpdate(double tpf) {
         if (direction != null) {

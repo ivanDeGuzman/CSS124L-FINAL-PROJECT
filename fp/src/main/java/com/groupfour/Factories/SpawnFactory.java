@@ -11,11 +11,14 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.multiplayer.NetworkComponent;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.InBoundsComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -23,20 +26,15 @@ import javafx.util.Duration;
 
 public class SpawnFactory implements EntityFactory {
 
+    
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
-
-        var p1Texture = texture("1P_Walk.gif");
-        p1Texture.setScaleX(1.5);
-        p1Texture.setScaleY(1.5);
-
         return entityBuilder(data)
             .type(EntityType.PLAYER)
-            .at(100, 100)
-            .viewWithBBox(p1Texture)
+            .bbox(new HitBox(BoundingShape.box(50, 50)))
             .with(new NetworkComponent())
             .collidable()
-            .with(new PlayerComponent(100))
+            .with(new PlayerComponent(10000))
             .build();
     }
 
