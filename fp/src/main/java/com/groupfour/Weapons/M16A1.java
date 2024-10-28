@@ -13,7 +13,7 @@ public class M16A1 extends WeaponComponent {
     private boolean isFiring = false;
 
     public M16A1(boolean isServer, Connection<Bundle> connection) {
-        super("M16A1", 180, 30, 30, 1, 10, isServer, connection);
+        super("M16A1", 180, 30, 30, 0.2, 10, isServer, connection);
     }
 
     @Override
@@ -35,6 +35,8 @@ public class M16A1 extends WeaponComponent {
     }
 
     private void shoot(Entity player) {
+        //playing with sounds, dont mind it - padua
+        if (isFiring) FXGL.play("m16a1.wav");
         ammo--;
         System.out.println(name + " fired. Ammo left: " + ammo);
         Point2D position = player.getCenter();
