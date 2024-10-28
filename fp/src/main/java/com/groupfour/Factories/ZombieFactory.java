@@ -59,15 +59,12 @@ public class ZombieFactory implements EntityFactory {
     
     @Spawns("zombie")
     public Entity newZombie(SpawnData data) {
-        Texture zombieTexture = texture("Zombies/Basic_Zombie_Walking.gif");
-        zombieTexture.setScaleX(1.5);
-        zombieTexture.setScaleY(1.5);
         return entityBuilder(data)
                 .type(EntityType.ZOMBIE)
                 .at(getRandomSpawnPoint())
                 .collidable()
-                .view(zombieTexture)
-                .bbox(new HitBox("BODY", BoundingShape.box(zombieTexture.getWidth(), zombieTexture.getHeight())))
+                
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
                 .with(new NetworkComponent())
                 .with(new CellMoveComponent(40, 40, 150))
                 .with(new ZombieComponent(60))

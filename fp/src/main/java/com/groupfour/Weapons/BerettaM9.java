@@ -11,8 +11,9 @@ import javafx.geometry.Point2D;
 public class BerettaM9 extends WeaponComponent {
 
     public BerettaM9(boolean isServer, Connection<Bundle> connection) {
-        super("Beretta M9", 100, 1000, 15, 1.0, isServer, connection);
+        super("Beretta M9", 100, 1000, 15, 1.0, 15, isServer, connection);
     }
+    
 
     @Override
     public void fire(Entity player) {
@@ -25,5 +26,10 @@ public class BerettaM9 extends WeaponComponent {
         } else {
             System.out.println(name + " is out of ammo.");
         }
+    }
+
+    //placeholder
+    public void stopFiring() {
+        boolean isFiring = false;
     }
 }

@@ -4,6 +4,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.groupfour.Weapons.BerettaM9;
 import com.groupfour.Weapons.FAMAS;
+import com.groupfour.Weapons.M16A1;
 
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
@@ -33,6 +34,7 @@ public class PlayerComponent extends Component {
         this.health = initialHealth;
         weapons.add(new BerettaM9(false, null));
         weapons.add(new FAMAS(false, null));
+        weapons.add(new M16A1(false, null));
 
         sprites.add(texture("Players/1P_Idle.png"));
         sprites.add(texture("Players/1P_Walk.gif"));

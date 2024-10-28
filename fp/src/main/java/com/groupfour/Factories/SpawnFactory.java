@@ -1,10 +1,6 @@
 package com.groupfour.Factories;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
-import static com.almasb.fxgl.dsl.FXGL.texture;
-
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
@@ -14,12 +10,9 @@ import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
-import com.groupfour.Components.InBoundsComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;

@@ -4,25 +4,20 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
-import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
-import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
@@ -31,9 +26,6 @@ import com.groupfour.mygame.EntityTypes.EntityType;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.almasb.fxgl.app.MenuItem;
-
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
@@ -50,6 +42,7 @@ public class App extends GameApplication {
     private PhysicsWorld physics;
     private boolean gameStarted=false;
     private Input gameInput;
+    private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
     PlayerComponent placeholder;
 
@@ -121,6 +114,7 @@ public class App extends GameApplication {
             }
             protected void onActionEnd() {
                player.getComponent(PlayerComponent.class).setShooting(false);
+               player.getComponent(PlayerComponent.class).getCurrentWeapon().stopFiring();
             }
         }, MouseButton.PRIMARY);
         getInput().addAction(new UserAction("Switch Weapons") {
@@ -137,6 +131,7 @@ public class App extends GameApplication {
         player = spawn("player");
         player.setPosition(50, 50);
         player.getComponent(PlayerComponent.class).setUpPlayer();
+        zombiePlayerHandler = new ZombiePlayerHandler();
     }
 
     @Override
@@ -270,31 +265,13 @@ public class App extends GameApplication {
         if (isServer) {
             gameInput.update(tpf);
         }
-
-        //dont need this for now because m9 is semi auto. we add it once we decide on auto guns - padua
-
-        // if (players.get(0).getComponent(PlayerComponent.class).isShooting()) {
-        //     players.get(0).getComponent(PlayerComponent.class).setTimeSinceLastShot(players.get(0).getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
-        //     if (players.get(0).getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
-        //         shoot(getInput().getMousePositionWorld(), players.get(0)); 
-        //         players.get(0).getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
-        //     }
-        // }
-
-        // if (isShootingP2) {
-        //     timeSinceLastShotP2 += tpf;
-        //     if (timeSinceLastShotP2 >= shootInterval) {
-        //         shoot(getInput().getMousePositionWorld(), player2); 
-        //         timeSinceLastShotP2 = 0;
-        //     }
-        // }
     }
 
     private void checkCollisions() {
         getGameWorld().getEntitiesByType(EntityType.ZOMBIE).forEach(zombie -> {
             getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                 if (zombie.isColliding(player)) {
-                    new ZombiePlayerHandler().inflictDamage(zombie, player);
+                    zombiePlayerHandler.handleCollision(zombie, player);
                 }
             });
         });    

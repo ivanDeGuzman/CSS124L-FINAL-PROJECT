@@ -17,21 +17,24 @@ public abstract class WeaponComponent {
     protected int ammo;         
     protected int maxAmmo;      
     protected double fireRate;
+    protected double damage;
     protected boolean isServer;
     protected Connection<Bundle> connection;
     protected boolean isReloading = false;
 
-    public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, boolean isServer, Connection<Bundle> connection) {
+    public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage, boolean isServer, Connection<Bundle> connection) {
         this.name = name;
         this.ammoCount = ammoCount;
         this.ammo = ammo;
         this.maxAmmo = maxAmmo;
         this.fireRate = fireRate;
+        this.damage = damage;
         this.isServer = isServer;
         this.connection = connection;
     }
 
     public abstract void fire(Entity player);
+    public abstract void stopFiring();
 
     public void reload() {
         if (ammoCount > 0 && !isReloading) {
@@ -64,13 +67,21 @@ public abstract class WeaponComponent {
         return isReloading;
     }
 
+    public double getDamage() {
+        return damage;
+    }
+
     protected void spawnBullet(Point2D position, Point2D direction) {
-        var data = new SpawnData(position.getX(), position.getY()).put("direction", direction);
+        var data = new SpawnData(position.getX(), position.getY())
+            .put("direction", direction)
+            .put("damage", getDamage());
         Entity bullet = FXGL.spawn("bullet", data);
+        bullet.getComponent(BulletComponent.class).setDamage(damage);
         bullet.getComponent(BulletComponent.class).setDirection(direction);
 
         double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
         bullet.setRotation(angle);
+        System.out.println("Bullet damage: " + damage);
 
         if (isServer) {
             FXGL.getService(MultiplayerService.class).spawn(connection, bullet, "bullet");

@@ -14,7 +14,7 @@ public class FAMAS extends WeaponComponent {
     private boolean canFire = true;
 
     public FAMAS(boolean isServer, Connection<Bundle> connection) {
-        super("FAMAS", 100, 30, 30, 1.0, isServer, connection); 
+        super("FAMAS", 100, 30, 30, 1, 20, isServer, connection); 
     }
 
     @Override
@@ -36,6 +36,11 @@ public class FAMAS extends WeaponComponent {
         if (ammo == 0) {
             System.out.println(name + " out of ammo");
         }
+    }
+    
+    //placeholder
+    public void stopFiring() {
+        boolean isFiring = false;
     }
 
 }
