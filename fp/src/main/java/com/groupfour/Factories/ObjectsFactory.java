@@ -8,10 +8,13 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.ObjectComponent;
 import com.almasb.fxgl.multiplayer.NetworkComponent;
-import com.groupfour.Components.MapComponent;
+import com.groupfour.Components.InBoundsComponent;
+import com.groupfour.Components.ObjectsComponent;
+import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -25,7 +28,19 @@ public class ObjectsFactory implements EntityFactory {
         .collidable()
         .at(100, 100)
         .with(new NetworkComponent())
-        .with(new MapComponent())
+        .with(new VendingMachine(false, null))
+        .build();
+    }
+
+    @Spawns("microwave")
+    public Entity microwave(SpawnData data) {
+        return entityBuilder(data)
+        .type(EntityType.MICROWAVE)
+        .viewWithBBox(new Rectangle(40, 40, Color.GREEN))
+        .collidable()
+        .at(150, 100)
+        .with(new NetworkComponent())
+        .with(new Microwave(false, null))
         .build();
     }
 }

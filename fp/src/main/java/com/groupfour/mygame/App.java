@@ -22,6 +22,8 @@ import com.groupfour.Components.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
+import com.groupfour.Objects.Microwave;
+import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
@@ -43,7 +45,6 @@ public class App extends GameApplication {
     private Entity player;
     private Entity playerPlaceHolder;
     private Entity zombie;
-    private Entity objects;
     private boolean isServer;
     private PhysicsWorld physics;
     private boolean gameStarted=false;
@@ -51,6 +52,8 @@ public class App extends GameApplication {
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
     private boolean factoryInitialized = false;
+    private Entity microwave;
+    private Entity vmachine;
     PlayerComponent placeholder;
 
     @Override
@@ -137,17 +140,11 @@ public class App extends GameApplication {
     }
 
     private void interactWithObject() { 
-        getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> { 
-            getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE, EntityType.MICROWAVE).forEach(object -> { 
-                if (player.isColliding(object)) { 
-                    try {
-                        object.getComponent(MapComponent.class).getCurrentObject().interact();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } 
-                } 
-            }); 
-        }); 
+        if (player.distance(vmachine) < 30) {
+            vmachine.getComponent(VendingMachine.class).interact(); 
+        } else if (player.distance(microwave) < 40) { 
+            microwave.getComponent(Microwave.class).interact(); 
+        }
     }
     
     @Override
@@ -160,7 +157,10 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new ObjectsFactory());
         
         player = spawn("player");
-        objects = spawn("vmachine");
+        vmachine = spawn("vmachine");
+        microwave = spawn("microwave");
+
+
         player.setPosition(50, 50);
         player.getComponent(PlayerComponent.class).setUpPlayer();
         zombiePlayerHandler = new ZombiePlayerHandler();

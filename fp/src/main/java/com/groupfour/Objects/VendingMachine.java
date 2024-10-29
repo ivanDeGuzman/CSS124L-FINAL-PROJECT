@@ -21,16 +21,19 @@ public class VendingMachine extends ObjectsComponent {
         super("Vending Machine", isServer, connection);
     }
 
-    @Override
+    
     public void interact() {
-        if (canInteract) {
-            rand = (int) (Math.random() * range) + min;
-            buffs(rand);
-            canInteract = false;
-            FXGL.runOnce(() -> canInteract = true, Duration.minutes(1));
-        } else {
-            System.out.println("Vending machine is cooling down. Please wait.");
-        }
+        FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
+   
+            if (canInteract) {
+                rand = (int) (Math.random() * range) + min;
+                buffs(rand);
+                canInteract = false;
+                FXGL.runOnce(() -> canInteract = true, Duration.minutes(1));
+            } else {
+                System.out.println("Vending machine is cooling down. Please wait.");
+            }
+        });
     }
 
     public void buffs(int rand) {
@@ -65,10 +68,11 @@ public class VendingMachine extends ObjectsComponent {
                 System.out.println("Ice Cold");
                 break;
             case 5:
-                //Atomic Soda - boost all stats by 20% for 2 min
+                //Atomic Soda - boost all stats by 15% for 2 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
-                    player.getComponent(PlayerComponent.class).increaseWeaponDamage(1.2, Duration.minutes(2));
-                    player.getComponent(PlayerComponent.class).setReducedDamage(0.8, Duration.minutes(2));
+                    player.getComponent(PlayerComponent.class).increaseWeaponDamage(1.15, Duration.minutes(2));
+                    player.getComponent(PlayerComponent.class).setReducedDamage(0.85, Duration.minutes(2));
+                    player.getComponent(PlayerComponent.class).increaseSpeed(1.15, Duration.minutes(1));
                 });
                 System.out.println("Atomic");
                 break;
@@ -77,6 +81,7 @@ public class VendingMachine extends ObjectsComponent {
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                     player.getComponent(PlayerComponent.class).increaseWeaponDamage(1.4, Duration.minutes(2));
                     player.getComponent(PlayerComponent.class).setReducedDamage(0.6, Duration.minutes(2));
+                    player.getComponent(PlayerComponent.class).increaseSpeed(1.4, Duration.minutes(1));
                 });
                 System.out.println("Nuke");
                 break;

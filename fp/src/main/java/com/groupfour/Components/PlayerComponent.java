@@ -106,7 +106,7 @@ public class PlayerComponent extends Component {
 
     private void resetReducedDamage() { 
         this.reducedDamage = 1.0; 
-        }
+    }
 
     public void takeDamage(double damage) {
         if (!isDead) {
