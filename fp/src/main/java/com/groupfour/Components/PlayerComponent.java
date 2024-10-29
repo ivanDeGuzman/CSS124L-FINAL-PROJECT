@@ -11,6 +11,8 @@ import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import com.almasb.fxgl.app.scene.Viewport;
+import com.almasb.fxgl.dsl.FXGL;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,12 +23,14 @@ public class PlayerComponent extends Component {
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
     private List<Texture> sprites = new ArrayList<>();
-    private double speed = 2;
+    private double originalSpeed = 2.0;
+    private double speed = originalSpeed;
     private String name="test";
     private int currentWeaponIndex = 0;
     private boolean isMoving;
     private Point2D previousPosition;
     private SpriteState currentState = SpriteState.IDLE;
+    private double reducedDamage = 1.0;
 
     private enum SpriteState { IDLE, WALK, SHOOT }
 
@@ -56,6 +60,21 @@ public class PlayerComponent extends Component {
     public int getHealth() {
         return health;
     }
+    // BUFFS
+
+    public void increaseSpeed(double amount, Duration duration) { 
+        speed *= amount; 
+        FXGL.runOnce(() -> resetSpeed(), duration); 
+    }
+
+    public void increaseWeaponDamage(double amount, Duration duration) { 
+        getCurrentWeapon().increaseDamage(amount); 
+        FXGL.runOnce(() -> getCurrentWeapon().resetDamage(), duration); 
+    }
+
+    private void resetSpeed() { 
+        speed = originalSpeed; 
+    }
 
     public double getSpeed(){
         return speed;
@@ -77,8 +96,21 @@ public class PlayerComponent extends Component {
         this.timeSinceLastShot = timeSinceLastShot;
     }
 
-    public void takeDamage(int damage) {
+    public void setReducedDamage(double multiplier, Duration duration) { 
+        this.reducedDamage = multiplier; FXGL.runOnce(() -> resetReducedDamage(), duration); 
+    }
+    
+    public double getReducedDamage() {
+        return reducedDamage;
+    }
+
+    private void resetReducedDamage() { 
+        this.reducedDamage = 1.0; 
+        }
+
+    public void takeDamage(double damage) {
         if (!isDead) {
+            damage *= reducedDamage;
             health -= damage;
             System.out.println("Player health: " + health);
             if (health <= 0) {
@@ -192,6 +224,9 @@ public class PlayerComponent extends Component {
     return name;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
 }
     

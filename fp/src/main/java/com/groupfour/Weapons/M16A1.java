@@ -36,7 +36,7 @@ public class M16A1 extends WeaponComponent {
 
     private void shoot(Entity player) {
         //playing with sounds, dont mind it - padua
-        if (isFiring) FXGL.play("m16a1.wav");
+        //if (isFiring) FXGL.play("m16a1.wav");
         ammo--;
         System.out.println(name + " fired. Ammo left: " + ammo);
         Point2D position = player.getCenter();

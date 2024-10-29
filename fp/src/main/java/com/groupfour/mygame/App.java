@@ -6,6 +6,7 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
@@ -14,8 +15,11 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
+import com.groupfour.Components.MapComponent;
+import com.groupfour.Components.ObjectsComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
 import com.groupfour.UI.MainUI;
@@ -26,6 +30,7 @@ import com.groupfour.mygame.EntityTypes.EntityType;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
@@ -38,12 +43,14 @@ public class App extends GameApplication {
     private Entity player;
     private Entity playerPlaceHolder;
     private Entity zombie;
+    private Entity objects;
     private boolean isServer;
     private PhysicsWorld physics;
     private boolean gameStarted=false;
     private Input gameInput;
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
+    private boolean factoryInitialized = false;
     PlayerComponent placeholder;
 
     @Override
@@ -122,13 +129,38 @@ public class App extends GameApplication {
                 player.getComponent(PlayerComponent.class).switchWeapon();
             }
         }, KeyCode.Q);
+        getInput().addAction(new UserAction("Interact") {
+            protected void onActionBegin() {
+                interactWithObject();
+            }
+        }, KeyCode.F);
+    }
+
+    private void interactWithObject() { 
+        getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> { 
+            getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE, EntityType.MICROWAVE).forEach(object -> { 
+                if (player.isColliding(object)) { 
+                    try {
+                        object.getComponent(MapComponent.class).getCurrentObject().interact();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } 
+                } 
+            }); 
+        }); 
     }
     
     @Override
     public void initGame() {
+
+
+        
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
+        getGameWorld().addEntityFactory(new ObjectsFactory());
+        
         player = spawn("player");
+        objects = spawn("vmachine");
         player.setPosition(50, 50);
         player.getComponent(PlayerComponent.class).setUpPlayer();
         zombiePlayerHandler = new ZombiePlayerHandler();
@@ -277,6 +309,7 @@ public class App extends GameApplication {
         });    
     }
 
+    
     public static void main(String[] args) {
         launch(args);
     }

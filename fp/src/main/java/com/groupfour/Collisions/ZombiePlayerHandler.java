@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.ZombieComponent;
 import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
@@ -19,12 +20,6 @@ public class ZombiePlayerHandler extends CollisionHandler {
         super(EntityType.ZOMBIE, EntityType.PLAYER);
     }
 
-    public void handleCollision(Entity zombie, Entity player) {
-        if (canAttack) {
-            startAttackSequence(zombie, player);
-        }
-    }
-
     @Override
     protected void onCollisionBegin(Entity zombie, Entity player) {
         if (canAttack) {
@@ -32,8 +27,13 @@ public class ZombiePlayerHandler extends CollisionHandler {
         }
     }
 
+    public void handleCollision(Entity zombie, Entity player) {
+        if (canAttack) {
+            startAttackSequence(zombie, player);
+        }
+    }
+
     private void startAttackSequence(Entity zombie, Entity player) {
-        
         FXGL.runOnce(() -> {
             if (isInAttackRange(zombie.getPosition(), player.getPosition())) {
                 inflictDamage(zombie, player);
@@ -45,13 +45,18 @@ public class ZombiePlayerHandler extends CollisionHandler {
         return playerPosition.distance(zombiePosition) < 50;
     }
 
-    public void inflictDamage(Entity zombie, Entity player) {
-        player.getComponent(PlayerComponent.class).takeDamage(10);
+    private void inflictDamage(Entity zombie, Entity player) {
+        double reducedDamage = player.getComponent(PlayerComponent.class).getReducedDamage();
+        int baseDamage = 10;
+        double finalDamage = (baseDamage * reducedDamage);
+        player.getComponent(PlayerComponent.class).takeDamage(finalDamage);
+
+        System.out.println("Inflicted Damage: " + finalDamage + " (Reduced Damage Multiplier: " + reducedDamage + ")");
+
         new MainUI().flashTintRed();
         getGameScene().getViewport().shake(15, 5);
 
         canAttack = false;
         FXGL.runOnce(() -> canAttack = true, ATTACK_COOLDOWN);
     }
-
 }

@@ -4,6 +4,7 @@ import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.multiplayer.MultiplayerService;
 import com.almasb.fxgl.net.Connection;
 import javafx.geometry.Point2D;
@@ -21,6 +22,7 @@ public abstract class WeaponComponent {
     protected boolean isServer;
     protected Connection<Bundle> connection;
     protected boolean isReloading = false;
+    protected double originalDamage;
 
     public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage, boolean isServer, Connection<Bundle> connection) {
         this.name = name;
@@ -90,5 +92,12 @@ public abstract class WeaponComponent {
 
     public String getName() {
         return this.name;
+    }
+
+    public void increaseDamage(double bonusDamage) { 
+        this.damage *= bonusDamage; 
+    } 
+    public void resetDamage() {
+        this.damage = originalDamage; 
     }
 }
