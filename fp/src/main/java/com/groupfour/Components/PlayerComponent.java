@@ -59,7 +59,7 @@ public class PlayerComponent extends Component {
         previousPosition = entity.getPosition();
         updateSpriteVisibility();
     }
-
+    
     public int getHealth() {
         return health;
     }

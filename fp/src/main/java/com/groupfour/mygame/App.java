@@ -45,7 +45,7 @@ public class App extends GameApplication {
     
     private List<Entity> players= new ArrayList<>();
     private Entity player;
-    private int playerCount;
+    private int playerCount=1;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
@@ -151,8 +151,6 @@ public class App extends GameApplication {
     
     @Override
     public void initGame() {
-
-
         
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
@@ -216,8 +214,7 @@ public class App extends GameApplication {
         getDialogService().showConfirmationBox("Are you the host?", answer -> {
             MultiplayerStart multiplayerStart = new MultiplayerStart();
             isServer = answer;
-
-            //If host
+            //If host DONE
             if (answer) {
                 players.add(player);
                 var server = getNetService().newTCPServer(55555);
@@ -232,9 +229,12 @@ public class App extends GameApplication {
                     //first one will pop the loading screen and display a scene with a start button
                     if(playerCount==1){
                         getExecutor().startAsyncFX(() -> {
-                        getSceneService().popSubScene();
-                        FXGL.getSceneService().pushSubScene(multiplayerStart);
-                        multiplayerStart.addPlayer();
+                            getSceneService().popSubScene();
+                            FXGL.getSceneService().pushSubScene(multiplayerStart);
+                            multiplayerStart.addPlayer();
+                            multiplayerStart.setOnStartClick(e-> {
+                                onServer();
+                            });
                         });
                     }
                     else{
@@ -244,7 +244,7 @@ public class App extends GameApplication {
                 });
             } 
 
-            //If Client
+            //If Client WIP
             else {
                 players.add(player);
                 var client = getNetService().newTCPClient("localhost", 55555);
@@ -260,30 +260,34 @@ public class App extends GameApplication {
         });
     }
 
+    //DONE
     private void waitingForPlayers() {
         LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
         FXGL.getSceneService().pushSubScene(loadingScreen);
     }
 
     private void onServer() {
-        // player1 = spawn("player");
-        for (Entity player :players){
-        getService(MultiplayerService.class).spawn(connection, player, "player");
-
+        
+        getService(MultiplayerService.class).spawn(connection, players.get(0), "player");
+        for (int i=1; i<players.size();i++){
+            Entity clientPlayer = players.get(i);
+            getService(MultiplayerService.class).spawn(connection, clientPlayer, "player");
         }
-
-        // getService(MultiplayerService.class).spawn(connection, player2, "player");
+        getService(MultiplayerService.class).addInputReplicationReceiver(connection, getInput());
         
         FXGL.run(() -> {
             zombie = spawn("zombie", players.get(0).getCenter().getX() + 5, players.get(0).getCenter().getY() + 5);
             getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
+            updateFollower();
         }, Duration.seconds(1));
 
-        // getService(MultiplayerService.class).addInputReplicationReceiver(connection, gameInput);
-        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
+        // FXGL.run(() -> updateFollower(), Duration.seconds(1)); //Moved this to fxgl.run above
+        getSceneService().popSubScene();
+        getSceneService().popSubScene();
     }
 
     private void onClient() {
+        // player.getComponent(PlayerComponent.class).setInput(getInput());
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
     }
