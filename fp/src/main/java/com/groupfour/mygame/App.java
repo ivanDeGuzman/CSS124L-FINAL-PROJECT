@@ -4,25 +4,26 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
-import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
-import com.groupfour.Components.BulletComponent;
+import com.groupfour.Components.MapComponent;
+import com.groupfour.Components.ObjectsComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
-import com.groupfour.UI.LoadingScreen;
+import com.groupfour.Objects.Microwave;
+import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.MultiplayerStart;
 import com.groupfour.UI.PlayerCountMenu;
@@ -49,7 +50,11 @@ public class App extends GameApplication {
     private PhysicsWorld physics;
     private boolean gameStarted=false;
     private Input gameInput;
+    private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
+    private boolean factoryInitialized = false;
+    private Entity microwave;
+    private Entity vmachine;
     PlayerComponent placeholder;
 
     @Override
@@ -58,6 +63,7 @@ public class App extends GameApplication {
         settings.setTitle("Flatline: Oregon");
         settings.setVersion("Alpha 0.3");
         settings.addEngineService(MultiplayerService.class);
+        settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
 
@@ -80,7 +86,7 @@ public class App extends GameApplication {
 
     @Override
     protected void initInput(){
-        player = new  Entity();
+        player = new Entity();
 
         getInput().addAction(new UserAction("Move Upwards"){
             protected void onAction(){
@@ -119,16 +125,46 @@ public class App extends GameApplication {
             }
             protected void onActionEnd() {
                player.getComponent(PlayerComponent.class).setShooting(false);
+               player.getComponent(PlayerComponent.class).getCurrentWeapon().stopFiring();
             }
         }, MouseButton.PRIMARY);
+        getInput().addAction(new UserAction("Switch Weapons") {
+            protected void onActionBegin() {
+                player.getComponent(PlayerComponent.class).switchWeapon();
+            }
+        }, KeyCode.Q);
+        getInput().addAction(new UserAction("Interact") {
+            protected void onActionBegin() {
+                interactWithObject();
+            }
+        }, KeyCode.F);
+    }
+
+    private void interactWithObject() { 
+        if (player.distance(vmachine) < 30) {
+            vmachine.getComponent(VendingMachine.class).interact(); 
+        } else if (player.distance(microwave) < 40) { 
+            microwave.getComponent(Microwave.class).interact(); 
+        }
     }
     
     @Override
     public void initGame() {
+
+
+        
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
+        getGameWorld().addEntityFactory(new ObjectsFactory());
+        
         player = spawn("player");
+        vmachine = spawn("vmachine");
+        microwave = spawn("microwave");
+
+
+        player.setPosition(50, 50);
         player.getComponent(PlayerComponent.class).setUpPlayer();
+        zombiePlayerHandler = new ZombiePlayerHandler();
     }
 
     @Override
@@ -157,6 +193,7 @@ public class App extends GameApplication {
         gameStarted=true;
         FXGL.run(() -> {
             zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
         }, Duration.seconds(1));
 
@@ -273,36 +310,19 @@ public class App extends GameApplication {
         if (isServer) {
             gameInput.update(tpf);
         }
-
-        //dont need this for now because m9 is semi auto. we add it once we decide on auto guns - padua
-
-        // if (players.get(0).getComponent(PlayerComponent.class).isShooting()) {
-        //     players.get(0).getComponent(PlayerComponent.class).setTimeSinceLastShot(players.get(0).getComponent(PlayerComponent.class).getTimeSinceLastShot() + tpf);
-        //     if (players.get(0).getComponent(PlayerComponent.class).getTimeSinceLastShot() >= shootInterval) {
-        //         shoot(getInput().getMousePositionWorld(), players.get(0)); 
-        //         players.get(0).getComponent(PlayerComponent.class).setTimeSinceLastShot(0);
-        //     }
-        // }
-
-        // if (isShootingP2) {
-        //     timeSinceLastShotP2 += tpf;
-        //     if (timeSinceLastShotP2 >= shootInterval) {
-        //         shoot(getInput().getMousePositionWorld(), player2); 
-        //         timeSinceLastShotP2 = 0;
-        //     }
-        // }
     }
 
     private void checkCollisions() {
         getGameWorld().getEntitiesByType(EntityType.ZOMBIE).forEach(zombie -> {
             getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                 if (zombie.isColliding(player)) {
-                    new ZombiePlayerHandler().inflictDamage(zombie, player);
+                    zombiePlayerHandler.handleCollision(zombie, player);
                 }
             });
         });    
     }
 
+    
     public static void main(String[] args) {
         launch(args);
     }
