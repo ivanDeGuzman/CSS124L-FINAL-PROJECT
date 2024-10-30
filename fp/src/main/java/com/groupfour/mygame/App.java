@@ -15,7 +15,6 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
-import com.groupfour.Components.MapComponent;
 import com.groupfour.Components.ObjectsComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
