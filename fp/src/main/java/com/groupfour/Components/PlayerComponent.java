@@ -1,6 +1,7 @@
 package com.groupfour.Components;
 
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.input.Input;
 import com.groupfour.Weapons.BerettaM9;
 import javafx.geometry.Point2D;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -14,6 +15,7 @@ public class PlayerComponent extends Component {
     private WeaponComponent currentWeapon;
     private double speed =2;
     private String name="Player 1";
+    private Input input;
 
     public PlayerComponent(int initialHealth) {
         this.health = initialHealth;

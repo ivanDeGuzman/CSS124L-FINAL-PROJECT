@@ -24,6 +24,7 @@ import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
 import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
+import com.groupfour.UI.MultiplayerStart;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
@@ -42,6 +43,7 @@ public class App extends GameApplication {
     
     private List<Entity> players= new ArrayList<>();
     private Entity player;
+    private int playerCount;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
@@ -173,25 +175,38 @@ public class App extends GameApplication {
     }
 
     public void startMultiplayer() {
-
         getDialogService().showConfirmationBox("Are you the host?", answer -> {
+            MultiplayerStart multiplayerStart = new MultiplayerStart();
             isServer = answer;
-            getGameWorld().addEntityFactory(new SpawnFactory());
-            getGameWorld().addEntityFactory(new ZombieFactory());
+
+            //If host
             if (answer) {
-                players.set(0, player);
+                players.add(player);
                 var server = getNetService().newTCPServer(55555);
-                server.setOnConnected(conn -> {
-                    connection = conn;
-                    getExecutor().startAsyncFX(() -> {
-                        onServer();
-                        getSceneService().popSubScene();
-                        getSceneService().popSubScene();
-                    });
-                });
                 server.startAsync();
                 waitingForPlayers();
+
+                //When someone connects
+                server.setOnConnected(conn -> {
+                    System.out.println("please work");
+                    connection = conn;
+
+                    //first one will pop the loading screen and display a scene with a start button
+                    if(playerCount==1){
+                        getExecutor().startAsyncFX(() -> {
+                        getSceneService().popSubScene();
+                        FXGL.getSceneService().pushSubScene(multiplayerStart);
+                        multiplayerStart.addPlayer();
+                        });
+                    }
+                    else{
+                    multiplayerStart.addPlayer();
+                    }
+                    playerCount++;
+                });
             } 
+
+            //If Client
             else {
                 players.add(player);
                 var client = getNetService().newTCPClient("localhost", 55555);
@@ -214,30 +229,25 @@ public class App extends GameApplication {
 
     private void onServer() {
         // player1 = spawn("player");
+        for (Entity player :players){
         getService(MultiplayerService.class).spawn(connection, player, "player");
-        // if (player1 == null) {
-        //     System.out.println("Failed to spawn player1!");
-        // } else {
-        //     System.out.println("player1 spawned successfully!");
-        //     getService(MultiplayerService.class).spawn(connection, player1, "player");
-        // }
-        // player2 = spawn("player");
+
+        }
 
         // getService(MultiplayerService.class).spawn(connection, player2, "player");
         
-        // FXGL.run(() -> {
-        //     zombie = spawn("zombie", player1.getCenter().getX() + 5, player1.getCenter().getY() + 5);
-        //     getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
-        // }, Duration.seconds(1));
+        FXGL.run(() -> {
+            zombie = spawn("zombie", players.get(0).getCenter().getX() + 5, players.get(0).getCenter().getY() + 5);
+            getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
+        }, Duration.seconds(1));
 
         // getService(MultiplayerService.class).addInputReplicationReceiver(connection, gameInput);
         // FXGL.run(() -> updateFollower(), Duration.seconds(1));
     }
 
     private void onClient() {
-        // players.set(0,spawn("player"));
-        // getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-        // getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
+        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
     }
 
     private void updateFollower() {
