@@ -26,7 +26,6 @@ public class PlayerComponent extends Component {
     private List<Texture> sprites = new ArrayList<>();
     private double originalSpeed = 2.0;
     private double speed = originalSpeed;
-    private String name="test";
     private int currentWeaponIndex = 0;
     private boolean isMoving;
     private Point2D previousPosition;
@@ -35,7 +34,6 @@ public class PlayerComponent extends Component {
 
     private enum SpriteState { IDLE, WALK, SHOOT }
     private WeaponComponent currentWeapon;
-    private double speed =2;
     private String name="Player 1";
     private Input input;
 

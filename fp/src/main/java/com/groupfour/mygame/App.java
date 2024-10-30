@@ -24,6 +24,7 @@ import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
+import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.MultiplayerStart;
 import com.groupfour.UI.PlayerCountMenu;
