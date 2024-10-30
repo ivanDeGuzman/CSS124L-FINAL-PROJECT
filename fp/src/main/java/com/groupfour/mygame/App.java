@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.almasb.fxgl.app.MenuItem;
-
-import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
@@ -44,7 +42,6 @@ public class App extends GameApplication {
     
     private List<Entity> players= new ArrayList<>();
     private Entity player;
-    private Entity playerPlaceHolder;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
@@ -73,7 +70,7 @@ public class App extends GameApplication {
             public FXGLMenu newGameMenu() {
                 return new PlayerCountMenu(
                     App.this::startGame1P,
-                    App.this::startGame2P 
+                    App.this::startMultiplayer 
                 );
             }
         });
@@ -129,13 +126,12 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         player = spawn("player");
-        player.setPosition(50, 50);
         player.getComponent(PlayerComponent.class).setUpPlayer();
     }
 
     @Override
     public void initPhysics() {
-        physics = getPhysicsWorld();
+    physics = getPhysicsWorld();
         if (isServer) {
             physics.addCollisionHandler(new BulletZombieHandler());
             physics.addCollisionHandler(new ZombiePlayerHandler());
@@ -149,7 +145,7 @@ public class App extends GameApplication {
         
      @Override
      protected void initUI() {
-        FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startGame2P)), Duration.seconds(.01));
+        FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer)), Duration.seconds(.01));
         var ui = new MainUI();
         addUINode(ui, 30, 50);
     }
@@ -176,52 +172,49 @@ public class App extends GameApplication {
         },Duration.seconds(0.1));
     }
 
-    public void resetGameWorld() {
-        getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
-        zombie = null;
-        gameStarted = false;
-        getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startGame2P));
-    }
+    public void startMultiplayer() {
 
-    public void startGame2P() {
-        // getDialogService().showConfirmationBox("Are you the host?", yes -> {
-        //     isServer = yes;
-        //     getGameWorld().addEntityFactory(new SpawnFactory());
-        //     getGameWorld().addEntityFactory(new ZombieFactory());
-        //     if (yes) {
-        //         var server = getNetService().newTCPServer(55555);
-        //         server.setOnConnected(conn -> {
-        //             connection = conn;
-        //             getExecutor().startAsyncFX(() -> {
-        //                 onServer();
-        //                 getSceneService().popSubScene();
-        //                 getSceneService().popSubScene();
-        //             });
-        //         });
-        //         server.startAsync();
-        //         waitingForPlayers();
-        //     } else {
-        //         var client = getNetService().newTCPClient("localhost", 55555);
-        //         client.setOnConnected(conn -> {
-        //             connection = conn;
-        //             getExecutor().startAsyncFX(() -> {
-        //                 onClient();
-        //                 getSceneService().popSubScene();
-        //             });
-        //         });
-        //         client.connectAsync();
-        //     }
-        // });
+        getDialogService().showConfirmationBox("Are you the host?", answer -> {
+            isServer = answer;
+            getGameWorld().addEntityFactory(new SpawnFactory());
+            getGameWorld().addEntityFactory(new ZombieFactory());
+            if (answer) {
+                players.set(0, player);
+                var server = getNetService().newTCPServer(55555);
+                server.setOnConnected(conn -> {
+                    connection = conn;
+                    getExecutor().startAsyncFX(() -> {
+                        onServer();
+                        getSceneService().popSubScene();
+                        getSceneService().popSubScene();
+                    });
+                });
+                server.startAsync();
+                waitingForPlayers();
+            } 
+            else {
+                players.add(player);
+                var client = getNetService().newTCPClient("localhost", 55555);
+                client.setOnConnected(conn -> {
+                    connection = conn;
+                    getExecutor().startAsyncFX(() -> {
+                        onClient();
+                        getSceneService().popSubScene();
+                    });
+                });
+                client.connectAsync();
+            }
+        });
     }
 
     private void waitingForPlayers() {
-        // LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
-        // FXGL.getSceneService().pushSubScene(loadingScreen);
+        LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
+        FXGL.getSceneService().pushSubScene(loadingScreen);
     }
 
     private void onServer() {
         // player1 = spawn("player");
-        // getService(MultiplayerService.class).spawn(connection, player1, "player");
+        getService(MultiplayerService.class).spawn(connection, player, "player");
         // if (player1 == null) {
         //     System.out.println("Failed to spawn player1!");
         // } else {
@@ -253,6 +246,13 @@ public class App extends GameApplication {
         } else {
             System.out.println("No more Zombies Left ");
         }
+    }
+
+    public void resetGameWorld() {
+        getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
+        zombie = null;
+        gameStarted = false;
+        getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
     }
 
     @Override

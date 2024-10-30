@@ -13,7 +13,7 @@ public class PlayerComponent extends Component {
     private double timeSinceLastShot = 0;
     private WeaponComponent currentWeapon;
     private double speed =2;
-    private String name="test";
+    private String name="Player 1";
 
     public PlayerComponent(int initialHealth) {
         this.health = initialHealth;
