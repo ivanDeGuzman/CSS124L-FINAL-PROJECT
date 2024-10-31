@@ -3,6 +3,7 @@ package com.groupfour.Components;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.input.Input;
+import com.groupfour.UI.MainUI;
 import com.groupfour.Weapons.BerettaM9;
 import com.groupfour.Weapons.FAMAS;
 import com.groupfour.Weapons.M16A1;
@@ -19,7 +20,8 @@ import java.util.ArrayList;
 
 public class PlayerComponent extends Component {
     private boolean isDead = false;
-    private int health;
+    private MainUI ui;
+    private int health = 100;
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
@@ -31,14 +33,13 @@ public class PlayerComponent extends Component {
     private Point2D previousPosition;
     private SpriteState currentState = SpriteState.IDLE;
     private double reducedDamage = 1.0;
+    private int currency = 0;
 
     private enum SpriteState { IDLE, WALK, SHOOT }
-    private WeaponComponent currentWeapon;
     private String name="Player 1";
-    private Input input;
 
-    public PlayerComponent(int initialHealth) {
-        this.health = initialHealth;
+    public PlayerComponent() {
+        
         weapons.add(new BerettaM9(false, null));
         weapons.add(new FAMAS(false, null));
         weapons.add(new M16A1(false, null));
@@ -60,6 +61,14 @@ public class PlayerComponent extends Component {
         updateSpriteVisibility();
     }
 
+    public void setCurrency(int amount) { 
+        this.currency += amount; 
+    }
+
+    public int getCurrency() {
+        return currency;
+    }
+
     public int getHealth() {
         return health;
     }
@@ -70,9 +79,11 @@ public class PlayerComponent extends Component {
         FXGL.runOnce(() -> resetSpeed(), duration); 
     }
 
-    public void increaseWeaponDamage(double amount, Duration duration) { 
-        getCurrentWeapon().increaseDamage(amount); 
-        FXGL.runOnce(() -> getCurrentWeapon().resetDamage(), duration); 
+    public void increaseWeaponDamage(double amount, Duration duration) {
+        weapons.forEach(weapon -> {
+            weapon.increaseDamage(amount);
+            FXGL.runOnce(() -> weapon.resetDamage(), duration);
+        });
     }
 
     private void resetSpeed() { 

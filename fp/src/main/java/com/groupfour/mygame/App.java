@@ -44,7 +44,7 @@ public class App extends GameApplication {
     
     private List<Entity> players= new ArrayList<>();
     private Entity player;
-    private int playerCount;
+    private int playerCount = 1;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
@@ -55,7 +55,8 @@ public class App extends GameApplication {
     private boolean factoryInitialized = false;
     private Entity microwave;
     private Entity vmachine;
-    PlayerComponent placeholder;
+    private MainUI ui;
+    PlayerComponent playerComponent;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -151,46 +152,45 @@ public class App extends GameApplication {
     @Override
     public void initGame() {
 
-
-        
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
-        
+
         player = spawn("player");
-        vmachine = spawn("vmachine");
-        microwave = spawn("microwave");
-
-
         player.setPosition(50, 50);
-        player.getComponent(PlayerComponent.class).setUpPlayer();
-        zombiePlayerHandler = new ZombiePlayerHandler();
     }
 
     @Override
-    public void initPhysics() {
-    physics = getPhysicsWorld();
-        if (isServer) {
-            physics.addCollisionHandler(new BulletZombieHandler());
-            physics.addCollisionHandler(new ZombiePlayerHandler());
-            getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-            FXGL.run(() -> checkCollisions(), Duration.seconds(1));
-        } else
-            physics.addCollisionHandler(new BulletZombieHandler());
-            physics.addCollisionHandler(new ZombiePlayerHandler());
-            FXGL.run(() -> checkCollisions(), Duration.seconds(1));
-    }
-        
-     @Override
      protected void initUI() {
         FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer)), Duration.seconds(.01));
-        var ui = new MainUI();
+        ui = new MainUI();
         addUINode(ui, 30, 50);
+    }
+    @Override
+    public void initPhysics() {
+        physics = getPhysicsWorld();
+            if (isServer) {
+                physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new ZombiePlayerHandler());
+                getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+            } else {
+                physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new ZombiePlayerHandler());
+                FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+            }
     }
     
     public void startGame1P() {
+        vmachine = spawn("vmachine");
+        microwave = spawn("microwave");
+
+        gameStarted = true;
+
+        player.getComponent(PlayerComponent.class).setUpPlayer();
+        zombiePlayerHandler = new ZombiePlayerHandler();
+
         getSceneService().popSubScene();
-        gameStarted=true;
         FXGL.run(() -> {
             zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
             zombie.getViewComponent();
@@ -310,6 +310,8 @@ public class App extends GameApplication {
         if (isServer) {
             gameInput.update(tpf);
         }
+        ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
+        ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
     }
 
     private void checkCollisions() {
@@ -322,7 +324,7 @@ public class App extends GameApplication {
         });    
     }
 
-    
+
     public static void main(String[] args) {
         launch(args);
     }

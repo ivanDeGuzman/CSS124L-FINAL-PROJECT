@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.runOnce;
 
-public abstract class WeaponComponent {
+public abstract class WeaponComponent extends Component {
     protected boolean hasAmmo = true;
     protected String name;
     protected int ammoCount;

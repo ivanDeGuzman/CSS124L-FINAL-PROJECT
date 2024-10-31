@@ -9,7 +9,7 @@ public class BulletComponent extends Component {
     private double damage;
 
     public BulletComponent() {
-        this.speed = 600;
+        this.speed = 3600;
     }
 
     public void setDirection(Point2D direction) {
