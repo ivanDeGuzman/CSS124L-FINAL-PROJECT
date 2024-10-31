@@ -154,6 +154,8 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
 
+        // setLevelFromMap("Lobby.tmx");
+        
         player = spawn("player");
         player.setPosition(50, 50);
     }
