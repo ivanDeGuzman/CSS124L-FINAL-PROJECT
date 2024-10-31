@@ -27,7 +27,7 @@ public class SpawnFactory implements EntityFactory {
             .bbox(new HitBox(BoundingShape.box(50, 50)))
             .with(new NetworkComponent())
             .collidable()
-            .with(new PlayerComponent(10000))
+            .with(new PlayerComponent())
             .build();
     }
 

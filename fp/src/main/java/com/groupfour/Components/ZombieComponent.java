@@ -113,7 +113,16 @@ public class ZombieComponent extends Component {
         health -= damage;
         if (health <= 0) {
             entity.removeFromWorld();
+            onDeath();
         }
+    }
+
+    public void onDeath() {
+        FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> { 
+            player.getComponent(PlayerComponent.class).setCurrency(10);
+            
+            
+        });
     }
 
     
