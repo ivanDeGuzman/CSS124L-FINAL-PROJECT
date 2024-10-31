@@ -45,7 +45,7 @@ public class MainUI extends Parent {
     public void goldUI() {
         goldText = new Text();
         goldText.setFill(Color.GOLD);
-        goldText.setFont(Font.font("Dosis", 25));
+        goldText.setFont(Font.font("Cambria Math", 25));
         goldText.setTranslateX(20);
         goldText.setTranslateY(0);
         getChildren().add(goldText);
@@ -107,7 +107,7 @@ public class MainUI extends Parent {
         healthBar.setMinWidth(200 * healthPercent);
         healthText.setText("" + health);
 
-        if (healthPercent == 0) {
+        if (healthPercent <= 0) {
             healthBar.setStyle("-fx-background-color: transparent");
             healthText.setFill(Color.RED);
             healthText.setText("DEAD");

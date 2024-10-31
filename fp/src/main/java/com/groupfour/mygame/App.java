@@ -6,7 +6,6 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
@@ -15,7 +14,7 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
-import com.groupfour.Components.ObjectsComponent;
+import com.groupfour.Components.BoundsComponent;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
@@ -52,7 +51,6 @@ public class App extends GameApplication {
     private Input gameInput;
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
-    private boolean factoryInitialized = false;
     private Entity microwave;
     private Entity vmachine;
     private MainUI ui;
@@ -142,9 +140,9 @@ public class App extends GameApplication {
     }
 
     private void interactWithObject() { 
-        if (player.distance(vmachine) < 30) {
+        if (player.distance(vmachine) < 60) {
             vmachine.getComponent(VendingMachine.class).interact(); 
-        } else if (player.distance(microwave) < 40) { 
+        } else if (player.distance(microwave) < 60) { 
             microwave.getComponent(Microwave.class).interact(); 
         }
     }
@@ -166,6 +164,7 @@ public class App extends GameApplication {
         ui = new MainUI();
         addUINode(ui, 30, 50);
     }
+    
     @Override
     public void initPhysics() {
         physics = getPhysicsWorld();
@@ -179,6 +178,7 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             }
+            FXGL.run(() -> BoundsComponent.ObjectPlayerCollision(player), Duration.seconds(0.0017));
     }
     
     public void startGame1P() {
@@ -191,13 +191,15 @@ public class App extends GameApplication {
         zombiePlayerHandler = new ZombiePlayerHandler();
 
         getSceneService().popSubScene();
-        FXGL.run(() -> {
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-            zombie.getViewComponent();
-            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-        }, Duration.seconds(1));
 
-        FXGL.run(() -> updateFollower(), Duration.seconds(1));
+        //Zombie spawning disabled for dev testing - padua
+        // FXGL.run(() -> {
+        //     zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+        //     zombie.getViewComponent();
+        //     zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        // }, Duration.seconds(1));
+
+        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
         FXGL.run(()->{
             if(player.getComponent(PlayerComponent.class).isDead()){
                 player.getComponent(PlayerComponent.class).setDeath(false);

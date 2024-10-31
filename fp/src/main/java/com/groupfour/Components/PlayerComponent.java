@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 public class PlayerComponent extends Component {
     private boolean isDead = false;
-    private MainUI ui;
     private int health = 100;
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
@@ -72,7 +71,11 @@ public class PlayerComponent extends Component {
     public int getHealth() {
         return health;
     }
+
     // BUFFS
+    public void heal() {
+
+    }
 
     public void increaseSpeed(double amount, Duration duration) { 
         speed *= amount; 
