@@ -3,7 +3,7 @@ package com.groupfour.Collisions;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.BulletComponent;
-import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 public class BulletZombieHandler extends CollisionHandler {

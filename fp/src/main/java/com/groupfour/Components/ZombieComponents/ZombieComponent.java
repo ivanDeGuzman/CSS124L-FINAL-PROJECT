@@ -1,8 +1,9 @@
-package com.groupfour.Components;
+package com.groupfour.Components.ZombieComponents;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
+import com.groupfour.Components.PlayerComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import static com.almasb.fxgl.dsl.FXGL.texture;
@@ -16,27 +17,12 @@ import javafx.geometry.Point2D;
 public class ZombieComponent extends Component {
     private Entity target;
     private int health;
-    private List<Texture> sprites = new ArrayList<>();
-    private SpriteState currentState = SpriteState.WALK;
-
-    private enum SpriteState { WALK, ATTACK }
 
     public ZombieComponent(int initialHealth) {
         this.health = initialHealth;
-        
-        sprites.add(texture("Zombies/Basic_Zombie_Walking.gif"));
-        sprites.add(texture("Zombies/Basic_Zombie_Attack.gif"));
-
-        sprites.forEach(sprite -> sprite.setScaleX(1.5));
-        sprites.forEach(sprite -> sprite.setScaleY(1.5));
 
     }
 
-    public void onAdded() {
-        entity.getViewComponent().addChild(sprites.get(SpriteState.WALK.ordinal()));
-        entity.getViewComponent().addChild(sprites.get(SpriteState.ATTACK.ordinal()));
-        updateSpriteVisibility();
-    }
 
     @Override
     public void onUpdate(double tpf) {
@@ -45,23 +31,7 @@ public class ZombieComponent extends Component {
         if (target != null) {
             Point2D targetPosition = target.getPosition();
             moveTowardsTarget(targetPosition, tpf);
-            updateSpriteState(targetPosition);
         }
-    }
-    
-    private void updateSpriteState(Point2D targetPosition) {
-        Point2D zombiePosition = entity.getCenter();
-        double distanceToPlayer = targetPosition.distance(zombiePosition);
-        SpriteState newState = (distanceToPlayer < 50) ? SpriteState.ATTACK : SpriteState.WALK;
-
-        if (newState != currentState) {
-            currentState = newState;
-            updateSpriteVisibility();
-        }
-
-        Point2D direction = targetPosition.subtract(zombiePosition);
-        double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
-        entity.setRotation(angle + 75);
     }
 
     public void findClosestPlayer() {
@@ -84,19 +54,6 @@ public class ZombieComponent extends Component {
         }
     }
 
-    private void updateSpriteVisibility() {
-        for (Texture sprite : sprites) {
-            sprite.setVisible(false);
-        }
-        switch (currentState) {
-            case ATTACK:
-                sprites.get(SpriteState.ATTACK.ordinal()).setVisible(true);
-                break;
-            case WALK:
-                sprites.get(SpriteState.WALK.ordinal()).setVisible(true);
-                break;
-        }
-    }
 
     private void moveTowardsTarget(Point2D targetPosition, double tpf) {
         Point2D zombiePosition = entity.getPosition(); 

@@ -14,9 +14,10 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
+import com.groupfour.Components.AnimationComponent;
 import com.groupfour.Components.BoundsComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
@@ -91,23 +92,35 @@ public class App extends GameApplication {
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveY(false);
             }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
+            }
         },KeyCode.W);
 
         getInput().addAction(new UserAction("Move Down"){
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveY(true);
             }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
+            }
         },KeyCode.S);
 
         getInput().addAction(new UserAction("Move Left"){
             protected void onAction(){
-                player.getComponent(PlayerComponent.class).moveX(true);
+                player.getComponent(PlayerComponent.class).moveX(true);   
+            }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.A);
 
         getInput().addAction(new UserAction("Move Right"){
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveX(false);
+            }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.D);
 
