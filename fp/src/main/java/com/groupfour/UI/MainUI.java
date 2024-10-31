@@ -1,11 +1,14 @@
 package com.groupfour.UI;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import com.groupfour.Components.PlayerComponent;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -15,6 +18,8 @@ import javafx.util.Duration;
 public class MainUI extends Parent {
     private Text goldText;
     private Text healthText;
+    private Text showAmmo;
+    private Text currentGun;
     private StackPane stack;
     private Region healthBar;
     private Region healthBarBorder;
@@ -23,6 +28,7 @@ public class MainUI extends Parent {
     public MainUI() {
         goldUI();
         healthBar();
+        gunUI();
     }
 
     public void flashTintRed() {
@@ -66,6 +72,26 @@ public class MainUI extends Parent {
         
         getChildren().addAll(healthBarBorder, stack);
     }
+
+    public void gunUI() {
+        VBox gunBox = new VBox();
+        showAmmo = new Text();
+        currentGun = new Text();
+        showAmmo.setFont(Font.font("Comic Sans MS", 15));
+        currentGun.setFont(Font.font("Comic Sans MS", 20));
+        showAmmo.setTranslateX(20);
+        showAmmo.setTranslateY(100);
+        currentGun.setTranslateX(20);
+        currentGun.setTranslateY(80);
+
+        gunBox.getChildren().addAll(currentGun, showAmmo);
+        getChildren().add(gunBox);
+    }
+
+    public void updateGunUI(int ammo, int ammoCount, String name) {
+        showAmmo.setText("" + ammo + "/" + ammoCount);
+        currentGun.setText(name);
+    }
     
     public void updateGold(int gold) {   
         goldText.setText("Gold: " + gold);
@@ -86,6 +112,5 @@ public class MainUI extends Parent {
             healthText.setFill(Color.RED);
             healthText.setText("DEAD");
         }
-
     }
 }

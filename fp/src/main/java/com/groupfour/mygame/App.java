@@ -318,6 +318,11 @@ public class App extends GameApplication {
         }
         ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
         ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
+        ui.updateGunUI(
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmo(), 
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
+            );
     }
 
     private void checkCollisions() {

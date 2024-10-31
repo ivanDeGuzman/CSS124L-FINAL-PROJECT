@@ -52,7 +52,7 @@ public abstract class WeaponComponent extends Component {
             }, Duration.seconds(1.5));
         }
     }
-
+    
     public int getAmmo() {
         return ammo;
     }
