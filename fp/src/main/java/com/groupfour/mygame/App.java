@@ -242,32 +242,24 @@ public class App extends GameApplication {
                 server.startAsync();
                 waitingForPlayers();
 
-                //When someone connects
                 server.setOnConnected(conn -> {
-                    System.out.println("please work");
                     connection = conn;
-
-                    //first one will pop the loading screen and display a scene with a start button
-                    if(playerCount==1){
-                        getExecutor().startAsyncFX(() -> {
+                    getExecutor().startAsyncFX(() -> {
+                        if(players.size()==1){
                             getSceneService().popSubScene();
                             FXGL.getSceneService().pushSubScene(multiplayerStart);
-                            multiplayerStart.addPlayer();
                             multiplayerStart.setOnStartClick(e-> {
                                 onServer();
                             });
-                        });
-                    }
-                    else{
-                    multiplayerStart.addPlayer();
-                    }
-                    playerCount++;
+                        }
+                        multiplayerStart.addPlayer();
+                        players.add(spawn("player"));
+                        playerCount++;
+                    });
                 });
             } 
-
             //If Client WIP
             else {
-                players.add(player);
                 var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
@@ -288,7 +280,7 @@ public class App extends GameApplication {
     }
 
     private void onServer() {
-        
+        System.out.println(players.size());
         getService(MultiplayerService.class).spawn(connection, players.get(0), "player");
         for (int i=1; i<players.size();i++){
             Entity clientPlayer = players.get(i);
@@ -321,7 +313,7 @@ public class App extends GameApplication {
         }
     }
 
-    public void resetGameWorld() {
+     public void resetGameWorld() {
         getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
         zombie = null;
         gameStarted = false;
