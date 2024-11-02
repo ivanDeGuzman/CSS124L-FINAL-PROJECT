@@ -29,7 +29,7 @@ public class AnimationComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        System.out.println(isMoving);
+        // System.out.println(isMoving);
         if (isMoving) {
             if (texture.getAnimationChannel() != animWalk) {
                 texture.loopAnimationChannel(animWalk);

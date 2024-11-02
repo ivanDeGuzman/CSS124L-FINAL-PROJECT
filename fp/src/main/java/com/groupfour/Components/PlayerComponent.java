@@ -32,6 +32,7 @@ public class PlayerComponent extends Component {
     private double reducedDamage = 1.0;
     private int currency = 0;
     private AnimationComponent ac;
+    private Input clientInputs = new Input();
 
     private String name="Player 1";
 
@@ -58,6 +59,13 @@ public class PlayerComponent extends Component {
 
     public int getHealth() {
         return health;
+    }
+
+    public void setInput(Input input){
+        clientInputs = input;
+    }
+    public Input getClientInput(){
+        return clientInputs;
     }
 
     // BUFFS
