@@ -7,6 +7,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.EntityBuilder;
 import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
@@ -17,7 +18,7 @@ import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
-import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.geometry.Point2D;
@@ -56,18 +57,72 @@ public class ZombieFactory implements EntityFactory {
         //if player is in vicinity of spawn area, spawn at a new location
         return new Point2D(SPAWN_DISTANCE, SPAWN_DISTANCE);
     }
-    
-    @Spawns("zombie")
-    public Entity newZombie(SpawnData data) {
+
+    private EntityBuilder commonZombieSetup(SpawnData data, int health) {
         return entityBuilder(data)
                 .type(EntityType.ZOMBIE)
                 .at(getRandomSpawnPoint())
                 .collidable()
-                
-                .bbox(new HitBox(BoundingShape.box(50, 50)))
                 .with(new NetworkComponent())
+                .with(new ZombieComponent(health));
+    }
+    
+    @Spawns("zombie")
+    public Entity newZombie(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
                 .with(new CellMoveComponent(40, 40, 150))
-                .with(new ZombieComponent(60))
                 .build();
     }
+
+    @Spawns("chef_zombie")
+    public Entity newChefZombie(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new CellMoveComponent(40, 40, 150))
+                .build();
+    }
+
+    @Spawns("doctor_zombie")
+    public Entity newDoctorZombie(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new CellMoveComponent(40, 40, 150))
+                .build();
+    }
+
+    @Spawns("guard_zombie")
+    public Entity newGuardZombie(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new CellMoveComponent(40, 40, 150))
+                .build();
+    }
+
+    @Spawns("hazmat_zombie")
+    public Entity newHazmatZombie(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new CellMoveComponent(40, 40, 150))
+                .build();
+    }
+
+    @Spawns("welder_zombie")
+    public Entity newWelderZombie(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new CellMoveComponent(40, 40, 150))
+                .build();
+    }
+
+    @Spawns("warden")
+    public Entity newWarden(SpawnData data) {
+        return commonZombieSetup(data, 60)
+                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .with(new CellMoveComponent(40, 40, 150))
+                .build();
+    }
+
+
+
 }

@@ -3,6 +3,7 @@ package com.groupfour.Components;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.input.Input;
+import com.groupfour.UI.MainUI;
 import com.groupfour.Weapons.BerettaM9;
 import com.groupfour.Weapons.FAMAS;
 import com.groupfour.Weapons.M16A1;
@@ -11,6 +12,8 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+
+import com.almasb.fxgl.animation.Animation;
 import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 
@@ -19,60 +22,59 @@ import java.util.ArrayList;
 
 public class PlayerComponent extends Component {
     private boolean isDead = false;
-    private int health;
+    private int health = 100;
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
-    private List<Texture> sprites = new ArrayList<>();
-    private double originalSpeed = 2.0;
+    private double originalSpeed = 2;
     private double speed = originalSpeed;
     private int currentWeaponIndex = 0;
-    private boolean isMoving;
-    private Point2D previousPosition;
-    private SpriteState currentState = SpriteState.IDLE;
     private double reducedDamage = 1.0;
+    private int currency = 0;
+    private AnimationComponent ac;
 
-    private enum SpriteState { IDLE, WALK, SHOOT }
-    private WeaponComponent currentWeapon;
     private String name="Player 1";
-    private Input input;
 
-    public PlayerComponent(int initialHealth) {
-        this.health = initialHealth;
+    public PlayerComponent() {
+        
         weapons.add(new BerettaM9(false, null));
         weapons.add(new FAMAS(false, null));
         weapons.add(new M16A1(false, null));
-
-        sprites.add(texture("Players/1P_Idle.png"));
-        sprites.add(texture("Players/1P_Walk.gif"));
-        sprites.add(texture("Players/1P_Shoot.gif"));
-
-        sprites.forEach(sprite -> sprite.setScaleX(1.5));
-        sprites.forEach(sprite -> sprite.setScaleY(1.5));
     }
-    
+
     @Override
     public void onAdded() {
-        entity.getViewComponent().addChild(sprites.get(SpriteState.IDLE.ordinal()));
-        entity.getViewComponent().addChild(sprites.get(SpriteState.WALK.ordinal()));
-        entity.getViewComponent().addChild(sprites.get(SpriteState.SHOOT.ordinal()));
-        previousPosition = entity.getPosition();
-        updateSpriteVisibility();
+        ac = new AnimationComponent();
+        entity.addComponent(ac);
     }
-    
+
+    public void setCurrency(int amount) { 
+        this.currency += amount; 
+    }
+
+    public int getCurrency() {
+        return currency;
+    }
+
     public int getHealth() {
         return health;
     }
+
     // BUFFS
+    public void heal() {
+
+    }
 
     public void increaseSpeed(double amount, Duration duration) { 
         speed *= amount; 
         FXGL.runOnce(() -> resetSpeed(), duration); 
     }
 
-    public void increaseWeaponDamage(double amount, Duration duration) { 
-        getCurrentWeapon().increaseDamage(amount); 
-        FXGL.runOnce(() -> getCurrentWeapon().resetDamage(), duration); 
+    public void increaseWeaponDamage(double amount, Duration duration) {
+        weapons.forEach(weapon -> {
+            weapon.increaseDamage(amount);
+            FXGL.runOnce(() -> weapon.resetDamage(), duration);
+        });
     }
 
     private void resetSpeed() { 
@@ -150,45 +152,10 @@ public class PlayerComponent extends Component {
         double angle = Math.toDegrees(Math.atan2(vector.getY(), vector.getX()));
         entity.setRotation(angle + 90);
 
-        boolean isMovingNow = !playerPosition.equals(previousPosition);
-
-        if (!shooting) {
-            isMoving = isMovingNow;
-        }
-
-        updateSpriteState();
-        previousPosition = playerPosition;
     }
     
     public boolean isDead() {
         return isDead;
-    }
-
-    private void updateSpriteState() {
-        SpriteState newState = shooting ? SpriteState.SHOOT : (isMoving ? SpriteState.WALK : SpriteState.IDLE);
-
-        if (newState != currentState) {
-            currentState = newState;
-            updateSpriteVisibility();
-        }
-    }
-
-    private void updateSpriteVisibility() {
-        for (Texture sprite : sprites) {
-            sprite.setVisible(false);
-        }
-
-        switch (currentState) {
-            case SHOOT:
-                sprites.get(SpriteState.SHOOT.ordinal()).setVisible(true);
-                break;
-            case WALK:
-                sprites.get(SpriteState.WALK.ordinal()).setVisible(true);
-                break;
-            case IDLE:
-                sprites.get(SpriteState.IDLE.ordinal()).setVisible(true);
-                break;
-        }
     }
 
     public void setUpPlayer() {
@@ -198,6 +165,7 @@ public class PlayerComponent extends Component {
     }
  
     public void moveX(boolean isLeft) {
+
         double tempSpeed = speed;
         if (!isDead()) {
             if (isShooting()) {
@@ -206,7 +174,8 @@ public class PlayerComponent extends Component {
             if (isLeft) {
                 tempSpeed = -tempSpeed;
             }
-        entity.translateX(tempSpeed);
+            entity.translateX(tempSpeed);
+            ac.setIsMoving(true);
         }
     }
 
@@ -219,7 +188,8 @@ public class PlayerComponent extends Component {
             if (!isDown) {
                 tempSpeed = -tempSpeed;
             }
-        entity.translateY(tempSpeed);
+            entity.translateY(tempSpeed);
+            ac.setIsMoving(true);
         }
     }
 
@@ -229,6 +199,10 @@ public class PlayerComponent extends Component {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void stopMoving() {
+        ac.setIsMoving(false);
     }
 
 }

@@ -6,7 +6,6 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
@@ -15,9 +14,10 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
-import com.groupfour.Components.ObjectsComponent;
+import com.groupfour.Components.AnimationComponent;
+import com.groupfour.Components.BoundsComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
@@ -52,10 +52,10 @@ public class App extends GameApplication {
     private Input gameInput;
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
-    private boolean factoryInitialized = false;
     private Entity microwave;
     private Entity vmachine;
-    PlayerComponent placeholder;
+    private MainUI ui;
+    PlayerComponent playerComponent;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -92,23 +92,35 @@ public class App extends GameApplication {
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveY(false);
             }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
+            }
         },KeyCode.W);
 
         getInput().addAction(new UserAction("Move Down"){
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveY(true);
             }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
+            }
         },KeyCode.S);
 
         getInput().addAction(new UserAction("Move Left"){
             protected void onAction(){
-                player.getComponent(PlayerComponent.class).moveX(true);
+                player.getComponent(PlayerComponent.class).moveX(true);   
+            }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.A);
 
         getInput().addAction(new UserAction("Move Right"){
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveX(false);
+            }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.D);
 
@@ -141,9 +153,9 @@ public class App extends GameApplication {
     }
 
     private void interactWithObject() { 
-        if (player.distance(vmachine) < 30) {
+        if (player.distance(vmachine) < 60) {
             vmachine.getComponent(VendingMachine.class).interact(); 
-        } else if (player.distance(microwave) < 40) { 
+        } else if (player.distance(microwave) < 60) { 
             microwave.getComponent(Microwave.class).interact(); 
         }
     }
@@ -154,48 +166,55 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
+
+        // setLevelFromMap("Lobby.tmx");
         
         player = spawn("player");
-        vmachine = spawn("vmachine");
-        microwave = spawn("microwave");
-
-
         player.setPosition(50, 50);
-        player.getComponent(PlayerComponent.class).setUpPlayer();
-        zombiePlayerHandler = new ZombiePlayerHandler();
     }
 
     @Override
-    public void initPhysics() {
-    physics = getPhysicsWorld();
-        if (isServer) {
-            physics.addCollisionHandler(new BulletZombieHandler());
-            physics.addCollisionHandler(new ZombiePlayerHandler());
-            getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-            FXGL.run(() -> checkCollisions(), Duration.seconds(1));
-        } else
-            physics.addCollisionHandler(new BulletZombieHandler());
-            physics.addCollisionHandler(new ZombiePlayerHandler());
-            FXGL.run(() -> checkCollisions(), Duration.seconds(1));
-    }
-        
-     @Override
      protected void initUI() {
         FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer)), Duration.seconds(.01));
-        var ui = new MainUI();
+        ui = new MainUI();
         addUINode(ui, 30, 50);
     }
     
+    @Override
+    public void initPhysics() {
+        physics = getPhysicsWorld();
+            if (isServer) {
+                physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new ZombiePlayerHandler());
+                getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+            } else {
+                physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new ZombiePlayerHandler());
+                FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+            }
+            FXGL.run(() -> BoundsComponent.ObjectPlayerCollision(player), Duration.seconds(0.0017));
+    }
+    
     public void startGame1P() {
-        getSceneService().popSubScene();
-        gameStarted=true;
-        FXGL.run(() -> {
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-            zombie.getViewComponent();
-            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-        }, Duration.seconds(1));
+        vmachine = spawn("vmachine");
+        microwave = spawn("microwave");
 
-        FXGL.run(() -> updateFollower(), Duration.seconds(1));
+        gameStarted = true;
+
+        player.getComponent(PlayerComponent.class).setUpPlayer();
+        zombiePlayerHandler = new ZombiePlayerHandler();
+
+        getSceneService().popSubScene();
+
+        //Zombie spawning disabled for dev testing - padua
+        // FXGL.run(() -> {
+        //     zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+        //     zombie.getViewComponent();
+        //     zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        // }, Duration.seconds(1));
+
+        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
         FXGL.run(()->{
             if(player.getComponent(PlayerComponent.class).isDead()){
                 player.getComponent(PlayerComponent.class).setDeath(false);
@@ -306,6 +325,13 @@ public class App extends GameApplication {
         if (isServer) {
             gameInput.update(tpf);
         }
+        ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
+        ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
+        ui.updateGunUI(
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmo(), 
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
+            );
     }
 
     private void checkCollisions() {
@@ -318,7 +344,7 @@ public class App extends GameApplication {
         });    
     }
 
-    
+
     public static void main(String[] args) {
         launch(args);
     }
