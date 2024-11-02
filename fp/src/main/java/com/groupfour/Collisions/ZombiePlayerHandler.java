@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
@@ -20,10 +21,18 @@ public class ZombiePlayerHandler extends CollisionHandler {
     }
 
     @Override
-    protected void onCollisionBegin(Entity zombie, Entity player) {
-        if (canAttack) {
-            handleCollision(zombie, player);
-        }
+    protected void onCollisionBegin(Entity zombie, Entity player) { 
+        ZombieComponent zombieComponent = zombie.getComponent(ZombieComponent.class); 
+        zombieComponent.startAttacking(); 
+        if (canAttack) { 
+            handleCollision(zombie, player); 
+        } 
+    } 
+    
+    @Override 
+    protected void onCollisionEnd(Entity zombie, Entity player) { 
+        ZombieComponent zombieComponent = zombie.getComponent(ZombieComponent.class); 
+        zombieComponent.stopAttacking(); 
     }
 
     public void handleCollision(Entity zombie, Entity player) {
@@ -58,4 +67,9 @@ public class ZombiePlayerHandler extends CollisionHandler {
         canAttack = false;
         FXGL.runOnce(() -> canAttack = true, ATTACK_COOLDOWN);
     }
+
+    public boolean isCanAttack() {
+        return canAttack;
+    }
+
 }

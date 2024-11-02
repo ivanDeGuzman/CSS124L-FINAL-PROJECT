@@ -14,9 +14,9 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
-import com.groupfour.Components.AnimationComponent;
 import com.groupfour.Components.BoundsComponent;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
@@ -55,7 +55,6 @@ public class App extends GameApplication {
     private Entity microwave;
     private Entity vmachine;
     private MainUI ui;
-    PlayerComponent playerComponent;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -134,10 +133,12 @@ public class App extends GameApplication {
             protected void onActionBegin() {
                player.getComponent(PlayerComponent.class).getCurrentWeapon().fire(player);
                player.getComponent(PlayerComponent.class).setShooting(true);
+               player.getComponent(PlayerAnimComp.class).setIsShooting(true);
             }
             protected void onActionEnd() {
                player.getComponent(PlayerComponent.class).setShooting(false);
                player.getComponent(PlayerComponent.class).getCurrentWeapon().stopFiring();
+               player.getComponent(PlayerAnimComp.class).setIsShooting(false);
             }
         }, MouseButton.PRIMARY);
         getInput().addAction(new UserAction("Switch Weapons") {
@@ -215,6 +216,8 @@ public class App extends GameApplication {
         // }, Duration.seconds(1));
 
         // FXGL.run(() -> updateFollower(), Duration.seconds(1));
+
+
         FXGL.run(()->{
             if(player.getComponent(PlayerComponent.class).isDead()){
                 player.getComponent(PlayerComponent.class).setDeath(false);
@@ -340,6 +343,7 @@ public class App extends GameApplication {
             player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
             player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
             );
+        player.getComponent(PlayerAnimComp.class).setWeaponType(player.getComponent(PlayerComponent.class).getCurrentWeapon().getName());
     }
 
     private void checkCollisions() {

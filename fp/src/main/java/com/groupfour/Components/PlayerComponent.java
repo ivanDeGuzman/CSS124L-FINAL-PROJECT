@@ -3,6 +3,7 @@ package com.groupfour.Components;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.input.Input;
+import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.UI.MainUI;
 import com.groupfour.Weapons.BerettaM9;
 import com.groupfour.Weapons.FAMAS;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class PlayerComponent extends Component {
+    private PlayerComponent pc;
     private boolean isDead = false;
     private int health = 100;
     private boolean shooting = false;
@@ -31,7 +33,7 @@ public class PlayerComponent extends Component {
     private int currentWeaponIndex = 0;
     private double reducedDamage = 1.0;
     private int currency = 0;
-    private AnimationComponent ac;
+    private PlayerAnimComp ac;
 
     private String name="Player 1";
 
@@ -44,7 +46,7 @@ public class PlayerComponent extends Component {
 
     @Override
     public void onAdded() {
-        ac = new AnimationComponent();
+        ac = new PlayerAnimComp();
         entity.addComponent(ac);
     }
 
@@ -142,6 +144,7 @@ public class PlayerComponent extends Component {
             currentWeaponIndex = (currentWeaponIndex + 1) % weapons.size();
             System.out.println("Switched to: " + getCurrentWeapon().getName());
         }, Duration.seconds(0.5));
+        animWeaponSet();
     }
 
     @Override
@@ -203,6 +206,10 @@ public class PlayerComponent extends Component {
 
     public void stopMoving() {
         ac.setIsMoving(false);
+    }
+
+    public void animWeaponSet() {
+        ac.setWeaponType(getCurrentWeapon().getName());
     }
 
 }

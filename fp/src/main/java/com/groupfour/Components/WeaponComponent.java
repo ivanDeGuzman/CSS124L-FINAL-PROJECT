@@ -74,7 +74,7 @@ public abstract class WeaponComponent extends Component {
     }
 
     protected void spawnBullet(Point2D position, Point2D direction) {
-        var data = new SpawnData(position.getX(), position.getY())
+        var data = new SpawnData(position.getX() - 10, position.getY() - 7)
             .put("direction", direction)
             .put("damage", getDamage());
         Entity bullet = FXGL.spawn("bullet", data);

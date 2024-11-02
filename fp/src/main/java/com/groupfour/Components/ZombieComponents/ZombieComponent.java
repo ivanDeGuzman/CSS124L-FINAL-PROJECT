@@ -1,28 +1,27 @@
 package com.groupfour.Components.ZombieComponents;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.texture.Texture;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.AnimationComponents.ZombieAnimComp;
 import com.groupfour.mygame.EntityTypes.EntityType;
-
-import static com.almasb.fxgl.dsl.FXGL.texture;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.almasb.fxgl.dsl.FXGL;
 import javafx.geometry.Point2D;
 
 public class ZombieComponent extends Component {
     private Entity target;
     private int health;
+    private ZombieAnimComp zac;
 
     public ZombieComponent(int initialHealth) {
         this.health = initialHealth;
-
     }
 
+    @Override
+    public void onAdded() {
+        zac = new ZombieAnimComp();
+        entity.addComponent(zac);
+    }
 
     @Override
     public void onUpdate(double tpf) {
@@ -54,7 +53,6 @@ public class ZombieComponent extends Component {
         }
     }
 
-
     private void moveTowardsTarget(Point2D targetPosition, double tpf) {
         Point2D zombiePosition = entity.getPosition(); 
         Point2D direction = targetPosition.subtract(zombiePosition).normalize();
@@ -74,13 +72,17 @@ public class ZombieComponent extends Component {
         }
     }
 
-    public void onDeath() {
+    private void onDeath() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> { 
             player.getComponent(PlayerComponent.class).setCurrency(10);
-            
-            
         });
     }
 
-    
+    public void startAttacking() {
+        zac.setIsAttacking(true);
+    }
+
+    public void stopAttacking() {
+        zac.setIsAttacking(false);
+    }
 }
