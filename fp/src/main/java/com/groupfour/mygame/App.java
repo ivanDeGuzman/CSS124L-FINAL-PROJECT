@@ -14,9 +14,10 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
+import com.groupfour.Components.AnimationComponent;
 import com.groupfour.Components.BoundsComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
@@ -91,23 +92,35 @@ public class App extends GameApplication {
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveY(false);
             }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
+            }
         },KeyCode.W);
 
         getInput().addAction(new UserAction("Move Down"){
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveY(true);
             }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
+            }
         },KeyCode.S);
 
         getInput().addAction(new UserAction("Move Left"){
             protected void onAction(){
-                player.getComponent(PlayerComponent.class).moveX(true);
+                player.getComponent(PlayerComponent.class).moveX(true);   
+            }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.A);
 
         getInput().addAction(new UserAction("Move Right"){
             protected void onAction(){
                 player.getComponent(PlayerComponent.class).moveX(false);
+            }
+            protected void onActionEnd() {
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.D);
 
@@ -226,32 +239,24 @@ public class App extends GameApplication {
                 server.startAsync();
                 waitingForPlayers();
 
-                //When someone connects
                 server.setOnConnected(conn -> {
-                    System.out.println("please work");
                     connection = conn;
-
-                    //first one will pop the loading screen and display a scene with a start button
-                    if(playerCount==1){
-                        getExecutor().startAsyncFX(() -> {
+                    getExecutor().startAsyncFX(() -> {
+                        if(players.size()==1){
                             getSceneService().popSubScene();
                             FXGL.getSceneService().pushSubScene(multiplayerStart);
-                            multiplayerStart.addPlayer();
                             multiplayerStart.setOnStartClick(e-> {
                                 onServer();
                             });
-                        });
-                    }
-                    else{
-                    multiplayerStart.addPlayer();
-                    }
-                    playerCount++;
+                        }
+                        multiplayerStart.addPlayer();
+                        players.add(spawn("player"));
+                        playerCount++;
+                    });
                 });
             } 
-
             //If Client WIP
             else {
-                players.add(player);
                 var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
@@ -272,7 +277,7 @@ public class App extends GameApplication {
     }
 
     private void onServer() {
-        
+        System.out.println(players.size());
         getService(MultiplayerService.class).spawn(connection, players.get(0), "player");
         for (int i=1; i<players.size();i++){
             Entity clientPlayer = players.get(i);
@@ -305,7 +310,7 @@ public class App extends GameApplication {
         }
     }
 
-    public void resetGameWorld() {
+     public void resetGameWorld() {
         getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
         zombie = null;
         gameStarted = false;

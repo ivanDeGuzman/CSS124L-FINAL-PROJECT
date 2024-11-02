@@ -11,6 +11,7 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.AnimationComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.scene.paint.Color;
@@ -28,7 +29,8 @@ public class SpawnFactory implements EntityFactory {
             .with(new NetworkComponent())
             .collidable()
             .with(new PlayerComponent())
-            .build();
+            .with(new AnimationComponent())
+            .buildAndAttach();
     }
 
         @Spawns("bullet")

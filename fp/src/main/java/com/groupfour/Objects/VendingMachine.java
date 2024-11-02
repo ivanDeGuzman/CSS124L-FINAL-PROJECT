@@ -6,7 +6,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.net.Connection;
 import com.groupfour.Components.ObjectsComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.ZombieComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.util.Duration;
 
