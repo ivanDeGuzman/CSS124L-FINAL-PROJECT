@@ -50,11 +50,14 @@ public class App extends GameApplication {
     private PhysicsWorld physics;
     private boolean gameStarted=false;
     private Input gameInput;
+    private Input input;
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
     private Entity microwave;
     private Entity vmachine;
     private MainUI ui;
+    PlayerComponent playerComponent;
+    Entity newPlayer;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -169,9 +172,6 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new ObjectsFactory());
 
         // setLevelFromMap("Lobby.tmx");
-        
-        player = spawn("player");
-        player.setPosition(50, 50);
     }
 
     @Override
@@ -198,6 +198,8 @@ public class App extends GameApplication {
     }
     
     public void startGame1P() {
+        player = spawn("player");
+        player.setPosition(50, 50);
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
 
@@ -239,7 +241,7 @@ public class App extends GameApplication {
             if (answer) {
                 players.add(player);
                 var server = getNetService().newTCPServer(55555);
-                server.startAsync();
+
                 waitingForPlayers();
 
                 server.setOnConnected(conn -> {
@@ -253,10 +255,13 @@ public class App extends GameApplication {
                             });
                         }
                         multiplayerStart.addPlayer();
-                        players.add(spawn("player"));
-                        playerCount++;
+                        // Entity newPlayer = spawn("player");
+                        // getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
+                        // getService(MultiplayerService.class).addInputReplicationReceiver(connection,input);
+                        // players.add(newPlayer);
                     });
                 });
+                server.startAsync();
             } 
             //If Client WIP
             else {
@@ -280,29 +285,106 @@ public class App extends GameApplication {
     }
 
     private void onServer() {
-        System.out.println(players.size());
+        player = spawn("player");
+        player.setPosition(50, 50);
         getService(MultiplayerService.class).spawn(connection, players.get(0), "player");
-        for (int i=1; i<players.size();i++){
-            Entity clientPlayer = players.get(i);
-            getService(MultiplayerService.class).spawn(connection, clientPlayer, "player");
-        }
-        getService(MultiplayerService.class).addInputReplicationReceiver(connection, getInput());
-        
+        newPlayer = spawn("player");
+        initClientInput(newPlayer);
+        getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
+
+
+        // players.add()
+        // for (int i=1; i<players.size();i++){
+        //     getService(MultiplayerService.class).spawn(connection, players.get(i), "player");
+        //     initClientInput(players.get(i));
+        //     getService(MultiplayerService.class).addInputReplicationReceiver(connection, players.get(i).getComponent(PlayerComponent.class).getClientInput());
+        // }
+
         FXGL.run(() -> {
-            zombie = spawn("zombie", players.get(0).getCenter().getX() + 5, players.get(0).getCenter().getY() + 5);
-            getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
-            updateFollower();
+            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie.getViewComponent();
+            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
         }, Duration.seconds(1));
 
-        // FXGL.run(() -> updateFollower(), Duration.seconds(1)); //Moved this to fxgl.run above
+        FXGL.run(() -> updateFollower(), Duration.seconds(1)); //Moved this to fxgl.run above
+        
         getSceneService().popSubScene();
         getSceneService().popSubScene();
     }
 
     private void onClient() {
-        // player.getComponent(PlayerComponent.class).setInput(getInput());
+        player = spawn("player");
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
+    }
+
+
+    protected void initClientInput(Entity clientPlayer){
+        // input = new Input();
+        Input input = clientPlayer.getComponent(PlayerComponent.class).getClientInput();
+
+        input.addAction(new UserAction("Move Upwards"){
+            protected void onAction(){
+                clientPlayer.getComponent(PlayerComponent.class).moveY(false);
+            }
+            protected void onActionEnd() {
+                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
+            }
+        },KeyCode.W);
+
+        input.addAction(new UserAction("Move Down"){
+            protected void onAction(){
+                clientPlayer.getComponent(PlayerComponent.class).moveY(true);
+            }
+            protected void onActionEnd() {
+                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
+            }
+        },KeyCode.S);
+
+        input.addAction(new UserAction("Move Left"){
+            protected void onAction(){
+                clientPlayer.getComponent(PlayerComponent.class).moveX(true);   
+            }
+            protected void onActionEnd() {
+                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
+            }
+        },KeyCode.A);
+
+        input.addAction(new UserAction("Move Right"){
+            protected void onAction(){
+                clientPlayer.getComponent(PlayerComponent.class).moveX(false);
+            }
+            protected void onActionEnd() {
+                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
+            }
+        },KeyCode.D);
+
+        input.addAction(new UserAction("Reload"){
+            protected void onActionBegin(){
+                clientPlayer.getComponent(PlayerComponent.class).getCurrentWeapon().reload();
+            }
+        },KeyCode.R);
+
+        input.addAction(new UserAction("Shoot") {
+            protected void onActionBegin() {
+               clientPlayer.getComponent(PlayerComponent.class).getCurrentWeapon().fire(player);
+               clientPlayer.getComponent(PlayerComponent.class).setShooting(true);
+            }
+            protected void onActionEnd() {
+               clientPlayer.getComponent(PlayerComponent.class).setShooting(false);
+               clientPlayer.getComponent(PlayerComponent.class).getCurrentWeapon().stopFiring();
+            }
+        }, MouseButton.PRIMARY);
+        input.addAction(new UserAction("Switch Weapons") {
+            protected void onActionBegin() {
+                clientPlayer.getComponent(PlayerComponent.class).switchWeapon();
+            }
+        }, KeyCode.Q);
+        input.addAction(new UserAction("Interact") {
+            protected void onActionBegin() {
+                interactWithObject();
+            }
+        }, KeyCode.F);
     }
 
     private void updateFollower() {
@@ -326,7 +408,10 @@ public class App extends GameApplication {
             return;
         }
         if (isServer) {
-            gameInput.update(tpf);
+            newPlayer.getComponent(PlayerComponent.class).getClientInput();
+            // for(int i=1;i<players.size();i++){
+            //     players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
+            // }
         }
         ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
         ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
