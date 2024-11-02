@@ -16,28 +16,25 @@ public class PlayerAnimComp extends Component {
     private AnimatedTexture weaponTexture;
     private AnimationChannel weaponIdle, weaponAttack;
     private boolean isShooting;
+    private Image playerSprite;
     private String weaponType = "m16a1";
 
     public PlayerAnimComp() {
-        Image playerSprite = FXGL.image("Players/1P_Shoot.png");
-
-        animIdle = new AnimationChannel(playerSprite, 3, 50, 50, Duration.seconds(1), 0, 0);
-        animWalk = new AnimationChannel(playerSprite, 3, 50, 50, Duration.seconds(0.5), 0, 2);
-        texture = new AnimatedTexture(animIdle);
+        updatePlayerSprite();
     }   
 
     @Override
     public void onAdded() {
         entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
         entity.getViewComponent().addChild(texture);
-        entity.getViewComponent().addChild(new AnimatedTexture(new AnimationChannel(FXGL.image("Weapons/Idle/BerettaM9_Idle.png"), 1, 25, 25, Duration.seconds(0), 0, 0)));
         handleWeaponTexture();
     }
 
     @Override
     public void onUpdate(double tpf) {
         handleWeaponTexture();
-
+        updatePlayerSprite();
+        
         if (isMoving) {
             if (texture.getAnimationChannel() != animWalk) {
                 texture.loopAnimationChannel(animWalk);
@@ -61,15 +58,14 @@ public class PlayerAnimComp extends Component {
 
     private void handleWeaponTexture() {
         String idlePath, attackPath;
-        System.out.println(weaponType);
         switch(weaponType.toLowerCase()) {
             case "m16a1": 
                 idlePath = "Weapons/Idle/M16_Idle.png";
                 attackPath = "Weapons/Shooting/M16_Shooting.png";
                 break; 
             case "famas": 
-                idlePath = "Weapons/Idle/FAMAS_Idle.png";
-                attackPath = "Weapons/Shooting/FAMAS_Shooting.png";
+                idlePath = "Weapons/Idle/AK17_Idle.png";
+                attackPath = "Weapons/Shooting/AK47_Shooting.png";
                 break; 
             case "beretta m9": 
                 idlePath = "Weapons/Idle/BerettaM9_Idle.png";
@@ -80,6 +76,19 @@ public class PlayerAnimComp extends Component {
         }
 
         updateWeaponTexture(idlePath, attackPath);
+    }
+
+    private void updatePlayerSprite() {
+
+        if (weaponType != "m16a1" || weaponType != "famas") {
+            playerSprite = FXGL.image("Players/1P_Shoot.png");
+        } else {
+            playerSprite = FXGL.image("Players/1P_Rifle_Shoot.png");
+        }
+
+        animIdle = new AnimationChannel(playerSprite, 3, 50, 50, Duration.seconds(1), 0, 0);
+        animWalk = new AnimationChannel(playerSprite, 3, 50, 50, Duration.seconds(0.5), 0, 2);
+        texture = new AnimatedTexture(animIdle);
     }
 
     private void updateWeaponTexture(String idlePath, String attackPath) {
@@ -95,6 +104,9 @@ public class PlayerAnimComp extends Component {
 
         weaponTexture = new AnimatedTexture(weaponIdle);
         entity.getViewComponent().addChild(weaponTexture);
+
+        weaponTexture.setTranslateX(10);
+        weaponTexture.setTranslateY(-7);
     }
 
     public void setIsMoving(boolean isMoving) {
@@ -109,3 +121,4 @@ public class PlayerAnimComp extends Component {
         this.weaponType = weaponType;
     }
 }
+

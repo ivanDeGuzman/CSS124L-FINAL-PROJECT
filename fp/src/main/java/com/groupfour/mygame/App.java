@@ -154,9 +154,9 @@ public class App extends GameApplication {
     }
 
     private void interactWithObject() { 
-        if (player.distance(vmachine) < 60) {
+        if (player.distance(vmachine) < 70) {
             vmachine.getComponent(VendingMachine.class).interact(); 
-        } else if (player.distance(microwave) < 60) { 
+        } else if (player.distance(microwave) < 70) { 
             microwave.getComponent(Microwave.class).interact(); 
         }
     }

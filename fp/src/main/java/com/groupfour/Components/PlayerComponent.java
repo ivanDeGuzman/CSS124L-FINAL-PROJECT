@@ -165,6 +165,7 @@ public class PlayerComponent extends Component {
         Viewport viewport = getGameScene().getViewport();
         viewport.setLazy(true);
         viewport.bindToEntity(entity, getAppWidth() / 2.0, getAppHeight() / 2.0);
+        viewport.setZoom(1.5);
     }
  
     public void moveX(boolean isLeft) {

@@ -25,7 +25,7 @@ public class SpawnFactory implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
             .type(EntityType.PLAYER)
-            .bbox(new HitBox(BoundingShape.box(50, 50)))
+            .bbox(new HitBox(BoundingShape.box(45, 45)))
             .with(new NetworkComponent())
             .collidable()
             .with(new PlayerComponent())
