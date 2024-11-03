@@ -234,16 +234,18 @@ public class App extends GameApplication {
     }
 
     public void startMultiplayer() {
+        zombiePlayerHandler = new ZombiePlayerHandler();
         getDialogService().showConfirmationBox("Are you the host?", answer -> {
+            player = spawn("player");
+            player.getComponent(PlayerComponent.class).setUpPlayer();
             MultiplayerStart multiplayerStart = new MultiplayerStart();
             isServer = answer;
-            //If host DONE
-            if (answer) {
+
+            if (isServer) {
                 players.add(player);
                 var server = getNetService().newTCPServer(55555);
-
                 waitingForPlayers();
-
+                server.startAsync();
                 server.setOnConnected(conn -> {
                     connection = conn;
                     getExecutor().startAsyncFX(() -> {
@@ -252,25 +254,32 @@ public class App extends GameApplication {
                             FXGL.getSceneService().pushSubScene(multiplayerStart);
                             multiplayerStart.setOnStartClick(e-> {
                                 onServer();
+                                gameStarted=true;
+                                // connection.send(new Bundle("gameStart"));
                             });
                         }
                         multiplayerStart.addPlayer();
-                        // Entity newPlayer = spawn("player");
-                        // getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
-                        // getService(MultiplayerService.class).addInputReplicationReceiver(connection,input);
-                        // players.add(newPlayer);
+                        newPlayer = spawn("player");
+                        players.add(newPlayer);
+                        getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
+                        initClientInput(newPlayer);
+                        getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
                     });
-                });
-                server.startAsync();
+                });       
             } 
             //If Client WIP
             else {
                 var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
+                    // connection.addMessageHandlerFX((c, message) -> {
+                    //     if (message.getName().equals("gameStart")) {
+                    //         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                    //         getSceneService().popSubScene();
+                    //     }
+                    // });
                     getExecutor().startAsyncFX(() -> {
                         onClient();
-                        getSceneService().popSubScene();
                     });
                 });
                 client.connectAsync();
@@ -285,28 +294,17 @@ public class App extends GameApplication {
     }
 
     private void onServer() {
-        player = spawn("player");
-        player.setPosition(50, 50);
-        getService(MultiplayerService.class).spawn(connection, players.get(0), "player");
-        newPlayer = spawn("player");
-        initClientInput(newPlayer);
-        getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
-
-
-        // players.add()
-        // for (int i=1; i<players.size();i++){
-        //     getService(MultiplayerService.class).spawn(connection, players.get(i), "player");
-        //     initClientInput(players.get(i));
-        //     getService(MultiplayerService.class).addInputReplicationReceiver(connection, players.get(i).getComponent(PlayerComponent.class).getClientInput());
-        // }
+        getService(MultiplayerService.class).spawn(connection, player, "player");
 
         FXGL.run(() -> {
             zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
             zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+            updateFollower();
         }, Duration.seconds(1));
 
-        FXGL.run(() -> updateFollower(), Duration.seconds(1)); //Moved this to fxgl.run above
+        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
         
         getSceneService().popSubScene();
         getSceneService().popSubScene();
@@ -314,8 +312,10 @@ public class App extends GameApplication {
 
     private void onClient() {
         player = spawn("player");
+        player.getComponent(PlayerComponent.class).setUpPlayer();
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
+        getSceneService().popSubScene();
     }
 
 
@@ -408,10 +408,10 @@ public class App extends GameApplication {
             return;
         }
         if (isServer) {
-            newPlayer.getComponent(PlayerComponent.class).getClientInput();
-            // for(int i=1;i<players.size();i++){
-            //     players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
-            // }
+
+            for(int i=1;i<players.size();i++){
+                players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
+            }
         }
         ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
         ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
