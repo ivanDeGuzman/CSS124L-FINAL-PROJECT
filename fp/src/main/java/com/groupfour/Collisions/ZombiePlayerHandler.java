@@ -10,29 +10,40 @@ import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
+import com.almasb.fxgl.time.TimerAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ZombiePlayerHandler extends CollisionHandler {
     private boolean canAttack = true;
     private static final Duration ATTACK_DELAY = Duration.seconds(1);
     private static final Duration ATTACK_COOLDOWN = Duration.seconds(1);
+    private List<TimerAction> scheduledAttacks = new ArrayList<>();
 
     public ZombiePlayerHandler() {
         super(EntityType.ZOMBIE, EntityType.PLAYER);
     }
 
     @Override
-    protected void onCollisionBegin(Entity zombie, Entity player) { 
-        ZombieComponent zombieComponent = zombie.getComponent(ZombieComponent.class); 
-        zombieComponent.startAttacking(); 
-        if (canAttack) { 
-            handleCollision(zombie, player); 
-        } 
-    } 
-    
-    @Override 
-    protected void onCollisionEnd(Entity zombie, Entity player) { 
-        ZombieComponent zombieComponent = zombie.getComponent(ZombieComponent.class); 
-        zombieComponent.stopAttacking(); 
+    protected void onCollisionBegin(Entity zombie, Entity player) {
+        ZombieComponent zombieComponent = zombie.getComponent(ZombieComponent.class);
+        zombieComponent.startAttacking();
+        if (canAttack) {
+            handleCollision(zombie, player);
+        }
+    }
+
+    @Override
+    protected void onCollisionEnd(Entity zombie, Entity player) {
+        if (zombie.hasComponent(ZombieComponent.class)) {
+            zombie.getComponent(ZombieComponent.class).stopAttacking();
+        }
+        
+        for (TimerAction attack : scheduledAttacks) {
+            attack.expire();
+        }
+        scheduledAttacks.clear();
     }
 
     public void handleCollision(Entity zombie, Entity player) {
@@ -42,11 +53,12 @@ public class ZombiePlayerHandler extends CollisionHandler {
     }
 
     private void startAttackSequence(Entity zombie, Entity player) {
-        FXGL.runOnce(() -> {
+        TimerAction attackTask = FXGL.runOnce(() -> {
             if (isInAttackRange(zombie.getPosition(), player.getPosition())) {
                 inflictDamage(zombie, player);
             }
         }, ATTACK_DELAY);
+        scheduledAttacks.add(attackTask);
     }
 
     private boolean isInAttackRange(Point2D zombiePosition, Point2D playerPosition) {
@@ -71,5 +83,4 @@ public class ZombiePlayerHandler extends CollisionHandler {
     public boolean isCanAttack() {
         return canAttack;
     }
-
 }

@@ -35,7 +35,9 @@ public class PlayerComponent extends Component {
     private int currency = 0;
     private PlayerAnimComp ac;
     private Input clientInputs = new Input();
-    
+    private double angle;
+    private Point2D lastMousePosition;
+
     private String name="Player 1";
 
     public PlayerComponent() {
@@ -49,6 +51,7 @@ public class PlayerComponent extends Component {
     public void onAdded() {
         ac = new PlayerAnimComp();
         entity.addComponent(ac);
+        lastMousePosition = getInput().getMousePositionWorld();
     }
 
     public void setCurrency(int amount) { 
@@ -71,9 +74,6 @@ public class PlayerComponent extends Component {
     }
 
     // BUFFS
-    public void heal() {
-
-    }
 
     public void increaseSpeed(double amount, Duration duration) { 
         speed *= amount; 
@@ -159,10 +159,14 @@ public class PlayerComponent extends Component {
     public void onUpdate(double tpf) {
         Point2D playerPosition = entity.getCenter();
         Point2D mousePosition = getInput().getMousePositionWorld();
-        Point2D vector = mousePosition.subtract(playerPosition);
-        double angle = Math.toDegrees(Math.atan2(vector.getY(), vector.getX()));
-        entity.setRotation(angle + 90);
 
+        
+        if (!mousePosition.equals(lastMousePosition)) {
+            Point2D vector = mousePosition.subtract(playerPosition);
+            angle = Math.toDegrees(Math.atan2(vector.getY(), vector.getX()));
+            entity.setRotation(angle + 90);
+            lastMousePosition = mousePosition;
+        }
     }
     
     public boolean isDead() {
@@ -221,5 +225,7 @@ public class PlayerComponent extends Component {
         ac.setWeaponType(getCurrentWeapon().getName());
     }
 
+    public double getAngle() {
+        return angle;
+    }
 }
-    

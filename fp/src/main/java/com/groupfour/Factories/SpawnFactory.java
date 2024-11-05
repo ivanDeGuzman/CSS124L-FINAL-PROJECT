@@ -29,7 +29,6 @@ public class SpawnFactory implements EntityFactory {
             .with(new NetworkComponent())
             .collidable()
             .with(new PlayerComponent())
-            .with(new PlayerAnimComp())
             .build();
     }
 
@@ -38,7 +37,7 @@ public class SpawnFactory implements EntityFactory {
 
             var expireClean = new ExpireCleanComponent(Duration.seconds(5)).animateOpacity();
 
-            Rectangle bulletShape = new Rectangle(20, 5, Color.BLACK); 
+            Rectangle bulletShape = new Rectangle(12, 3, Color.BLACK); 
 
             return entityBuilder(data)
             .type(EntityType.BULLET)

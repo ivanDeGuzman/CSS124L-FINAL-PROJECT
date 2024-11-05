@@ -194,7 +194,7 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             }
-            FXGL.run(() -> BoundsComponent.ObjectPlayerCollision(player), Duration.seconds(0.0017));
+            FXGL.run(() -> BoundsComponent.ObjectEntityCollision(player, zombie), Duration.seconds(0.0017));
     }
     
     public void startGame1P() {
@@ -210,14 +210,14 @@ public class App extends GameApplication {
 
         getSceneService().popSubScene();
 
-        //Zombie spawning disabled for dev testing - padua
-        // FXGL.run(() -> {
-        //     zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-        //     zombie.getViewComponent();
-        //     zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-        // }, Duration.seconds(1));
+        
+        FXGL.run(() -> {
+            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie.getViewComponent();
+            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        }, Duration.seconds(1));
 
-        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
+        FXGL.run(() -> updateFollower(), Duration.seconds(1));
 
 
         FXGL.run(()->{
@@ -421,6 +421,7 @@ public class App extends GameApplication {
             player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
             );
         player.getComponent(PlayerAnimComp.class).setWeaponType(player.getComponent(PlayerComponent.class).getCurrentWeapon().getName());
+        player.getComponent(PlayerComponent.class).getCurrentWeapon().setPlayerRotation(player.getRotation());
     }
 
     private void checkCollisions() {

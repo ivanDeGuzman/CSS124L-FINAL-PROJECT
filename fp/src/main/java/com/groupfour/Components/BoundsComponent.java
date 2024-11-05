@@ -38,7 +38,7 @@ public class BoundsComponent extends Component {
         }
     }
 
-    public static void ObjectPlayerCollision(Entity player) { 
+    public static void ObjectEntityCollision(Entity player, Entity zombie) { 
         List<Entity> objects = new ArrayList<>(); 
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE)); 
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE)); 

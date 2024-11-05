@@ -23,6 +23,8 @@ public abstract class WeaponComponent extends Component {
     protected Connection<Bundle> connection;
     protected boolean isReloading = false;
     protected double originalDamage;
+    protected int offsetX, offsetY;
+    protected double playerRotation;
 
     public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage, boolean isServer, Connection<Bundle> connection) {
         this.name = name;
@@ -74,16 +76,25 @@ public abstract class WeaponComponent extends Component {
     }
 
     protected void spawnBullet(Point2D position, Point2D direction) {
-        var data = new SpawnData(position.getX() - 10, position.getY() - 7)
+        double playerRotationRadians = Math.toRadians(playerRotation);
+
+        double adjustedX = Math.cos(playerRotationRadians) - Math.sin(playerRotationRadians); 
+        double adjustedY = Math.sin(playerRotationRadians) + Math.cos(playerRotationRadians);
+
+        double bulletX = position.getX() + adjustedX;
+        double bulletY = position.getY() + adjustedY;
+
+
+        var data = new SpawnData(bulletX, bulletY)
             .put("direction", direction)
             .put("damage", getDamage());
+
         Entity bullet = FXGL.spawn("bullet", data);
         bullet.getComponent(BulletComponent.class).setDamage(damage);
         bullet.getComponent(BulletComponent.class).setDirection(direction);
 
         double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
         bullet.setRotation(angle);
-        System.out.println("Bullet damage: " + damage);
 
         if (isServer) {
             FXGL.getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
@@ -97,7 +108,12 @@ public abstract class WeaponComponent extends Component {
     public void increaseDamage(double bonusDamage) { 
         this.damage *= bonusDamage; 
     } 
+
     public void resetDamage() {
         this.damage = originalDamage; 
+    }
+
+    public void setPlayerRotation(double playerRotation) {
+        this.playerRotation = playerRotation;
     }
 }

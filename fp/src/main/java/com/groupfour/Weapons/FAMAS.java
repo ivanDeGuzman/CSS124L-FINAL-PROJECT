@@ -11,7 +11,7 @@ import javafx.util.Duration;
 
 public class FAMAS extends WeaponComponent {
 
-    private boolean canFire = true;
+    private boolean isFiring = true;
 
     public FAMAS(boolean isServer, Connection<Bundle> connection) {
         super("FAMAS", 160, 30, 30, 1, 20, isServer, connection); 
@@ -19,17 +19,18 @@ public class FAMAS extends WeaponComponent {
 
     @Override
     public void fire(Entity player) {
-        if (ammo >= 3 && !getIsReloading() && canFire) {
-            canFire = false;
+        if (ammo >= 3 && !getIsReloading() && isFiring) {
+            isFiring = false;
             for (int i = 0; i < 3; i++) {
                 ammo--;
                 System.out.println(name + " fired. Ammo left: " + ammo);
-                Point2D position = player.getCenter();
-                Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
-
-                FXGL.runOnce(() -> spawnBullet(position, direction), Duration.seconds(i * 0.1));
+                FXGL.runOnce(() -> {
+                    Point2D position = player.getCenter();
+                    Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
+                    spawnBullet(position, direction);
+                }, Duration.seconds(i * 0.1));
             }
-                FXGL.runOnce(() -> canFire = true, Duration.seconds(fireRate));
+            FXGL.runOnce(() -> isFiring = true, Duration.seconds(fireRate));
         } else {
             System.out.println(name + " fire rate delay");
         }
