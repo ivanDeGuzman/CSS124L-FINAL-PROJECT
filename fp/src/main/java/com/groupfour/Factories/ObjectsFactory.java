@@ -43,4 +43,14 @@ public class ObjectsFactory implements EntityFactory {
         .with(new Microwave(false, null))
         .build();
     }
+
+    @Spawns("wall")
+    public Entity newWall(SpawnData data) {
+        return entityBuilder(data)
+        .type(EntityType.WALL)
+        .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+        .with(new CollidableComponent(true))
+        .with(new PhysicsComponent())
+        .build();
+    }
 }
