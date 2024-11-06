@@ -51,8 +51,10 @@ public class ObjectsFactory implements EntityFactory {
         return entityBuilder(data)
         .type(EntityType.WALL)
         .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
-        .with(new CollidableComponent(true))
+        .collidable()
         .with(new PhysicsComponent())
+        .with(new NetworkComponent())
+        .with(new Wall(false, null))
         .build();
     }
 }
