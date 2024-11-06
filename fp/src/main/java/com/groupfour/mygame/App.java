@@ -171,7 +171,7 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
 
-        //setLevelFromMap("Lobby.tmx");
+        setLevelFromMap("Lobby.tmx");
     }
 
     @Override
