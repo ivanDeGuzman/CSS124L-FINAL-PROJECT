@@ -171,7 +171,7 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
 
-        // setLevelFromMap("Lobby.tmx");
+        //setLevelFromMap("Lobby.tmx");
     }
 
     @Override
@@ -212,7 +212,7 @@ public class App extends GameApplication {
 
         
         FXGL.run(() -> {
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie = spawn("spitter", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
             zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
         }, Duration.seconds(1));

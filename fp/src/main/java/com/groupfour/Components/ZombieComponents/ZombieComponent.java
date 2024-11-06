@@ -10,12 +10,11 @@ import javafx.geometry.Point2D;
 
 public class ZombieComponent extends Component {
     private Entity target;
-    private int health;
+    private int health = 60;
     private ZombieAnimComp zac;
-    private final double MIN_ROTATION_DISTANCE = 10.0; // Minimum distance to update rotation
+    private final double minRotate = 10.0;
 
-    public ZombieComponent(int initialHealth) {
-        this.health = initialHealth;
+    public ZombieComponent() {
     }
 
     @Override
@@ -55,19 +54,19 @@ public class ZombieComponent extends Component {
         }
     }
 
-    private void moveTowardsTarget(Point2D targetPosition, double tpf) {
+    public void moveTowardsTarget(Point2D targetPosition, double tpf) {
         Point2D zombiePosition = entity.getPosition();
         Point2D direction = targetPosition.subtract(zombiePosition).normalize();
 
         entity.translate(direction.multiply(100 * tpf));
     }
 
-    private void rotateTowardsTarget(Point2D targetPosition) {
+    public void rotateTowardsTarget(Point2D targetPosition) {
         Point2D zombiePosition = entity.getPosition();
         Point2D direction = targetPosition.subtract(zombiePosition).normalize();
         double distance = zombiePosition.distance(targetPosition);
 
-        if (distance > MIN_ROTATION_DISTANCE) {
+        if (distance > minRotate) {
             double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
             entity.setRotation(angle + 90);
         }
@@ -85,7 +84,7 @@ public class ZombieComponent extends Component {
         }
     }
 
-    private void onDeath() {
+    public void onDeath() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
             player.getComponent(PlayerComponent.class).setCurrency(10);
         });

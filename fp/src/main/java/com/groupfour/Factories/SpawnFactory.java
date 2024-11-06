@@ -32,21 +32,22 @@ public class SpawnFactory implements EntityFactory {
             .build();
     }
 
-        @Spawns("bullet")
-        public Entity newBullet(SpawnData data) {
+    @Spawns("bullet")
+    public Entity newBullet(SpawnData data) {
 
-            var expireClean = new ExpireCleanComponent(Duration.seconds(5)).animateOpacity();
+        var expireClean = new ExpireCleanComponent(Duration.seconds(5)).animateOpacity();
 
-            Rectangle bulletShape = new Rectangle(12, 3, Color.BLACK); 
+        Rectangle bulletShape = new Rectangle(12, 3, Color.BLACK); 
 
-            return entityBuilder(data)
-            .type(EntityType.BULLET)
-            .viewWithBBox(bulletShape)
-            .with(new NetworkComponent())
-            .collidable()
-            .with(new BulletComponent()) 
-            .with(expireClean)
-            .build();
-        }
+        return entityBuilder(data)
+        .type(EntityType.BULLET)
+        .viewWithBBox(bulletShape)
+        .with(new NetworkComponent())
+        .collidable()
+        .with(new BulletComponent()) 
+        .with(expireClean)
+        .build();
+    }
+
 
 }
