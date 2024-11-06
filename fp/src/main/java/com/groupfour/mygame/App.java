@@ -56,8 +56,9 @@ public class App extends GameApplication {
     private Entity microwave;
     private Entity vmachine;
     private MainUI ui;
-    PlayerComponent playerComponent;
-    Entity newPlayer;
+    private int wave;
+    private PlayerComponent playerComponent;
+    private Entity newPlayer;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -199,28 +200,25 @@ public class App extends GameApplication {
     
     public void startGame1P() {
         player = spawn("player");
-        player.setPosition(50, 50);
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
-
-        gameStarted = true;
-
+        wave=0;
+        double waveMultiplier=1.5;
         player.getComponent(PlayerComponent.class).setUpPlayer();
         zombiePlayerHandler = new ZombiePlayerHandler();
 
+        gameStarted = true;
         getSceneService().popSubScene();
 
-        
-        FXGL.run(() -> {
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-            zombie.getViewComponent();
-            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-        }, Duration.seconds(1));
-
-        FXGL.run(() -> updateFollower(), Duration.seconds(1));
-
-
         FXGL.run(()->{
+            if(getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty()){
+                if(wave!=0){
+                    System.out.println(wave+" Clear");
+                }
+                wave++;
+                nextWave(wave,waveMultiplier);
+            }
+
             if(player.getComponent(PlayerComponent.class).isDead()){
                 player.getComponent(PlayerComponent.class).setDeath(false);
                 getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
@@ -231,6 +229,17 @@ public class App extends GameApplication {
                 });
             }
         },Duration.seconds(0.1));
+
+        FXGL.run(() -> updateFollower(), Duration.seconds(1));
+    }
+
+    private void nextWave(int wave, double waveMultiplier){
+        for(int i=0;i<wave*waveMultiplier;i++){
+            System.out.println("zombie spawn");
+            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
+            zombie.getViewComponent();
+            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        }
     }
 
     public void startMultiplayer() {

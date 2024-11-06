@@ -11,6 +11,7 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
+import com.groupfour.Objects.Wall;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.entity.components.CollidableComponent;
