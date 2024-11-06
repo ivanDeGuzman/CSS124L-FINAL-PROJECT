@@ -12,6 +12,8 @@ import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
 import com.groupfour.mygame.EntityTypes.EntityType;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
