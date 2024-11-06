@@ -42,7 +42,7 @@ public class BoundsComponent extends Component {
         List<Entity> objects = new ArrayList<>(); 
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE)); 
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE)); 
-        // objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.WALL));
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.WALL));
         objects.forEach(object -> { 
             if (player.isColliding(object)) { 
                 double overlapX = Math.min(player.getWidth(), object.getWidth()) - Math.abs(player.getX() - object.getX()); 
