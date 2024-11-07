@@ -1,8 +1,10 @@
 package com.groupfour.Components;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.input.UserAction;
 import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.UI.MainUI;
 import com.groupfour.Weapons.BerettaM9;
@@ -10,6 +12,8 @@ import com.groupfour.Weapons.FAMAS;
 import com.groupfour.Weapons.M16A1;
 
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -207,6 +211,72 @@ public class PlayerComponent extends Component {
             entity.translateY(tempSpeed);
             ac.setIsMoving(true);
         }
+    }
+
+    public void initClientInput(){
+
+        clientInputs.addAction(new UserAction("Move Upwards"){
+            protected void onAction(){
+                moveY(false);
+            }
+            protected void onActionEnd() {
+                stopMoving();
+            }
+        },KeyCode.W);
+
+        clientInputs.addAction(new UserAction("Move Down"){
+            protected void onAction(){
+                moveY(true);
+            }
+            protected void onActionEnd() {
+                stopMoving();
+            }
+        },KeyCode.S);
+
+        clientInputs.addAction(new UserAction("Move Left"){
+            protected void onAction(){
+                moveX(true);   
+            }
+            protected void onActionEnd() {
+                stopMoving();
+            }
+        },KeyCode.A);
+
+        clientInputs.addAction(new UserAction("Move Right"){
+            protected void onAction(){
+                moveX(false);
+            }
+            protected void onActionEnd() {
+                stopMoving();
+            }
+        },KeyCode.D);
+
+        clientInputs.addAction(new UserAction("Reload"){
+            protected void onActionBegin(){
+                getCurrentWeapon().reload();
+            }
+        },KeyCode.R);
+
+        clientInputs.addAction(new UserAction("Shoot") {
+            protected void onActionBegin() {
+               getCurrentWeapon().fire(entity);
+               setShooting(true);
+            }
+            protected void onActionEnd() {
+               setShooting(false);
+               getCurrentWeapon().stopFiring();
+            }
+        }, MouseButton.PRIMARY);
+        clientInputs.addAction(new UserAction("Switch Weapons") {
+            protected void onActionBegin() {
+                switchWeapon();
+            }
+        }, KeyCode.Q);
+        // clientInputs.addAction(new UserAction("Interact") {
+        //     protected void onActionBegin() {
+        //         interactWithObject();
+        //     }
+        // }, KeyCode.F);
     }
 
     public String getName(){

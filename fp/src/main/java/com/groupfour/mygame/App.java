@@ -44,20 +44,16 @@ public class App extends GameApplication {
     
     private List<Entity> players= new ArrayList<>();
     private Entity player;
-    private int playerCount=1;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
     private boolean gameStarted=false;
-    private Input gameInput;
-    private Input input;
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
     private Entity microwave;
     private Entity vmachine;
     private MainUI ui;
     private int wave;
-    private PlayerComponent playerComponent;
     private Entity newPlayer;
 
     @Override
@@ -239,6 +235,9 @@ public class App extends GameApplication {
             zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
             zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+            // zombie = spawn("spitter");
+            // zombie.getViewComponent(); 
+            // zombie.getComponent(ZombieComponent.class).findClosestPlayer();
         }
     }
 
@@ -264,14 +263,14 @@ public class App extends GameApplication {
                             multiplayerStart.setOnStartClick(e-> {
                                 onServer();
                                 gameStarted=true;
-                                // connection.send(new Bundle("gameStart"));
+                                connection.send(new Bundle("gameStart"));
                             });
                         }
                         multiplayerStart.addPlayer();
                         newPlayer = spawn("player");
                         players.add(newPlayer);
                         getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
-                        initClientInput(newPlayer);
+                        newPlayer.getComponent(PlayerComponent.class).initClientInput();
                         getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
                     });
                 });       
@@ -326,76 +325,7 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
         getSceneService().popSubScene();
     }
-
-
-    protected void initClientInput(Entity clientPlayer){
-        // input = new Input();
-        Input input = clientPlayer.getComponent(PlayerComponent.class).getClientInput();
-
-        input.addAction(new UserAction("Move Upwards"){
-            protected void onAction(){
-                clientPlayer.getComponent(PlayerComponent.class).moveY(false);
-            }
-            protected void onActionEnd() {
-                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
-            }
-        },KeyCode.W);
-
-        input.addAction(new UserAction("Move Down"){
-            protected void onAction(){
-                clientPlayer.getComponent(PlayerComponent.class).moveY(true);
-            }
-            protected void onActionEnd() {
-                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
-            }
-        },KeyCode.S);
-
-        input.addAction(new UserAction("Move Left"){
-            protected void onAction(){
-                clientPlayer.getComponent(PlayerComponent.class).moveX(true);   
-            }
-            protected void onActionEnd() {
-                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
-            }
-        },KeyCode.A);
-
-        input.addAction(new UserAction("Move Right"){
-            protected void onAction(){
-                clientPlayer.getComponent(PlayerComponent.class).moveX(false);
-            }
-            protected void onActionEnd() {
-                clientPlayer.getComponent(PlayerComponent.class).stopMoving();
-            }
-        },KeyCode.D);
-
-        input.addAction(new UserAction("Reload"){
-            protected void onActionBegin(){
-                clientPlayer.getComponent(PlayerComponent.class).getCurrentWeapon().reload();
-            }
-        },KeyCode.R);
-
-        input.addAction(new UserAction("Shoot") {
-            protected void onActionBegin() {
-               clientPlayer.getComponent(PlayerComponent.class).getCurrentWeapon().fire(player);
-               clientPlayer.getComponent(PlayerComponent.class).setShooting(true);
-            }
-            protected void onActionEnd() {
-               clientPlayer.getComponent(PlayerComponent.class).setShooting(false);
-               clientPlayer.getComponent(PlayerComponent.class).getCurrentWeapon().stopFiring();
-            }
-        }, MouseButton.PRIMARY);
-        input.addAction(new UserAction("Switch Weapons") {
-            protected void onActionBegin() {
-                clientPlayer.getComponent(PlayerComponent.class).switchWeapon();
-            }
-        }, KeyCode.Q);
-        input.addAction(new UserAction("Interact") {
-            protected void onActionBegin() {
-                interactWithObject();
-            }
-        }, KeyCode.F);
-    }
-
+    
     private void updateFollower() {
         if (zombie.hasComponent(ZombieComponent.class)) {
             zombie.getComponent(ZombieComponent.class).onUpdate(0);
