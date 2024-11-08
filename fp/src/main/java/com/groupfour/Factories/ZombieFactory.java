@@ -71,7 +71,7 @@ public class ZombieFactory implements EntityFactory {
                 .at(getRandomSpawnPoint())
                 .collidable()
                 .with(new NetworkComponent())
-                .with(new ZombieComponent());
+                .with(new ZombieComponent(health));
     }
     
     @Spawns("zombie")
@@ -84,7 +84,7 @@ public class ZombieFactory implements EntityFactory {
 
     @Spawns("spitter")
     public Entity newSpitterZombie(SpawnData data) {
-        return commonZombieSetup(data, 80)
+        return commonZombieSetup(data, 45)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
                 .with(new CellMoveComponent(40, 40, 150))
                 .with(new SpitterZombieComponent())

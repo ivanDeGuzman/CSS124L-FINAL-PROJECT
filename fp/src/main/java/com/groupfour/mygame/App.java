@@ -86,6 +86,7 @@ public class App extends GameApplication {
     @Override
     protected void initInput(){
         player = new Entity();
+        zombie = new Entity();
 
         getInput().addAction(new UserAction("Move Upwards"){
             protected void onAction(){
@@ -191,7 +192,7 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             }
-            FXGL.run(() -> BoundsComponent.ObjectEntityCollision(player, zombie), Duration.seconds(0.0017));
+            FXGL.run(() -> BoundsComponent.ObjectEntityCollision(player, zombie), Duration.seconds(0.017));
     }
     
     public void startGame1P() {

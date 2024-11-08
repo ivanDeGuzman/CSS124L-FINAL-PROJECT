@@ -1,8 +1,8 @@
-package com.groupfour.Components.ZombieComponents;
+// package com.groupfour.Components.ZombieComponents;
 
-public class GuardZombieComponent extends ZombieComponent {
-    public GuardZombieComponent(int initialHealth) {
+// public class GuardZombieComponent extends ZombieComponent {
+//     public GuardZombieComponent(int initialHealth) {
         
-    }
+//     }
 
-}
+// }
