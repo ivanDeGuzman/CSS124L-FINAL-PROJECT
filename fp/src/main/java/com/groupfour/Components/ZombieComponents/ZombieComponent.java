@@ -10,11 +10,12 @@ import javafx.geometry.Point2D;
 
 public class ZombieComponent extends Component {
     private Entity target;
-    private int health = 60;
+    private int health;
     private ZombieAnimComp zac;
     private final double minRotate = 10.0;
 
-    public ZombieComponent() {
+    public ZombieComponent(int initialHealth) {
+        this.health = initialHealth;
     }
 
     @Override

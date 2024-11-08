@@ -71,20 +71,20 @@ public class ZombieFactory implements EntityFactory {
                 .at(getRandomSpawnPoint())
                 .collidable()
                 .with(new NetworkComponent())
-                .with(new ZombieComponent());
+                .with(new ZombieComponent(health));
     }
     
     @Spawns("zombie")
     public Entity newZombie(SpawnData data) {
         return commonZombieSetup(data, 60)
-                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                 .with(new CellMoveComponent(40, 40, 150))
                 .build();
     }
 
     @Spawns("spitter")
     public Entity newSpitterZombie(SpawnData data) {
-        return commonZombieSetup(data, 80)
+        return commonZombieSetup(data, 45)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
                 .with(new CellMoveComponent(40, 40, 150))
                 .with(new SpitterZombieComponent())

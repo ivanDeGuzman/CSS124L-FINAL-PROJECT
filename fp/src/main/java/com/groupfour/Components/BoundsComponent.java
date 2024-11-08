@@ -2,12 +2,10 @@ package com.groupfour.Components;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.mygame.EntityTypes.EntityType;
-
 import javafx.geometry.Rectangle2D;
 
 public class BoundsComponent extends Component {
@@ -38,29 +36,55 @@ public class BoundsComponent extends Component {
         }
     }
 
-    public static void ObjectEntityCollision(Entity player, Entity zombie) { 
-        List<Entity> objects = new ArrayList<>(); 
-        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE)); 
-        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE)); 
+    public static void ObjectEntityCollision(Entity player, Entity zombie) {
+        List<Entity> objects = new ArrayList<>();
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE));
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE));
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.WALL));
-        objects.forEach(object -> { 
-            if (player.isColliding(object)) { 
-                double overlapX = Math.min(player.getWidth(), object.getWidth()) - Math.abs(player.getX() - object.getX()); 
-                double overlapY = Math.min(player.getHeight(), object.getHeight()) - Math.abs(player.getY() - object.getY()); 
-                if (overlapX < overlapY) { 
-                    if (player.getX() < object.getX()) {
-                        player.setX(object.getX() - player.getWidth()); 
-                    } else { 
-                        player.setX(object.getX() + object.getWidth()); 
-                    } 
-                } else { 
-                    if (player.getY() < object.getY()) { 
-                        player.setY(object.getY() - player.getHeight()); 
-                    } else { 
-                        player.setY(object.getY() + object.getHeight()); 
-                    }
+    
+        for (Entity object : objects) {
+            if (player.isColliding(object)) {
+                resolveCollision(player, object);
+            }
+            if (zombie.isColliding(object)) {
+                resolveCollision(zombie, object);
+            }
+        }
+    
+        handleZombieCollisions();
+    }
+    
+    private static void resolveCollision(Entity entity, Entity object) {
+        double overlapX = (entity.getWidth() / 2 + object.getWidth() / 2) - Math.abs(entity.getX() - object.getX());
+        double overlapY = (entity.getHeight() / 2 + object.getHeight() / 2) - Math.abs(entity.getY() - object.getY());
+    
+        if (overlapX > 0 && overlapY > 0) {
+            if (overlapX < overlapY) {
+                if (entity.getX() < object.getX()) {
+                    entity.setX(entity.getX() - overlapX);
+                } else {
+                    entity.setX(entity.getX() + overlapX);
+                }
+            } else {
+                if (entity.getY() < object.getY()) {
+                    entity.setY(entity.getY() - overlapY);
+                } else {
+                    entity.setY(entity.getY() + overlapY);
                 }
             }
-        }); 
+        }
+    }
+
+    private static void handleZombieCollisions() {
+        List<Entity> zombies = FXGL.getGameWorld().getEntitiesByType(EntityType.ZOMBIE);
+        for (int i = 0; i < zombies.size(); i++) {
+            Entity z1 = zombies.get(i);
+            for (int j = i + 1; j < zombies.size(); j++) {
+                Entity z2 = zombies.get(j);
+                if (z1.isColliding(z2)) {
+                    resolveCollision(z1, z2);
+                }
+            }
+        }
     }
 }

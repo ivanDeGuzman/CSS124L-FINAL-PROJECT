@@ -16,7 +16,7 @@ public class PlayerAnimComp extends Component {
     private AnimationChannel weaponIdle, weaponAttack;
     private boolean isShooting;
     private String weaponType = "beretta m9";
-    private int frames, frameEnd, width, height;
+    private int frames, frameEnd, width, height, setX, setY;
     private int playerFrames, pfEnd;
 
     @Override
@@ -79,6 +79,8 @@ public class PlayerAnimComp extends Component {
                 height = 50;
                 frames = 2;
                 frameEnd = 1;
+                setX = 10;
+                setY = -7;
                 break;
             case "famas":
                 idlePath = "Weapons/Idle/AK47_Idle.png";
@@ -87,6 +89,8 @@ public class PlayerAnimComp extends Component {
                 height = 50;
                 frames = 2;
                 frameEnd = 1;
+                setX = 10;
+                setY = -7;
                 break;
             case "beretta m9":
                 idlePath = "Weapons/Idle/BerettaM9_Idle.png";
@@ -95,6 +99,8 @@ public class PlayerAnimComp extends Component {
                 height = 20;
                 frames = 3;
                 frameEnd = 2;
+                setX = 12;
+                setY = 0;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown weapon type: " + weaponType);
@@ -132,8 +138,8 @@ public class PlayerAnimComp extends Component {
         weaponTexture = new AnimatedTexture(weaponIdle);
         entity.getViewComponent().addChild(weaponTexture);
 
-        weaponTexture.setTranslateX(10);
-        weaponTexture.setTranslateY(-7);
+        weaponTexture.setTranslateX(setX);
+        weaponTexture.setTranslateY(setY);
     }
 
     public void setIsMoving(boolean isMoving) {

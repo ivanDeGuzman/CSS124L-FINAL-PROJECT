@@ -86,6 +86,7 @@ public class App extends GameApplication {
     @Override
     protected void initInput(){
         player = new Entity();
+        zombie = new Entity();
 
         getInput().addAction(new UserAction("Move Upwards"){
             protected void onAction(){
@@ -191,7 +192,7 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             }
-            FXGL.run(() -> BoundsComponent.ObjectEntityCollision(player, zombie), Duration.seconds(0.0017));
+            FXGL.run(() -> BoundsComponent.ObjectEntityCollision(player, zombie), Duration.seconds(0.017));
     }
     
     public void startGame1P() {
@@ -227,11 +228,14 @@ public class App extends GameApplication {
     }
 
     private void nextWave(int wave, double waveMultiplier){
-        for(int i=0;i<wave*waveMultiplier;i++){
-            System.out.println("zombie spawn");
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-            zombie.getViewComponent();
-            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        int totalZombies = (int)(wave * waveMultiplier);
+        Duration interval = Duration.seconds(1);
+        for(int i = 0; i < totalZombies ; i++) {
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                System.out.println("zombie spawn");
+                spawn("zombie");
+            }, delay);
             // zombie = spawn("spitter");
             // zombie.getViewComponent(); 
             // zombie.getComponent(ZombieComponent.class).findClosestPlayer();
@@ -306,7 +310,6 @@ public class App extends GameApplication {
             getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
             zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-            updateFollower();
         }, Duration.seconds(1));
         
         getSceneService().popSubScene();
@@ -319,14 +322,6 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
         getSceneService().popSubScene();
-    }
-
-    private void updateFollower() {
-        // if (zombie.hasComponent(ZombieComponent.class)) {
-        //     zombie.getComponent(ZombieComponent.class).onUpdate(0);
-        // } else {
-        //     System.out.println("No more Zombies Left ");
-        // }
     }
 
      public void resetGameWorld() {
