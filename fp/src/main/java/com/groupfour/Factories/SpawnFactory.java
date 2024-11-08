@@ -1,19 +1,22 @@
 package com.groupfour.Factories;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+
+import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -25,12 +28,20 @@ public class SpawnFactory implements EntityFactory {
     public Entity newPlayer(SpawnData data) {
         return entityBuilder(data)
             .type(EntityType.PLAYER)
-            .bbox(new HitBox(BoundingShape.box(45, 45)))
+            .bbox(new HitBox(new Point2D(12, 12), BoundingShape.box(30, 30))) 
             .with(new NetworkComponent())
             .collidable()
             .with(new PlayerComponent())
+            .with(new Component() {
+                @Override
+                public void onAdded() {
+                    entity.getTransformComponent().setRotationOrigin(new Point2D(20, 20)); 
+                }
+            })
             .build();
     }
+    
+
 
     @Spawns("bullet")
     public Entity newBullet(SpawnData data) {

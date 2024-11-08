@@ -77,7 +77,7 @@ public class ZombieFactory implements EntityFactory {
     @Spawns("zombie")
     public Entity newZombie(SpawnData data) {
         return commonZombieSetup(data, 60)
-                .bbox(new HitBox(BoundingShape.box(50, 50)))
+                .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                 .with(new CellMoveComponent(40, 40, 150))
                 .build();
     }

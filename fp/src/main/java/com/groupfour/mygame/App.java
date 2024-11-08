@@ -226,15 +226,17 @@ public class App extends GameApplication {
             }
         },Duration.seconds(0.1));
 
-        FXGL.run(() -> updateFollower(), Duration.seconds(1));
     }
 
     private void nextWave(int wave, double waveMultiplier){
-        for(int i=0;i<wave*waveMultiplier;i++){
-            System.out.println("zombie spawn");
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-            zombie.getViewComponent();
-            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        int totalZombies = (int)(wave * waveMultiplier);
+        Duration interval = Duration.seconds(1);
+        for(int i = 0; i < totalZombies ; i++) {
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                System.out.println("zombie spawn");
+                spawn("zombie");
+            }, delay);
             // zombie = spawn("spitter");
             // zombie.getViewComponent(); 
             // zombie.getComponent(ZombieComponent.class).findClosestPlayer();
@@ -309,7 +311,6 @@ public class App extends GameApplication {
             getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
             zombie.getViewComponent();
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-            updateFollower();
         }, Duration.seconds(1));
 
         // FXGL.run(() -> updateFollower(), Duration.seconds(1));
@@ -324,14 +325,6 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
         getSceneService().popSubScene();
-    }
-    
-    private void updateFollower() {
-        if (zombie.hasComponent(ZombieComponent.class)) {
-            zombie.getComponent(ZombieComponent.class).onUpdate(0);
-        } else {
-            System.out.println("No more Zombies Left ");
-        }
     }
 
      public void resetGameWorld() {
