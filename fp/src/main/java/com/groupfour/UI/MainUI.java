@@ -3,9 +3,18 @@ package com.groupfour.UI;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.WeaponComponent;
+import com.groupfour.Weapons.FAMAS;
+import com.groupfour.Weapons.M16A1;
+import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.animation.FadeTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -24,11 +33,12 @@ public class MainUI extends Parent {
     private Region healthBar;
     private Region healthBarBorder;
     private int maxHealth = 100;
+    private VBox armoryMenu;
 
     public MainUI() {
         goldUI();
         healthBar();
-        gunUI();
+        gunUI();        
     }
 
     public void flashTintRed() {
@@ -113,4 +123,93 @@ public class MainUI extends Parent {
             healthText.setText("DEAD");
         }
     }
+
+    
+    public void showArmoryUI() {
+        armoryMenu = new VBox();
+        armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10;");
+        armoryMenu.setTranslateX(FXGL.getAppWidth() / 2);
+        armoryMenu.setTranslateY(FXGL.getAppHeight() / 2);
+    
+        Text title = new Text("Armory");
+        title.setFont(Font.font("Cambria Math", 20));
+        title.setFill(Color.WHITE);
+        
+        GridPane weaponsForSale = new GridPane();
+        weaponsForSale.setHgap(10);
+        weaponsForSale.setVgap(10);
+    
+        // List of weapons
+        String[] weaponNames = {"FAMAS", "M16A1"};
+        String[] weaponPrices = {"$100", "$300"};
+        String[] weaponImageLinks = {
+            "/assets/textures/Weapons/Idle/AK47_Idle.png", 
+            "/assets/textures/Weapons/Idle/M16_Idle.png"
+        };
+    
+        for (int i = 0; i < weaponNames.length; i++) {
+            
+            ImageView weaponImage = new ImageView(getClass().getResource(weaponImageLinks[i]).toExternalForm());
+            weaponImage.setFitWidth(50);
+            weaponImage.setFitHeight(50);
+
+            Text weaponName = new Text(weaponNames[i]);
+            weaponName.setFill(Color.WHITE);
+            weaponName.setFont(Font.font("Cambria Math", 14));
+
+            Button buyButton = new Button(weaponPrices[i]);
+            final int index = i;
+            buyButton.setOnAction(e -> {
+                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+            });
+
+            VBox weaponBox = new VBox();
+            weaponBox.setAlignment(Pos.CENTER);
+            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
+
+            weaponsForSale.add(weaponBox, i % 2, i / 2);
+        }
+    
+        Button backBtn = new Button("Back");
+        backBtn.setOnAction(e -> hideArmoryUI());
+    
+        armoryMenu.getChildren().addAll(title, weaponsForSale, backBtn);
+        
+        FXGL.getGameScene().addUINode(armoryMenu);
+    }
+    
+    public void purchaseWeapon(Entity player, String weaponName) {
+        PlayerComponent pc = player.getComponent(PlayerComponent.class);
+
+        WeaponComponent newWeapon = null;
+        int price = 0;
+
+        switch(weaponName) {
+            case "FAMAS": 
+                price = 100; 
+                newWeapon = new FAMAS(false, null); 
+                break; 
+            case "M16A1":
+                price = 300; 
+                newWeapon = new M16A1(false, null); 
+                break; 
+            // case "AK47": 
+            //     newWeapon = new AK47(false, null); 
+            //     price = 250; 
+            //     break;
+        }
+        if (pc.getCurrency() >= price) {
+            pc.setCurrencyFromArmory(pc.getCurrency() - price);
+            pc.addWeapon(newWeapon);
+            hideArmoryUI();
+        } else {
+            FXGL.getNotificationService().pushNotification("Not enough money");
+        }
+    }
+
+    public void hideArmoryUI() {
+        FXGL.getGameScene().removeUINode(armoryMenu);
+    }
+
+    
 }

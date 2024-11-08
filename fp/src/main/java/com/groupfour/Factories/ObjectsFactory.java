@@ -6,17 +6,16 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.groupfour.Objects.Armory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
-import com.groupfour.Objects.Wall;
+import com.groupfour.UI.MainUI;
+import com.groupfour.mygame.App;
 import com.groupfour.mygame.EntityTypes.EntityType;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,7 +31,7 @@ public class ObjectsFactory implements EntityFactory {
         .collidable()
         .at(100, 100)
         .with(new NetworkComponent())
-        .with(new VendingMachine(false, null))
+        .with(new VendingMachine())
         .build();
     }
 
@@ -45,7 +44,7 @@ public class ObjectsFactory implements EntityFactory {
         .collidable()
         .at(300, -100)
         .with(new NetworkComponent())
-        .with(new Microwave(false, null))
+        .with(new Microwave())
         .build();
     }
 
@@ -55,9 +54,19 @@ public class ObjectsFactory implements EntityFactory {
         .type(EntityType.WALL)
         .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
         .collidable()
-        .with(new PhysicsComponent())
         .with(new NetworkComponent())
-        .with(new Wall(false, null))
+        .build();
+    }
+
+    @Spawns("armory")
+    public Entity newArmory(SpawnData data) {
+        return entityBuilder(data)
+        .type(EntityType.ARMORY)
+        .viewWithBBox(new Rectangle(100, 50, Color.GRAY))
+        .at(200, 0)
+        .collidable()
+        .with(new NetworkComponent())
+        .with(new Armory(new MainUI(), new App()))
         .build();
     }
 }

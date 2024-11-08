@@ -41,6 +41,7 @@ public class BoundsComponent extends Component {
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE));
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE));
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.WALL));
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.ARMORY));
     
         for (Entity object : objects) {
             if (player.isColliding(object)) {

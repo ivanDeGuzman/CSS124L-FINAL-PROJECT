@@ -87,7 +87,7 @@ public class ZombieComponent extends Component {
 
     public void onDeath() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
-            player.getComponent(PlayerComponent.class).setCurrency(10);
+            player.getComponent(PlayerComponent.class).setCurrencyFromZombie(10);
         });
     }
 

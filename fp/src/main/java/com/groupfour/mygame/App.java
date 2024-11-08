@@ -7,6 +7,7 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.input.InputModifier;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -21,6 +22,7 @@ import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
+import com.groupfour.Objects.Armory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.LoadingScreen;
@@ -51,16 +53,19 @@ public class App extends GameApplication {
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
     private Entity microwave;
-    private Entity vmachine;
+    private Entity vmachine, armory;
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
+    private double waveMultiplier=1.5;
+    private boolean waveCooldown = false;
+    private boolean isWaveSpawning;
 
     @Override
     protected void initSettings(GameSettings settings) {
 
         settings.setTitle("Flatline: Oregon");
-        settings.setVersion("Alpha 0.3");
+        settings.setVersion("Alpha 0.19021902");
         settings.addEngineService(MultiplayerService.class);
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
@@ -152,6 +157,7 @@ public class App extends GameApplication {
                 interactWithObject();
             }
         }, KeyCode.F);
+
     }
 
     private void interactWithObject() { 
@@ -159,6 +165,8 @@ public class App extends GameApplication {
             vmachine.getComponent(VendingMachine.class).interact(); 
         } else if (player.distance(microwave) < 70) { 
             microwave.getComponent(Microwave.class).interact(); 
+        } else if (player.distance(armory) < 70) {
+            armory.getComponent(Armory.class).interact();
         }
     }
     
@@ -199,33 +207,44 @@ public class App extends GameApplication {
         player = spawn("player");
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
+        armory = spawn("armory");
         wave=0;
-        double waveMultiplier=1.5;
         player.getComponent(PlayerComponent.class).setUpPlayer();
         zombiePlayerHandler = new ZombiePlayerHandler();
 
         gameStarted = true;
         getSceneService().popSubScene();
 
-        FXGL.run(()->{
-            if(getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty()){
-                if(wave!=0){
-                    System.out.println(wave+" Clear");
-                }
-                wave++;
-                nextWave(wave,waveMultiplier);
-            }
+        FXGL.run(() -> {
+        if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
+            if (wave != 0) {
+                System.out.println(wave + " Clear");
+                waveCooldown = true;
+                isWaveSpawning = true;
+                System.out.println(waveCooldown);
 
-            if(player.getComponent(PlayerComponent.class).isDead()){
-                player.getComponent(PlayerComponent.class).setDeath(false);
-                getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
+                runOnce(() -> {
+                    wave++;
+                    nextWave(wave, waveMultiplier);
+                    waveCooldown = true;
+                    isWaveSpawning = false;
+                }, Duration.seconds(20));
+            } else {
+                wave++;
+                nextWave(wave, waveMultiplier);
+            }
+        }
+
+        if (player.getComponent(PlayerComponent.class).isDead()) {
+            player.getComponent(PlayerComponent.class).setDeath(false);
+            getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
                 getGameController().gotoMainMenu();
                 FXGL.run(() -> {
                     resetGameWorld();
                 }, Duration.seconds(5));
-                });
-            }
-        },Duration.seconds(0.1));
+            });
+        }
+        }, Duration.seconds(0.1));
 
     }
 
@@ -367,7 +386,10 @@ public class App extends GameApplication {
         });    
     }
 
-
+    public boolean isWaveCooldown() {
+        return waveCooldown;
+    }
+    
     public static void main(String[] args) {
         launch(args);
     }

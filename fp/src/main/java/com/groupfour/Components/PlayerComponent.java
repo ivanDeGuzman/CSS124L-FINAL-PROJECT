@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class PlayerComponent extends Component {
-    private PlayerComponent pc;
     private boolean isDead = false;
     private int health = 100;
     private boolean shooting = false;
@@ -47,8 +46,6 @@ public class PlayerComponent extends Component {
     public PlayerComponent() {
         
         weapons.add(new BerettaM9(false, null));
-        weapons.add(new FAMAS(false, null));
-        weapons.add(new M16A1(false, null));
     }
 
     @Override
@@ -58,8 +55,12 @@ public class PlayerComponent extends Component {
         lastMousePosition = getInput().getMousePositionWorld();
     }
 
-    public void setCurrency(int amount) { 
+    public void setCurrencyFromZombie(int amount) { 
         this.currency += amount; 
+    }
+
+    public void setCurrencyFromArmory(int currency) {
+        this.currency = currency;
     }
 
     public int getCurrency() {
@@ -297,5 +298,13 @@ public class PlayerComponent extends Component {
 
     public double getAngle() {
         return angle;
+    }
+
+    public void setSpeed(int originalSpeed) {
+        this.originalSpeed = originalSpeed;
+    }
+
+    public void addWeapon(WeaponComponent weapon) {
+        weapons.add(weapon);
     }
 }
