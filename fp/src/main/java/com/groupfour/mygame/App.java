@@ -167,7 +167,7 @@ public class App extends GameApplication {
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
-
+        zombiePlayerHandler = new ZombiePlayerHandler();
         setLevelFromMap("Lobby.tmx");
     }
 
@@ -201,7 +201,6 @@ public class App extends GameApplication {
         wave=0;
         double waveMultiplier=1.5;
         player.getComponent(PlayerComponent.class).setUpPlayer();
-        zombiePlayerHandler = new ZombiePlayerHandler();
 
         gameStarted = true;
         getSceneService().popSubScene();
@@ -219,14 +218,12 @@ public class App extends GameApplication {
                 player.getComponent(PlayerComponent.class).setDeath(false);
                 getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
                 getGameController().gotoMainMenu();
-                FXGL.run(() -> {
+                FXGL.runOnce(() -> {
                     resetGameWorld();
-                }, Duration.seconds(5));
+                }, Duration.seconds(1));
                 });
             }
         },Duration.seconds(0.1));
-
-        FXGL.run(() -> updateFollower(), Duration.seconds(1));
     }
 
     private void nextWave(int wave, double waveMultiplier){
@@ -242,7 +239,6 @@ public class App extends GameApplication {
     }
 
     public void startMultiplayer() {
-        zombiePlayerHandler = new ZombiePlayerHandler();
         getDialogService().showConfirmationBox("Are you the host?", answer -> {
             player = spawn("player");
             player.getComponent(PlayerComponent.class).setUpPlayer();
@@ -280,12 +276,13 @@ public class App extends GameApplication {
                 var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
-                    // connection.addMessageHandlerFX((c, message) -> {
-                    //     if (message.getName().equals("gameStart")) {
-                    //         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                    //         getSceneService().popSubScene();
-                    //     }
-                    // });
+                    connection.addMessageHandlerFX((c, message) -> {
+                        if (message.getName().equals("gameStart")) {
+                            System.out.println("Client detect start");
+                            getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                            getSceneService().popSubScene();
+                        }
+                    });
                     getExecutor().startAsyncFX(() -> {
                         onClient();
                     });
@@ -311,8 +308,6 @@ public class App extends GameApplication {
             zombie.getComponent(ZombieComponent.class).findClosestPlayer();
             updateFollower();
         }, Duration.seconds(1));
-
-        // FXGL.run(() -> updateFollower(), Duration.seconds(1));
         
         getSceneService().popSubScene();
         getSceneService().popSubScene();
@@ -325,13 +320,13 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
         getSceneService().popSubScene();
     }
-    
+
     private void updateFollower() {
-        if (zombie.hasComponent(ZombieComponent.class)) {
-            zombie.getComponent(ZombieComponent.class).onUpdate(0);
-        } else {
-            System.out.println("No more Zombies Left ");
-        }
+        // if (zombie.hasComponent(ZombieComponent.class)) {
+        //     zombie.getComponent(ZombieComponent.class).onUpdate(0);
+        // } else {
+        //     System.out.println("No more Zombies Left ");
+        // }
     }
 
      public void resetGameWorld() {
@@ -347,20 +342,19 @@ public class App extends GameApplication {
             return;
         }
         if (isServer) {
-
             for(int i=1;i<players.size();i++){
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
-        ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
-        ui.updateGunUI(
-            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmo(), 
-            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
-            player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
-            );
-        player.getComponent(PlayerAnimComp.class).setWeaponType(player.getComponent(PlayerComponent.class).getCurrentWeapon().getName());
-        player.getComponent(PlayerComponent.class).getCurrentWeapon().setPlayerRotation(player.getRotation());
+        // ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
+        // ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
+        // ui.updateGunUI(
+        //     player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmo(), 
+        //     player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
+        //     player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
+        //     );
+        // player.getComponent(PlayerAnimComp.class).setWeaponType(player.getComponent(PlayerComponent.class).getCurrentWeapon().getName());
+        // player.getComponent(PlayerComponent.class).getCurrentWeapon().setPlayerRotation(player.getRotation());
     }
 
     private void checkCollisions() {
