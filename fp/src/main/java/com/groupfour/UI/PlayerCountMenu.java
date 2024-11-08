@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
     public  class PlayerCountMenu extends FXGLMenu {
-
+        
         public PlayerCountMenu(Runnable onOnePlayer, Runnable onTwoPlayer) {
             super(MenuType.GAME_MENU);
             playerButton OnePlayerbutton = new playerButton("Play Solo", onOnePlayer);

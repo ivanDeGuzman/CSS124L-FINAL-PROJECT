@@ -69,12 +69,11 @@ public class ZombiePlayerHandler extends CollisionHandler {
         double reducedDamage = player.getComponent(PlayerComponent.class).getReducedDamage();
         int baseDamage = 10;
         double finalDamage = (baseDamage * reducedDamage);
+        getGameScene().getViewport().shake(15, 5);
         player.getComponent(PlayerComponent.class).takeDamage(finalDamage);
 
         System.out.println("Inflicted Damage: " + finalDamage + " (Reduced Damage Multiplier: " + reducedDamage + ")");
-
         new MainUI().flashTintRed();
-        getGameScene().getViewport().shake(15, 5);
 
         canAttack = false;
         FXGL.runOnce(() -> canAttack = true, ATTACK_COOLDOWN);

@@ -26,6 +26,7 @@ import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.MultiplayerStart;
+import com.groupfour.UI.PCM_BG;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
@@ -173,8 +174,11 @@ public class App extends GameApplication {
     }
 
     @Override
-     protected void initUI() {
-        FXGL.runOnce(() -> FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer)), Duration.seconds(.01));
+    protected void initUI() {
+        FXGL.runOnce(() -> {
+            FXGL.getSceneService().pushSubScene(new PCM_BG());
+            FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
+        }, Duration.seconds(0.01));
         ui = new MainUI();
         addUINode(ui, 30, 50);
     }
@@ -192,7 +196,10 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             }
-            FXGL.run(() -> BoundsComponent.ObjectEntityCollision(player, zombie), Duration.seconds(0.017));
+            FXGL.run(() -> {
+                if(player.isActive()){
+                    BoundsComponent.ObjectEntityCollision(player, zombie);
+                }}, Duration.seconds(0.017));
     }
     
     public void startGame1P() {
@@ -204,6 +211,7 @@ public class App extends GameApplication {
         playerComponent = player.getComponent(PlayerComponent.class);
         playerComponent.setUpPlayer();
 
+        getSceneService().popSubScene();
         getSceneService().popSubScene();
 
         FXGL.run(()->{
@@ -245,6 +253,8 @@ public class App extends GameApplication {
     public void startMultiplayer() {
         getDialogService().showConfirmationBox("Are you the host?", answer -> {
             player = spawn("player");
+            vmachine = spawn("vmachine");
+            microwave = spawn("microwave");
             playerComponent = player.getComponent(PlayerComponent.class);
             playerComponent.setUpPlayer();
             MultiplayerStart multiplayerStart = new MultiplayerStart();
@@ -263,7 +273,7 @@ public class App extends GameApplication {
                             FXGL.getSceneService().pushSubScene(multiplayerStart);
                             multiplayerStart.setOnStartClick(e-> {
                                 onServer();
-                                connection.send(new Bundle("gameStart"));
+                                // connection.send(new Bundle("gameStart"));
                             });
                         }
                         multiplayerStart.addPlayer();
@@ -271,6 +281,7 @@ public class App extends GameApplication {
                         players.add(newPlayer);
                         getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
                         newPlayer.getComponent(PlayerComponent.class).initClientInput();
+                        newPlayer.getComponent(PlayerComponent.class).setUpPlayer();
                         getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
                     });
                 });       
@@ -280,13 +291,14 @@ public class App extends GameApplication {
                 var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
-                    connection.addMessageHandlerFX((c, message) -> {
-                        if (message.getName().equals("gameStart")) {
-                            System.out.println("Client detect start");
-                            getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                            getSceneService().popSubScene();
-                        }
-                    });
+                    // connection.addMessageHandlerFX((c, message) -> {
+                    //     if (message.getName().equals("gameStart")) {
+                    //         System.out.println("Client detect start");
+                    //         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                    //         getSceneService().popSubScene();
+                    //     }
+                    // });
+                    getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                     getExecutor().startAsyncFX(() -> {
                         onClient();
                     });
@@ -296,7 +308,6 @@ public class App extends GameApplication {
         });
     }
 
-    //DONE
     private void waitingForPlayers() {
         LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
         FXGL.getSceneService().pushSubScene(loadingScreen);
@@ -314,6 +325,7 @@ public class App extends GameApplication {
         
         getSceneService().popSubScene();
         getSceneService().popSubScene();
+        getSceneService().popSubScene();
     }
 
     private void onClient() {
@@ -322,11 +334,13 @@ public class App extends GameApplication {
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
         getSceneService().popSubScene();
+        getSceneService().popSubScene();
     }
 
      public void resetGameWorld() {
         getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
         zombie = null;
+        getSceneService().pushSubScene(new PCM_BG());
         getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
     }
 
