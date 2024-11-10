@@ -45,9 +45,6 @@ public class PlayerComponent extends Component {
 
     public PlayerComponent() {
         weapons.add(new BerettaM9(false, null));
-        weapons.add(new FAMAS(false, null));
-        weapons.add(new M16A1(false, null));
-
     }
 
     @Override
