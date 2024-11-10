@@ -18,7 +18,6 @@ public class M16A1 extends WeaponComponent {
 
     @Override
     public void fire(Entity player) {
-        System.out.println(offsetX + offsetY);
         if (ammo > 0 && !getIsReloading() && !isFiring) {
             isFiring = true;
             FXGL.run(() -> {

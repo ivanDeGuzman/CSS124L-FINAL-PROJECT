@@ -1,7 +1,11 @@
 package com.groupfour.UI;
 
+import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+
+import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.ui.FontFactory;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.WeaponComponent;
 import com.groupfour.Weapons.FAMAS;
@@ -14,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -23,6 +28,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 
 public class MainUI extends Parent {
     private Text goldText;
@@ -34,11 +40,19 @@ public class MainUI extends Parent {
     private Region healthBarBorder;
     private int maxHealth = 100;
     private VBox armoryMenu;
+    private Text waveText;
+    private Font customFont;
 
     public MainUI() {
         goldUI();
         healthBar();
-        gunUI();        
+        gunUI();
+        waveUI();        
+    }
+
+    public Font loadFont(String fontPath, int size) {
+        FontFactory fontFac = getAssetLoader().load(AssetType.FONT, fontPath);
+        return fontFac.newFont(size);
     }
 
     public void flashTintRed() {
@@ -53,32 +67,33 @@ public class MainUI extends Parent {
     }
 
     public void goldUI() {
+        customFont = loadFont("PIXELADE.TTF", 50);
         goldText = new Text();
         goldText.setFill(Color.GOLD);
-        goldText.setFont(Font.font("Cambria Math", 25));
+        goldText.setFont(customFont);
         goldText.setTranslateX(20);
-        goldText.setTranslateY(0);
+        goldText.setTranslateY(70);
         getChildren().add(goldText);
     }
 
     public void healthBar() {
+        customFont = loadFont("PIXELADE.TTF", 29);
         stack = new StackPane();
         healthBar = new Region();
-        healthBar.setStyle("-fx-background-color: green;");
+        healthBar.setStyle("-fx-background-color: green; -fx-background-radius: 15px");
 
         healthBarBorder = new Region();
 
-        healthBarBorder.setTranslateX(18);
-        healthBarBorder.setTranslateY(18);
+        healthBarBorder.setTranslateX(20);
 
         healthText = new Text();
-        healthText.setFont(Font.font("Comic Sans MS", 20));
+        healthText.setFont(customFont);
         healthText.setFill(Color.WHITE);
 
 
         stack.getChildren().addAll(healthBar, healthText);
-        stack.setTranslateX(20);
-        stack.setTranslateY(20);
+        stack.setTranslateX(22);
+        stack.setTranslateY(2);
         
         getChildren().addAll(healthBarBorder, stack);
     }
@@ -108,20 +123,32 @@ public class MainUI extends Parent {
     }
 
     public void updateHealthBar(int health) {
-
         healthBarBorder.setMinWidth(205);
         healthBarBorder.setMinHeight(33);
-        healthBarBorder.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: black;");
-
+        healthBarBorder.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 15px");
+    
         double healthPercent = (double) health / maxHealth;
         healthBar.setMinWidth(200 * healthPercent);
-        healthText.setText("" + health);
-
+    
+        
+        Color healthColor;
+        if (healthPercent > 0.5) {
+            healthColor = Color.GREEN.interpolate(Color.YELLOW, (1 - (healthPercent * 2)));
+        } else {
+            healthColor = Color.YELLOW.interpolate(Color.RED, (1 - (healthPercent * 2)));
+        }
+    
+        healthBar.setStyle("-fx-background-color: " + toRgbString(healthColor) + "; -fx-background-radius: 15px");
+    
         if (healthPercent <= 0) {
             healthBar.setStyle("-fx-background-color: transparent");
             healthText.setFill(Color.RED);
             healthText.setText("DEAD");
         }
+    }
+    
+    private String toRgbString(Color color) {
+        return String.format("rgb(%d, %d, %d)", (int)(color.getRed() * 255), (int)(color.getGreen() * 255), (int)(color.getBlue() * 255));
     }
 
     
@@ -209,6 +236,18 @@ public class MainUI extends Parent {
 
     public void hideArmoryUI() {
         FXGL.getGameScene().removeUINode(armoryMenu);
+    }
+
+    public void waveUI() {
+        waveText = new Text();
+        customFont = loadFont("PIXELADE.TTF", 40);
+        waveText.setFont(customFont);
+        waveText.setTranslateX(350);
+        getChildren().add(waveText);
+    }
+
+    public void updateWave(int wave) {
+        waveText.setText("Wave " + wave);
     }
 
     

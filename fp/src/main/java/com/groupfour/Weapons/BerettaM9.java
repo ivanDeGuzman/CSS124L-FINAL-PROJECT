@@ -18,8 +18,8 @@ public class BerettaM9 extends WeaponComponent {
     @Override
     public void fire(Entity player) {
         if (ammo > 0 && !getIsReloading()) {
+            FXGL.play("BerettaM9_Shoot.mp3");
             ammo--;
-            System.out.println(name + " fired. Ammo left: " + ammo);
             Point2D position = player.getCenter();
             Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
             spawnBullet(position, direction);

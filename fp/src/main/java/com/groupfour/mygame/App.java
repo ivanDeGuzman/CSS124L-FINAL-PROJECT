@@ -6,8 +6,6 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.input.InputModifier;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -383,8 +381,10 @@ public class App extends GameApplication {
             playerComponent.getCurrentWeapon().getAmmoCount(),
             playerComponent.getCurrentWeapon().getName()
         );
+        ui.updateWave(wave);
         player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
         playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
+        
     }
 
     private void checkCollisions() {
