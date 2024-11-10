@@ -13,12 +13,12 @@ public class M16A1 extends WeaponComponent {
 
 
     public M16A1(boolean isServer, Connection<Bundle> connection) {
-        super("M16A1", 180, 30, 30, 0.5, 10, isServer, connection);
+        super("M16A1", 180, 800, 30, 0.3, 10, isServer, connection);
     }
 
     @Override
     public void fire(Entity player) {
-        if (ammo > 0 && !getIsReloading() && !isFiring) {
+        if (ammo > 0 && !getIsReloading()) {
             isFiring = true;
             FXGL.run(() -> {
                 if (ammo > 0 && isFiring) {
