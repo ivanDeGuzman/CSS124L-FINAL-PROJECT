@@ -167,7 +167,9 @@ public class App extends GameApplication {
         } else if (player.distance(microwave) < 70) { 
             microwave.getComponent(Microwave.class).interact(); 
         } else if (player.distance(armory) < 70) {
-            armory.getComponent(Armory.class).interact();
+            if (waveCooldown)
+                armory.getComponent(Armory.class).interact();
+            else System.out.println("Only accessible after wave"); //placeholder, should be a UI
         }
     }
     
@@ -234,7 +236,7 @@ public class App extends GameApplication {
                 runOnce(() -> {
                     wave++;
                     nextWave(wave, waveMultiplier);
-                    waveCooldown = true;
+                    waveCooldown = false;
                     isWaveSpawning = false;
                 }, Duration.seconds(20));
             } else {
@@ -395,9 +397,6 @@ public class App extends GameApplication {
         });    
     }
 
-    public boolean isWaveCooldown() {
-        return waveCooldown;
-    }
     
     public static void main(String[] args) {
         launch(args);

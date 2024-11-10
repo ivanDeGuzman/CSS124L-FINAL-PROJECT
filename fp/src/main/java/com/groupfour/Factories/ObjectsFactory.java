@@ -66,7 +66,7 @@ public class ObjectsFactory implements EntityFactory {
         .at(200, 0)
         .collidable()
         .with(new NetworkComponent())
-        .with(new Armory(new MainUI(), new App()))
+        .with(new Armory(new MainUI()))
         .build();
     }
 }
