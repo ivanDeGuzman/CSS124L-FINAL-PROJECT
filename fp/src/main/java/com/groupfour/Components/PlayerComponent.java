@@ -70,9 +70,6 @@ public class PlayerComponent extends Component {
         return health;
     }
 
-    public void setInput(Input input){
-        clientInputs = input;
-    }
     public Input getClientInput(){
         return clientInputs;
     }

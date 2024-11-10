@@ -10,7 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 public class M16A1 extends WeaponComponent {
-    private boolean isFiring = false;
+
 
     public M16A1(boolean isServer, Connection<Bundle> connection) {
         super("M16A1", 180, 30, 30, 0.5, 10, isServer, connection);

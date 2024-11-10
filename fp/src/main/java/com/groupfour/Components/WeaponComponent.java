@@ -25,6 +25,7 @@ public abstract class WeaponComponent extends Component {
     protected double originalDamage;
     protected int offsetX, offsetY;
     protected double playerRotation;
+    protected boolean isFiring;
 
     public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage, boolean isServer, Connection<Bundle> connection) {
         this.name = name;
@@ -61,6 +62,14 @@ public abstract class WeaponComponent extends Component {
 
     public int getAmmoCount() {
         return ammoCount;
+    }
+
+    public boolean getIsFiring(){
+        return isFiring;
+    }
+
+    public void setFiring(boolean firing){
+        isFiring = firing;
     }
 
     public double getFireRate() {

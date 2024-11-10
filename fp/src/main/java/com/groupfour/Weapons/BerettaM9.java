@@ -23,6 +23,7 @@ public class BerettaM9 extends WeaponComponent {
             Point2D position = player.getCenter();
             Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
             spawnBullet(position, direction);
+            isFiring=true;
         } else {
             System.out.println(name + " is out of ammo.");
         }
@@ -30,6 +31,6 @@ public class BerettaM9 extends WeaponComponent {
 
     //placeholder
     public void stopFiring() {
-        boolean isFiring = false;
+        isFiring=false;
     }
 }

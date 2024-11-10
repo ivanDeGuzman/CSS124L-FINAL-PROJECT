@@ -4,6 +4,8 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import com.groupfour.Components.PlayerComponent;
+
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
@@ -32,6 +34,7 @@ public class PlayerAnimComp extends Component {
         handlePlayerTexture();
 
         if (isMoving) {
+            // entity.getComponent(PlayerComponent.class).getCurrentWeapon().isFiring();
             if (texture.getAnimationChannel() != animWalk) {
                 texture.loopAnimationChannel(animWalk);
             }
