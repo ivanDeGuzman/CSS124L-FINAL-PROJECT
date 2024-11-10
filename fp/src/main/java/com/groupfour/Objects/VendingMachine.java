@@ -1,25 +1,18 @@
 package com.groupfour.Objects;
 
-import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.net.Connection;
-import com.groupfour.Components.ObjectsComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.util.Duration;
 
-public class VendingMachine extends ObjectsComponent {
+public class VendingMachine extends Component {
     private int max = 6;
     private int min = 1;
     private int range = max - min + 1;
     private int rand;
     private boolean canInteract = true;
 
-    public VendingMachine(boolean isServer, Connection<Bundle> connection) {
-        super("Vending Machine", isServer, connection);
-    }
 
     
     public void interact() {
@@ -86,9 +79,5 @@ public class VendingMachine extends ObjectsComponent {
                 System.out.println("Nuke");
                 break;
         }
-    }
-
-    public void onAdded() {
-        // Any initial setup if needed
     }
 }

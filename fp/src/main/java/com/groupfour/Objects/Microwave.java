@@ -1,25 +1,17 @@
 package com.groupfour.Objects;
 
-import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.net.Connection;
-import com.groupfour.Components.ObjectsComponent;
+import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.util.Duration;
 
-public class Microwave extends ObjectsComponent {
+public class Microwave extends Component {
     private boolean canInteract = true; 
     private int healAmount = 20; 
     private Duration cooldownDuration = Duration.minutes(1);
 
-    
-    public Microwave(boolean isServer, Connection<Bundle> connection) {
-        super("Microwave", isServer, connection);
-    }
-
-    
     public void interact() {
         if (canInteract) { 
             FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> { 

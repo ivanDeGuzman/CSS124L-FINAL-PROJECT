@@ -6,7 +6,6 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -21,6 +20,7 @@ import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.Factories.ObjectsFactory;
 import com.groupfour.Factories.SpawnFactory;
 import com.groupfour.Factories.ZombieFactory;
+import com.groupfour.Objects.Armory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.LoadingScreen;
@@ -51,17 +51,20 @@ public class App extends GameApplication {
     private ZombiePlayerHandler zombiePlayerHandler;
     private Connection<Bundle> connection;
     private Entity microwave;
-    private Entity vmachine;
+    private Entity vmachine, armory;
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
     private PlayerComponent playerComponent;
+    private double waveMultiplier=1.5;
+    private boolean waveCooldown = false;
+    private boolean isWaveSpawning;
 
     @Override
     protected void initSettings(GameSettings settings) {
 
         settings.setTitle("Flatline: Oregon");
-        settings.setVersion("Alpha 0.3");
+        settings.setVersion("Alpha 0.19021902");
         settings.addEngineService(MultiplayerService.class);
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
@@ -152,6 +155,7 @@ public class App extends GameApplication {
                 interactWithObject();
             }
         }, KeyCode.F);
+
     }
 
     private void interactWithObject() { 
@@ -159,6 +163,10 @@ public class App extends GameApplication {
             vmachine.getComponent(VendingMachine.class).interact(); 
         } else if (player.distance(microwave) < 70) { 
             microwave.getComponent(Microwave.class).interact(); 
+        } else if (player.distance(armory) < 70) {
+            if (waveCooldown)
+                armory.getComponent(Armory.class).interact();
+            else System.out.println("Only accessible after wave"); //placeholder, should be a UI
         }
     }
     
@@ -205,22 +213,34 @@ public class App extends GameApplication {
         player = spawn("player");
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
+        armory = spawn("armory");
         wave=0;
-        double waveMultiplier=1.5;
+        
         playerComponent = player.getComponent(PlayerComponent.class);
         playerComponent.setUpPlayer();
 
         getSceneService().popSubScene();
         getSceneService().popSubScene();
 
-        FXGL.run(()->{
-            if(getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty()){
-                if(wave!=0){
-                    System.out.println(wave+" Clear");
-                }
+        FXGL.run(() -> {
+        if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
+            if (wave != 0) {
+                System.out.println(wave + " Clear");
+                waveCooldown = true;
+                isWaveSpawning = true;
+                System.out.println(waveCooldown);
+
+                runOnce(() -> {
+                    wave++;
+                    nextWave(wave, waveMultiplier);
+                    waveCooldown = false;
+                    isWaveSpawning = false;
+                }, Duration.seconds(20));
+            } else {
                 wave++;
-                nextWave(wave,waveMultiplier);
+                nextWave(wave, waveMultiplier);
             }
+        }
 
             if(playerComponent.isDead()){
                 playerComponent.setDeath(false);
@@ -360,8 +380,10 @@ public class App extends GameApplication {
             playerComponent.getCurrentWeapon().getAmmoCount(),
             playerComponent.getCurrentWeapon().getName()
         );
+        ui.updateWave(wave);
         player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
         playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
+        
     }
 
     private void checkCollisions() {
@@ -374,7 +396,7 @@ public class App extends GameApplication {
         });    
     }
 
-
+    
     public static void main(String[] args) {
         launch(args);
     }

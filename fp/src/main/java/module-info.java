@@ -7,6 +7,7 @@ open module com.groupfour.mygame {
     requires javafx.base;
     requires com.almasb.fxgl.core;
     requires com.almasb.fxgl.io;
+    requires javafx.media;
     
     exports com.groupfour.Components;
     exports com.groupfour.mygame;
