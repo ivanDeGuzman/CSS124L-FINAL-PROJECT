@@ -1,0 +1,951 @@
+16:58:38.972 [main                     ] DEBUG Logger               - Configured Logger
+16:58:38.990 [main                     ] DEBUG GameApplication      - Logging settings
+Title: Flatline: Oregon
+Version: Alpha 0.19021902
+Width: 800
+Height: 600
+Fullscreen: false
+Intro: false
+Profiling: false
+Single step:false
+App Mode: DEVELOPER
+Menu Key: ESCAPE
+Stage Style: DECORATED
+Scene Factory: class com.groupfour.mygame.App$1
+
+16:58:39.244 [JavaFX Application Thread] DEBUG FXGLApplication      - Initializing FXGL
+16:58:39.246 [JavaFX Application Thread] INFO  Engine               - FXGL-dev-SNAPSHOT (28.07.2021 16.39) on WINDOWS (J:11.0.22 FX:16)
+16:58:39.246 [JavaFX Application Thread] DEBUG Engine               - JRE Vendor Name: Oracle Corporation
+16:58:39.247 [JavaFX Application Thread] DEBUG Engine               - Running on OS: Windows 11 version 10.0
+16:58:39.247 [JavaFX Application Thread] DEBUG Engine               - Architecture: amd64
+16:58:39.247 [JavaFX Application Thread] INFO  Engine               - Source code and latest versions at: https://github.com/AlmasB/FXGL
+16:58:39.247 [JavaFX Application Thread] INFO  Engine               -              Join the FXGL chat at: https://gitter.im/AlmasB/FXGL
+16:58:39.304 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Creating a JavaFX scene
+16:58:39.342 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Target settings size: 800.0 x 600.0
+16:58:39.342 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled scene size:    800.0 x 600.0
+16:58:39.342 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+16:58:39.343 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Set initial scene to FXGLStartupScene
+16:58:39.346 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Opening main window
+16:58:39.408 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Window border size: (14.4000244140625, 37.5999755859375)
+16:58:39.408 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled size: 800.0 x 600.0
+16:58:39.409 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+16:58:39.409 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scene size: 800.0 x 600.0
+16:58:39.409 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Stage size: 814.4000244140625 x 637.5999755859375
+16:58:39.413 [FXGL Background Thread 1 ] DEBUG Engine               - Initializing environment variables
+16:58:39.443 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class com.groupfour.mygame.App
+16:58:39.443 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Applying CSS: fxgl_dark.css
+16:58:39.444 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/css/fxgl_dark.css
+16:58:39.480 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Initializing application scenes
+16:58:39.507 [FXGL Background Thread 1 ] DEBUG GameWorld            - Game world initialized
+16:58:39.544 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Physics world initialized: appHeight=600, physics.ppm=50.0
+16:58:39.545 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+16:58:39.547 [FXGL Background Thread 1 ] DEBUG GameScene            - Game scene initialized: 800x600
+16:58:39.554 [FXGL Background Thread 1 ] DEBUG FXGL.DefaultMenu     - createMenuBodyMainMenu()
+16:58:39.564 [FXGL Background Thread 1 ] DEBUG FXGL.DefaultMenu     - createOptionsMenu()
+16:58:39.570 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/particles/smoke.png
+16:58:39.634 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/particles/trace_horizontal.png
+16:58:39.657 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Application scenes initialized
+16:58:39.663 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Loading FXGL system data
+16:58:39.667 [FXGL Background Thread 1 ] DEBUG FileSystemAccess     - Reading from: C:\Users\acer\OneDrive\Desktop\git pull\CSS124L-FINAL-PROJECT\system\fxgl.bundle
+16:58:39.671 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Bundle FXGL: {}
+16:58:39.671 [FXGL Background Thread 1 ] DEBUG UpdaterService       - Checking for updates
+16:58:39.686 [FXGL Background Thread 1 ] DEBUG FXGLApplication      - Loading default localization
+16:58:39.685 [FXGL Background Thread 4 ] DEBUG FXGLApplication      - Loading fonts
+16:58:39.686 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/languages/english.lang
+16:58:39.686 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/VarelaRound-Regular.ttf
+16:58:39.696 [FXGL Background Thread 1 ] INFO  FXGLApplication      - FXGL initialization took: 0.284 sec
+16:58:39.705 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Upwards - W
+16:58:39.706 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Down - S
+16:58:39.706 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Left - A
+16:58:39.706 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Right - D
+16:58:39.706 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Reload - R
+16:58:39.706 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Shoot - LMB
+16:58:39.707 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Switch Weapons - Q
+16:58:39.707 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Interact - F
+16:58:39.707 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/fxgl_icon.png
+16:58:39.725 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/fxgl_default_cursor.png
+16:58:39.727 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Screenshot - CTRL+8
+16:58:39.728 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Dev Options - 1
+16:58:39.728 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Dev Console - 2
+16:58:39.728 [JavaFX Application Thread] DEBUG Input                - Registered new binding: System info dump - CTRL+9
+16:58:39.729 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Restart - CTRL+R
+16:58:39.730 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Toggle Debug Camera - CTRL+C
+16:58:39.732 [JavaFX Application Thread] DEBUG LoopRunner           - Starting loop
+16:58:39.747 [JavaFX Application Thread] DEBUG LoopRunner           - Initializing JavaFX AnimationTimerLoop
+16:58:39.750 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:39.759 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLStartupScene and adding to FXGLMainMenuDummyScene
+16:58:39.764 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLStartupScene -> FXGLMainMenuDummyScene
+16:58:39.764 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: FXGLDefaultMenu
+16:58:39.770 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:39.779 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to FXGLDefaultMenu
+16:58:39.780 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> FXGLDefaultMenu
+16:58:40.125 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/Abel-Regular.ttf
+16:58:40.130 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/lucida_console.ttf
+16:58:40.136 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/Courier-Prime.ttf
+16:58:40.144 [JavaFX Application Thread] DEBUG FXGLApplication      - Registering font factories with UI factory
+16:58:40.796 [FXGL Background Thread 2 ] INFO  UpdaterService       - Your current version:  dev-SNAPSHOT
+16:58:40.796 [FXGL Background Thread 2 ] INFO  UpdaterService       - Latest stable version: 21.1
+16:58:42.623 [JavaFX Application Thread] DEBUG Menu                 - fireNewGame()
+16:58:42.623 [JavaFX Application Thread] DEBUG GameApplicationServi - Starting new game
+16:58:42.624 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: FXGLDefaultMenu
+16:58:42.624 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:42.627 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLDefaultMenu and adding to FXGLMainMenuDummyScene
+16:58:42.628 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene <- FXGLDefaultMenu
+16:58:42.628 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:42.634 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to FXGLLoadingScene
+16:58:42.635 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> FXGLLoadingScene
+16:58:42.635 [JavaFX Application Thread] DEBUG GameApplicationServi - Clearing previous game
+16:58:42.635 [JavaFX Application Thread] DEBUG GameScene            - Clearing game scene
+16:58:42.635 [JavaFX Application Thread] DEBUG GameWorld            - Clearing game world
+16:58:42.635 [JavaFX Application Thread] DEBUG PhysicsWorld         - Clearing physics world
+16:58:42.636 [FXGL Background Thread 2 ] DEBUG FXGLApplication      - Initializing game
+16:58:42.685 [FXGL Background Thread 3 ] DEBUG Engine               - Logging environment variables
+16:58:42.686 [FXGL Background Thread 3 ] DEBUG Engine               - achievements: []
+16:58:42.686 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeight: 600.0
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeightProperty: ReadOnlyDoubleProperty [value: 600.0]
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidth: 800.0
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidthProperty: ReadOnlyDoubleProperty [value: 800.0]
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - appIcon: fxgl_icon.png
+16:58:42.687 [FXGL Background Thread 2 ] WARN  TMXLevelLoader       - TiledMap generated from 1.11.0. Supported version: 1.2.3. Some features may not be parsed fully.
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - applicationMode: DEVELOPER
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - cSSList: [fxgl_dark.css]
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - collisionDetectionStrategy: BRUTE_FORCE
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - configClass: Optional.empty
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - credits: []
+16:58:42.687 [FXGL Background Thread 3 ] DEBUG Engine               - defaultCursor: CursorInfo(imageName=fxgl_default_cursor.png, hotspotX=7.0, hotspotY=6.0)
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - devBBoxColorProperty: ObjectProperty [value: 0xff0000ff]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - devEnableDebugCameraProperty: BooleanProperty [value: false]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - devSensorColorProperty: ObjectProperty [value: 0xffff00ff]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - devShowBBoxProperty: BooleanProperty [value: false]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - devShowPositionProperty: BooleanProperty [value: false]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - enabledMenuItems: []
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - engineServices: [class com.almasb.fxgl.app.services.FXGLAssetLoaderService, class com.almasb.fxgl.app.FXGLApplication$GameApplicationService, class com.almasb.fxgl.app.services.FXGLDialogService, class com.almasb.fxgl.app.services.IOTaskExecutorService, class com.almasb.fxgl.io.FileSystemService, class com.almasb.fxgl.localization.LocalizationService, class com.almasb.fxgl.app.services.SystemBundleService, class com.almasb.fxgl.profile.SaveLoadService, class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider, class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider, class com.almasb.fxgl.audio.AudioPlayer, class com.almasb.fxgl.notification.impl.NotificationServiceProvider, class com.almasb.fxgl.achievement.AchievementService, class com.almasb.fxgl.cutscene.CutsceneService, class com.almasb.fxgl.minigames.MiniGameService, class com.almasb.fxgl.net.NetService, class com.almasb.fxgl.app.services.UpdaterService, class com.almasb.fxgl.dev.DevService, class com.almasb.fxgl.multiplayer.MultiplayerService]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - fontGame: Abel-Regular.ttf
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - fontMono: lucida_console.ttf
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - fontText: Courier-Prime.ttf
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - fontUI: VarelaRound-Regular.ttf
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - fullScreen: BooleanProperty [value: false]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficulty: MEDIUM
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficultyProperty: ObjectProperty [value: MEDIUM]
+16:58:42.688 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolume: 0.5
+16:58:42.689 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolumeProperty: DoubleProperty [value: 0.5]
+16:58:42.689 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolume: 0.5
+16:58:42.689 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolumeProperty: DoubleProperty [value: 0.5]
+16:58:42.689 [FXGL Background Thread 3 ] DEBUG Engine               - height: 600
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - is3D: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isAndroid: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isBrowser: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isClickFeedbackEnabled: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isCloseConfirmation: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isDesktop: true
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isDeveloperMenuEnabled: true
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isEmbedded: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isEntityPreloadEnabled: true
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isExperimentalTiledLargeMap: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isFileSystemWriteAllowed: true
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenAllowed: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenFromStart: false
+16:58:42.690 [FXGL Background Thread 3 ] DEBUG Engine               - isGameMenuEnabled: true
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isIOS: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isIntroEnabled: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isLinux: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isMac: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isMainMenuEnabled: true
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isManualResizeEnabled: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isMobile: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isNative: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isPauseMusicWhenMinimized: true
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isPreserveResizeRatio: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isProfilingEnabled: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isScaleAffectedOnResize: true
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isSingleStep: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isUserProfileEnabled: false
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - isWindows: true
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - language: ObjectProperty [value: ENGLISH]
+16:58:42.691 [FXGL Background Thread 3 ] DEBUG Engine               - menuKey: ESCAPE
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - mouseSensitivity: 0.2
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - notificationViewClass: class com.almasb.fxgl.notification.view.XboxNotificationView
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - pixelsPerMeter: 50.0
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - platform: WINDOWS
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - prefHeightProperty: ReadOnlyDoubleProperty [value: 600.0]
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - prefWidthProperty: ReadOnlyDoubleProperty [value: 800.0]
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - profileDir: profiles/
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - profileName: StringProperty [value: DEFAULT]
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - randomSeed: -1
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - runtimeInfo: RuntimeInfo(platform=WINDOWS, version=dev-SNAPSHOT, build=28.07.2021 16.39)
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - saveFileExt: sav
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - scaledHeightProp$fxgl: DoubleProperty [bound, value: 600.0]
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - scaledWidthProp$fxgl: DoubleProperty [bound, value: 800.0]
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - sceneFactory: com.groupfour.mygame.App$1@1db99d8
+16:58:42.692 [FXGL Background Thread 3 ] DEBUG Engine               - secondsIn24h: 60
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuBack: menu/back.wav
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuPress: menu/press.wav
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuSelect: menu/select.wav
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - soundNotification: core/notification.wav
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - stageStyle: DECORATED
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - supportedLanguages: [ENGLISH, FRENCH, GERMAN, HUNGARIAN, RUSSIAN]
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - ticksPerSecond: -1
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - title: Flatline: Oregon
+16:58:42.693 [FXGL Background Thread 3 ] DEBUG Engine               - urlGithub: https://github.com/AlmasB/FXGL
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - urlLeaderboard: http://fxgl-top.herokuapp.com/
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - urlPOM: https://raw.githubusercontent.com/AlmasB/FXGL/release/README.md
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - userAppClass: class com.groupfour.mygame.App
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - version: Alpha 0.19021902
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - versionCheckDays: 7
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - width: 800
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - Logging services
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLAssetLoaderService
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.FXGLApplication$GameApplicationService
+16:58:42.694 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLDialogService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.IOTaskExecutorService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.io.FileSystemService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.localization.LocalizationService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.SystemBundleService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.profile.SaveLoadService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider
+16:58:42.695 [FXGL Background Thread 2 ] DEBUG TMXLevelLoader       - Parsed TiledMap: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/levels/Lobby.tmx
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.audio.AudioPlayer
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.notification.impl.NotificationServiceProvider
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.achievement.AchievementService
+16:58:42.695 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.cutscene.CutsceneService
+16:58:42.696 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.minigames.MiniGameService
+16:58:42.696 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.net.NetService
+16:58:42.696 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.UpdaterService
+16:58:42.696 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.dev.DevService
+16:58:42.696 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.multiplayer.MultiplayerService
+16:58:42.696 [FXGL Background Thread 2 ] DEBUG TMXLevelLoader       - Creating tile layer entities
+16:58:42.697 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Loading view for layer Tile Layer 1
+16:58:42.701 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Created buffer with size 1280.0x768.0
+16:58:42.710 [FXGL Background Thread 2 ] DEBUG TMXLevelLoader       - Creating object layer entities
+16:58:42.726 [FXGL Background Thread 2 ] DEBUG GameWorld            - Clearing removable entities
+16:58:42.727 [FXGL Background Thread 2 ] DEBUG GameWorld            - Setting level: com.almasb.fxgl.entity.level.Level@5fe7d29
+16:58:42.733 [FXGL Background Thread 2 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/ui/fonts/PIXELADE.TTF
+16:58:42.752 [FXGL Background Thread 2 ] INFO  FXGLApplication      - Game initialization took: 0.116 sec
+16:58:42.791 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:42.796 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLLoadingScene and adding to GameScene
+16:58:42.797 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLLoadingScene -> GameScene
+16:58:42.824 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/Interactables/microwave_close.png
+16:58:42.826 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: PCM_BG
+16:58:42.826 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:42.826 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to PCM_BG
+16:58:42.827 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> PCM_BG
+16:58:42.828 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: PlayerCountMenu
+16:58:42.828 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:42.828 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PCM_BG and adding to PlayerCountMenu
+16:58:42.828 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PCM_BG -> PlayerCountMenu
+16:58:43.570 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+16:58:43.570 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:43.570 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PlayerCountMenu and adding to DialogSubScene
+16:58:43.571 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PlayerCountMenu -> DialogSubScene
+16:58:43.962 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+16:58:43.962 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:43.963 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to PlayerCountMenu
+16:58:43.963 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PlayerCountMenu <- DialogSubScene
+16:58:43.973 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/Weapons/Idle/BerettaM9_Idle.png
+16:58:43.975 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/Weapons/Shooting/BerettaM9_Shooting.png
+16:58:43.977 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/Players/1P_Shoot.png
+16:58:43.980 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/Interactables/vending_machine.png
+16:58:43.987 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: LoadingScreen
+16:58:43.987 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:43.987 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PlayerCountMenu and adding to LoadingScreen
+16:58:43.988 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PlayerCountMenu -> LoadingScreen
+16:58:43.994 [ServerAsyncConnThread    ] DEBUG TCPServer            - Starting to listen at: 55555 type: class com.almasb.fxgl.core.serialization.Bundle
+16:58:46.689 [ServerAsyncConnThread    ] DEBUG Endpoint             - TCPServer opening new connection (1) from /127.0.0.1:62575 type: class com.almasb.fxgl.core.serialization.Bundle
+16:58:46.693 [ServerAsyncConnThread    ] DEBUG Endpoint             - TCPServer successfully opened connection (1)
+16:58:46.694 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: LoadingScreen
+16:58:46.694 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:46.694 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from LoadingScreen and adding to PlayerCountMenu
+16:58:46.696 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PlayerCountMenu <- LoadingScreen
+16:58:46.696 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: MultiplayerStart
+16:58:46.696 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:46.697 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PlayerCountMenu and adding to MultiplayerStart
+16:58:46.698 [TCPServer_SendThread-1   ] DEBUG Writers              - Getting TCPMessageWriter for class com.almasb.fxgl.core.serialization.Bundle
+16:58:46.698 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PlayerCountMenu -> MultiplayerStart
+16:58:46.700 [TCPServer_SendThread-1   ] DEBUG Writers              - Constructed TCPMessageWriter for class com.almasb.fxgl.core.serialization.Bundle: BundleTCPMessageWriter
+16:58:46.700 [TCPServer_RecvThread-1   ] DEBUG Readers              - Getting TCPMessageReader for class com.almasb.fxgl.core.serialization.Bundle
+16:58:46.702 [TCPServer_RecvThread-1   ] DEBUG Readers              - Constructed MessageReader for class com.almasb.fxgl.core.serialization.Bundle: BundleTCPMessageReader
+16:58:46.703 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Upwards - W
+16:58:46.704 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Down - S
+16:58:46.704 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Left - A
+16:58:46.704 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Right - D
+16:58:46.705 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Reload - R
+16:58:46.705 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Shoot - LMB
+16:58:46.705 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Switch Weapons - Q
+16:58:50.451 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: MultiplayerStart
+16:58:50.451 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:50.452 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MultiplayerStart and adding to PlayerCountMenu
+16:58:50.452 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PlayerCountMenu <- MultiplayerStart
+16:58:50.452 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: PlayerCountMenu
+16:58:50.452 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:50.452 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PlayerCountMenu and adding to PCM_BG
+16:58:50.452 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PCM_BG <- PlayerCountMenu
+16:58:50.453 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: PCM_BG
+16:58:50.453 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+16:58:50.453 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PCM_BG and adding to GameScene
+16:58:50.453 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- PCM_BG
+16:58:51.989 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/music/BerettaM9_Shoot.mp3
+16:58:52.083 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:58:53.882 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:58:53.882 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:58:53.884 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:58:53.884 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:58:53.973 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:58:53.973 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:58:53.973 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:58:54.093 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:54.093 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:54.093 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:54.396 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:54.396 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:54.396 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:54.575 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:58:54.576 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:58:54.576 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:58:54.698 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:58:54.698 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:58:54.698 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:58:54.996 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:54.996 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:54.996 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:55.118 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:55.118 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:55.118 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:57.823 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:58:57.823 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:58:57.823 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:58:57.964 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:58:57.964 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:58:57.964 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:58:58.305 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:58.305 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:58.305 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:58:58.461 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:58.461 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:58.461 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:58:58.777 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:58:58.777 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:58:58.777 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:58:58.910 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:58:58.911 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:58:58.911 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:00.461 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:00.461 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:00.461 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:00.601 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:59:00.601 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:59:00.601 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:59:00.667 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:00.667 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:00.667 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:00.708 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:59:00.708 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:59:00.708 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:59:01.104 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:01.104 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:01.104 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:01.249 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:01.249 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:01.249 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:01.381 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.381 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:01.382 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.382 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.462 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.462 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.462 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.562 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.563 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:01.563 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.563 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.659 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.659 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.659 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.804 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.805 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:01.806 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.806 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:01.924 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.924 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:01.924 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.012 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.012 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:02.012 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.012 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.124 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.124 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.124 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.228 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.228 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:02.229 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.229 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.337 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.337 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.338 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.421 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.421 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:02.422 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.422 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.537 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.537 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.538 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.649 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.649 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:02.650 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.650 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:02.775 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.776 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:02.776 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:03.362 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:03.362 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:03.363 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:03.363 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:03.482 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:03.482 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:03.482 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:03.572 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:03.572 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:03.574 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:03.574 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:03.690 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:03.690 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:03.690 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.044 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.045 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:04.045 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.045 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.172 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.172 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.172 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.272 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.272 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:04.273 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.273 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.396 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.396 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.396 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.503 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.504 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:04.505 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.505 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.641 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.641 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.641 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.728 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.728 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:04.729 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.729 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.860 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.860 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.860 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:04.998 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.998 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:04.998 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:04.998 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:05.127 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:05.128 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:05.128 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:05.254 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:05.254 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:05.255 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:05.255 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:05.386 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:05.386 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:05.386 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:05.938 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:05.938 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:05.939 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:05.939 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.059 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.059 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.059 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.320 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.321 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:06.321 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.321 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.417 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.417 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.417 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.478 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.478 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:06.478 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.478 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.601 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.601 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.601 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.645 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.646 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:06.646 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.646 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.764 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.764 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.764 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:06.923 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.923 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:06.924 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:06.924 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.025 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.025 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.025 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.101 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.101 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:07.101 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.101 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.214 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.214 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.214 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.410 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.410 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:07.411 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.411 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:07.518 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.518 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:07.518 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.090 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:08.090 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:08.092 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:08.092 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:08.188 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.189 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.189 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.409 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:08.409 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:08.410 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:08.410 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:08.518 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.518 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.518 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:08.889 [JavaFX Application Thread] DEBUG Input                - Mocking key press: Q
+16:59:08.889 [JavaFX Application Thread] DEBUG Input                - Mocking key press: Q
+16:59:08.889 [JavaFX Application Thread] DEBUG Input                - Mocking key press: Q
+16:59:08.973 [JavaFX Application Thread] DEBUG Input                - Mocking key release: Q
+16:59:08.973 [JavaFX Application Thread] DEBUG Input                - Mocking key release: Q
+16:59:08.973 [JavaFX Application Thread] DEBUG Input                - Mocking key release: Q
+16:59:10.489 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:10.491 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:10.491 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:10.586 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:10.587 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:10.587 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:12.368 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:12.368 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:12.368 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:12.402 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.402 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:12.403 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.403 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.567 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:12.567 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:12.567 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:12.688 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:12.688 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:12.688 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:12.735 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.735 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:12.735 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.736 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.874 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:12.874 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:12.874 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:12.901 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.901 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:12.901 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:12.901 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.011 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.011 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.011 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.050 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.050 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.051 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.051 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.147 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.147 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.147 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.192 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.192 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.193 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.193 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.296 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.296 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.296 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.322 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.322 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.324 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.324 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.408 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.408 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.408 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.458 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.459 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.459 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.459 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.548 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.548 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.548 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.603 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.603 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.603 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.603 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.692 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.692 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.692 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.747 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.747 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.748 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.748 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.841 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.841 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.841 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.898 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.898 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:13.899 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.899 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:13.979 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.979 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:13.979 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.027 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.027 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:14.027 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.027 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.122 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.122 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.122 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.173 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.173 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:14.173 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.173 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.267 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.268 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.268 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.319 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.319 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:14.319 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.319 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.412 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.412 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.412 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.456 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.456 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:14.456 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.456 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.552 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.552 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.552 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.619 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.619 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:14.619 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.619 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.709 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.709 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.709 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.763 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.763 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.763 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.845 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.845 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.845 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.910 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.911 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.911 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:14.999 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.999 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:14.999 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:15.075 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:15.075 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:15.075 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:15.159 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:15.159 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:15.159 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:15.351 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:15.351 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:15.351 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:15.409 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:15.409 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:15.409 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:16.330 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:16.330 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:16.330 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:16.466 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:16.466 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:16.466 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:17.652 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:19.938 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:19.938 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:19.939 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:19.939 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:20.040 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:20.040 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:20.040 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:20.103 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:20.103 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:20.103 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:20.103 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:20.220 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:20.220 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:20.220 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.211 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.211 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:21.211 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.211 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.297 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.297 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.297 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.336 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.336 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:21.337 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.337 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.436 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.436 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.436 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.505 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.506 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:21.506 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.506 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:21.589 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.589 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:21.589 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.014 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.014 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.014 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.014 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.103 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.103 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.103 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.159 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.160 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.160 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.160 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.267 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.267 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.267 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.325 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.326 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.326 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.326 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.410 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.410 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.410 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.475 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.475 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.475 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.475 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.559 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.559 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.559 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.624 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.624 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.626 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.626 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.706 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.706 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.706 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.761 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.761 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.761 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.761 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.851 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.851 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.851 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:22.912 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.912 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:22.912 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:22.912 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.006 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.006 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.006 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.069 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.069 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:23.070 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.070 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.173 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.173 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.173 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.254 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.254 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:23.254 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.254 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.295 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:59:23.295 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:59:23.295 [JavaFX Application Thread] DEBUG Input                - Mocking key press: D
+16:59:23.346 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.346 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.346 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.559 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:23.559 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:23.559 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:23.657 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:59:23.658 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:59:23.658 [JavaFX Application Thread] DEBUG Input                - Mocking key release: D
+16:59:23.770 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:23.770 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:23.770 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:23.840 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.840 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:23.840 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.840 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:23.951 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.952 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:23.952 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.027 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.028 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.028 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.149 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.149 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.149 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.514 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.515 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.515 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.635 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.635 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.635 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.726 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.726 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.726 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:24.840 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.840 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:24.840 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:25.332 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:25.333 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:25.333 [JavaFX Application Thread] DEBUG Input                - Mocking key press: R
+16:59:25.407 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:25.407 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:25.407 [JavaFX Application Thread] DEBUG Input                - Mocking key release: R
+16:59:25.843 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:25.843 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:25.843 [JavaFX Application Thread] DEBUG Input                - Mocking key press: S
+16:59:26.096 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:26.096 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:26.096 [JavaFX Application Thread] DEBUG Input                - Mocking key release: S
+16:59:26.343 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:26.343 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:26.343 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:26.358 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:26.358 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:26.358 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:26.529 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:26.530 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:26.530 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:26.545 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:26.545 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:26.545 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:26.711 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:26.711 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:26.711 [JavaFX Application Thread] DEBUG Input                - Mocking key press: W
+16:59:26.886 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:26.886 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:26.886 [JavaFX Application Thread] DEBUG Input                - Mocking key release: W
+16:59:26.930 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:26.930 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:26.930 [JavaFX Application Thread] DEBUG Input                - Mocking key press: A
+16:59:27.011 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:27.011 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:27.011 [JavaFX Application Thread] DEBUG Input                - Mocking key release: A
+16:59:27.496 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.496 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:27.496 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.496 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.604 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.604 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.604 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.656 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.656 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:27.656 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.656 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.736 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.736 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.736 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.812 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.812 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:27.814 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.814 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.912 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.913 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.913 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:27.956 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.956 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:27.957 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:27.957 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.063 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.063 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.063 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.123 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.123 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:28.124 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.124 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.223 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.223 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.223 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.280 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.281 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:28.281 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.281 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.381 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.381 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.381 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.437 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.437 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:28.437 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.437 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.541 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.541 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.541 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.610 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.610 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:28.610 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.610 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.721 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.721 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.721 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.775 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.775 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:28.776 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.776 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:28.868 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.868 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:28.868 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:29.405 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:30.167 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:30.167 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:30.168 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:30.168 [JavaFX Application Thread] DEBUG Input                - Mocking button press: LMB at 0.0, 0.0
+16:59:30.247 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:30.247 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:30.247 [JavaFX Application Thread] DEBUG Input                - Mocking button release: LMB at 0.0, 0.0
+16:59:30.952 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:33.246 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:33.418 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:33.716 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:33.884 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:34.477 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:34.638 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:34.800 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:35.177 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:35.336 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:35.497 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:35.807 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:35.969 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:36.160 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:36.354 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:36.620 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:36.808 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:36.986 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:37.156 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:37.365 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:37.574 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:37.748 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:37.905 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.046 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.199 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.362 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.519 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.670 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.819 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:38.973 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:39.128 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@1467f0cf
+16:59:40.014 [JavaFX Application Thread] DEBUG FXGLApplication      - Exiting FXGL
+16:59:40.014 [JavaFX Application Thread] DEBUG LoopRunner           - Stopping loop
+16:59:40.014 [JavaFX Application Thread] DEBUG SystemBundleService  - Saving FXGL system data
+16:59:40.015 [JavaFX Application Thread] DEBUG FileSystemAccess     - Writing to: C:\Users\acer\OneDrive\Desktop\git pull\CSS124L-FINAL-PROJECT\system\fxgl.bundle
+16:59:40.016 [JavaFX Application Thread] DEBUG Async                - Shutting down background threads
+16:59:40.016 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Closing main window
+16:59:40.027 [JavaFX Application Thread] DEBUG Logger               - Closing Logger

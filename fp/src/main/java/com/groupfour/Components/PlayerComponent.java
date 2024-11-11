@@ -44,7 +44,6 @@ public class PlayerComponent extends Component {
     private String name="Player 1";
 
     public PlayerComponent() {
-        
         weapons.add(new BerettaM9(false, null));
     }
 
@@ -72,8 +71,9 @@ public class PlayerComponent extends Component {
     }
 
     public void setInput(Input input){
-        clientInputs = input;
+        this.clientInputs = input;
     }
+
     public Input getClientInput(){
         return clientInputs;
     }
@@ -143,11 +143,6 @@ public class PlayerComponent extends Component {
         return weapons.get(currentWeaponIndex);
     }
 
-    // implement later when you can pickup weapons now
-    // public void setCurrentWeapon(WeaponComponent weapon) {
-    //     this.currentWeapon = weapon;
-    // }
-
     public void setDeath(boolean dead) {
         isDead = dead;
     }
@@ -162,27 +157,28 @@ public class PlayerComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        Point2D playerPosition = entity.getCenter();
-        Point2D mousePosition = getInput().getMousePositionWorld();
+        if (clientInputs != null) {
+            mouseUpdate();
+        }
+    }
 
-        
+    //cringe ass mouse
+    private void mouseUpdate() {
+        Point2D playerPosition = entity.getCenter();
+        Point2D mousePosition = clientInputs.getMousePositionWorld();
+
         if (!mousePosition.equals(lastMousePosition)) {
             Point2D vector = mousePosition.subtract(playerPosition);
             angle = Math.toDegrees(Math.atan2(vector.getY(), vector.getX()));
             entity.setRotation(angle + 90);
+
             lastMousePosition = mousePosition;
+            
         }
     }
     
     public boolean isDead() {
         return isDead;
-    }
-
-    public void setUpPlayer() {
-        Viewport viewport = getGameScene().getViewport();
-        viewport.setLazy(true);
-        viewport.bindToEntity(entity, getAppWidth() / 2.0, getAppHeight() / 2.0);
-        viewport.setZoom(1.5);
     }
  
     public void moveX(boolean isLeft) {
