@@ -141,15 +141,12 @@ public class App extends GameApplication {
         getInput().addAction(new UserAction("Shoot") {
             protected void onActionBegin() {
                playerComponent.getCurrentWeapon().fire(player);
-               playerComponent.setShooting(true);
-               player.getComponent(PlayerAnimComp.class).setIsShooting(true);
             }
             protected void onActionEnd() {
-               playerComponent.setShooting(false);
                playerComponent.getCurrentWeapon().stopFiring();
-               player.getComponent(PlayerAnimComp.class).setIsShooting(false);
             }
         }, MouseButton.PRIMARY);
+        
         getInput().addAction(new UserAction("Switch Weapons") {
             protected void onActionBegin() {
                 playerComponent.switchWeapon();

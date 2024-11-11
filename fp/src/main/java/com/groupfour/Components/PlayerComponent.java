@@ -44,7 +44,6 @@ public class PlayerComponent extends Component {
     private String name="Player 1";
 
     public PlayerComponent() {
-        
         weapons.add(new BerettaM9(false, null));
     }
 

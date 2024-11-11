@@ -21,7 +21,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
             var box = new VBox(15, OnePlayerbutton, TwoPlayerbutton, RTNbutton);
             box.setTranslateX(100);
-            box.setTranslateY(500);
+            box.setTranslateY(450);
             
             getContentRoot().getChildren().addAll(box);
         }
