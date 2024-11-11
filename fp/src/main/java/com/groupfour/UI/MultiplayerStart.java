@@ -16,9 +16,11 @@ public class MultiplayerStart extends SubScene {
     private Text text;
     private int playerCount=1;
     private Button startButton;
+    private StackPane layout;
+
     public MultiplayerStart() {
         
-        StackPane layout = new StackPane();
+        layout = new StackPane();
         text = new Text();
         startButton = new Button();
         startButton.setText("Start");
@@ -40,4 +42,6 @@ public class MultiplayerStart extends SubScene {
         playerCount++;
         text.setText("Player Connected\nStart or Wait For More Players\nCurrent Player Count:"+playerCount);
     }
+
+   
 }

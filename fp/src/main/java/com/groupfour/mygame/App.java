@@ -4,8 +4,10 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
+import com.almasb.fxgl.app.scene.Viewport;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -56,9 +58,11 @@ public class App extends GameApplication {
     private int wave;
     private Entity newPlayer;
     private PlayerComponent playerComponent;
-    private double waveMultiplier=1.5;
+    private double waveMultiplier=10.5;
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
+    private MultiplayerStart multiplayerStart;
+    private boolean isServerStarted = false;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -188,7 +192,7 @@ public class App extends GameApplication {
             FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
         }, Duration.seconds(0.01));
         ui = new MainUI();
-        addUINode(ui, 30, 50);
+        addUINode(ui);
     }
     
     @Override
@@ -216,43 +220,48 @@ public class App extends GameApplication {
         microwave = spawn("microwave");
         armory = spawn("armory");
         wave=0;
+
+        waveAndDeathManager();
         
         playerComponent = player.getComponent(PlayerComponent.class);
-        playerComponent.setUpPlayer();
+        setUpPlayer();
 
         getSceneService().popSubScene();
         getSceneService().popSubScene();
 
+    }
+
+    private void waveAndDeathManager() {
         FXGL.run(() -> {
-        if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
-            if (wave != 0) {
-                System.out.println(wave + " Clear");
-                waveCooldown = true;
-                isWaveSpawning = true;
-                System.out.println(waveCooldown);
-
-                runOnce(() -> {
+            if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
+                if (wave != 0) {
+                    System.out.println(wave + " Clear");
+                    waveCooldown = true;
+                    isWaveSpawning = true;
+                    System.out.println(waveCooldown);
+    
+                    runOnce(() -> {
+                        wave++;
+                        nextWave(wave, waveMultiplier);
+                        waveCooldown = false;
+                        isWaveSpawning = false;
+                    }, Duration.seconds(20));
+                } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
-                    waveCooldown = false;
-                    isWaveSpawning = false;
-                }, Duration.seconds(20));
-            } else {
-                wave++;
-                nextWave(wave, waveMultiplier);
+                }
             }
-        }
-
-            if(playerComponent.isDead()){
-                playerComponent.setDeath(false);
-                getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
-                getGameController().gotoMainMenu();
-                FXGL.runOnce(() -> {
-                    resetGameWorld();
-                }, Duration.seconds(1));
-                });
-            }
-        },Duration.seconds(0.1));
+    
+                if(playerComponent.isDead()){
+                    playerComponent.setDeath(false);
+                    getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
+                    getGameController().gotoMainMenu();
+                    FXGL.runOnce(() -> {
+                        resetGameWorld();
+                    }, Duration.seconds(1));
+                    });
+                }
+            },Duration.seconds(0.1));
     }
 
     private void nextWave(int wave, double waveMultiplier){
@@ -276,8 +285,7 @@ public class App extends GameApplication {
             vmachine = spawn("vmachine");
             microwave = spawn("microwave");
             playerComponent = player.getComponent(PlayerComponent.class);
-            playerComponent.setUpPlayer();
-            MultiplayerStart multiplayerStart = new MultiplayerStart();
+            multiplayerStart = new MultiplayerStart();
             isServer = answer;
 
             if (isServer) {
@@ -300,8 +308,10 @@ public class App extends GameApplication {
                         newPlayer = spawn("player");
                         players.add(newPlayer);
                         getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
+                        newPlayer.getComponent(PlayerComponent.class).setInput(new Input());
                         newPlayer.getComponent(PlayerComponent.class).initClientInput();
-                        newPlayer.getComponent(PlayerComponent.class).setUpPlayer();
+
+                        getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
                         getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
                     });
                 });       
@@ -328,20 +338,30 @@ public class App extends GameApplication {
         });
     }
 
+    //moved it here so each player's cam is individualized instead of being cast to entity
+    private void setUpPlayer() {
+        Viewport viewport = getGameScene().getViewport();
+        viewport.setLazy(true);
+        viewport.bindToEntity(player, getAppWidth() / 2.0, getAppHeight() / 2.0);
+        viewport.setZoom(1.5);
+    }
+
     private void waitingForPlayers() {
         LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
         FXGL.getSceneService().pushSubScene(loadingScreen);
     }
 
     private void onServer() {
-        getService(MultiplayerService.class).spawn(connection, player, "player");
+        isServerStarted = true;
+        players.forEach(player -> {
+            connection.send(new Bundle("serverStarted"));
+            getService(MultiplayerService.class).spawn(connection, player, "player");
+            getService(MultiplayerService.class).addInputReplicationReceiver(connection, playerComponent.getClientInput());
+            setUpPlayer();
+        });
 
-        FXGL.run(() -> {
-            zombie = spawn("zombie", player.getCenter().getX() + 20, player.getCenter().getY() + 20);
-            getService(MultiplayerService.class).spawn(connection, zombie, "zombie");
-            zombie.getViewComponent();
-            zombie.getComponent(ZombieComponent.class).findClosestPlayer();
-        }, Duration.seconds(1));
+        wave = 0;
+        waveAndDeathManager();
         
         getSceneService().popSubScene();
         getSceneService().popSubScene();
@@ -349,12 +369,28 @@ public class App extends GameApplication {
     }
 
     private void onClient() {
+
+        connection.addMessageHandlerFX((conn, message) -> {
+            if (message.getName().equals("serverStarted")) {
+                isServerStarted = true;
+                ui.removeWaitingUI();
+            }
+        });
+        
+        if (!isServerStarted) {
+            ui.waitServerStart();
+        } else {
+            ui.removeWaitingUI();
+        }
+
         player = spawn("player");
-        playerComponent.setUpPlayer();
+        playerComponent.setInput(playerComponent.getClientInput());
+        setUpPlayer();
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
         getSceneService().popSubScene();
         getSceneService().popSubScene();
+        
     }
 
      public void resetGameWorld() {
@@ -369,11 +405,13 @@ public class App extends GameApplication {
         if(!player.isActive()){
             return;
         }
+
         if (isServer) {
             for(int i=1;i<players.size();i++){
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
+
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(

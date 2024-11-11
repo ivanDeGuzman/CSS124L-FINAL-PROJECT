@@ -35,13 +35,14 @@ public class MainUI extends Parent {
     private Text healthText;
     private Text showAmmo;
     private Text currentGun;
-    private StackPane stack;
+    private StackPane stack, waitLayout;
     private Region healthBar;
     private Region healthBarBorder;
     private int maxHealth = 100;
     private VBox armoryMenu;
-    private Text waveText;
+    private Text waveText, clientText;
     private Font customFont;
+    
 
     public MainUI() {
         goldUI();
@@ -71,8 +72,8 @@ public class MainUI extends Parent {
         goldText = new Text();
         goldText.setFill(Color.GOLD);
         goldText.setFont(customFont);
-        goldText.setTranslateX(20);
-        goldText.setTranslateY(70);
+        goldText.setTranslateX(50);
+        goldText.setTranslateY(120);
         getChildren().add(goldText);
     }
 
@@ -84,7 +85,8 @@ public class MainUI extends Parent {
 
         healthBarBorder = new Region();
 
-        healthBarBorder.setTranslateX(20);
+        healthBarBorder.setTranslateX(50);
+        healthBarBorder.setTranslateY(50);
 
         healthText = new Text();
         healthText.setFont(customFont);
@@ -92,8 +94,8 @@ public class MainUI extends Parent {
 
 
         stack.getChildren().addAll(healthBar, healthText);
-        stack.setTranslateX(22);
-        stack.setTranslateY(2);
+        stack.setTranslateX(52);
+        stack.setTranslateY(52);
         
         getChildren().addAll(healthBarBorder, stack);
     }
@@ -104,10 +106,10 @@ public class MainUI extends Parent {
         currentGun = new Text();
         showAmmo.setFont(Font.font("Comic Sans MS", 15));
         currentGun.setFont(Font.font("Comic Sans MS", 20));
-        showAmmo.setTranslateX(20);
-        showAmmo.setTranslateY(100);
-        currentGun.setTranslateX(20);
-        currentGun.setTranslateY(80);
+        showAmmo.setTranslateX(50);
+        showAmmo.setTranslateY(130);
+        currentGun.setTranslateX(50);
+        currentGun.setTranslateY(130);
 
         gunBox.getChildren().addAll(currentGun, showAmmo);
         getChildren().add(gunBox);
@@ -149,6 +151,26 @@ public class MainUI extends Parent {
     
     private String toRgbString(Color color) {
         return String.format("rgb(%d, %d, %d)", (int)(color.getRed() * 255), (int)(color.getGreen() * 255), (int)(color.getBlue() * 255));
+    }
+
+    public void waitServerStart() {
+        waitLayout = new StackPane();
+        clientText = new Text("Server not started yet, please wait");
+        waitLayout.getChildren().add(clientText);
+
+        clientText.setFont(Font.font("Arial", 24));
+        clientText.setFill(Color.WHITE);
+        
+        waitLayout.setPrefSize(800, 600);
+        waitLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7)");
+        
+        
+        getChildren().add(waitLayout);
+        
+    }
+
+    public void removeWaitingUI() { 
+        getChildren().remove(waitLayout); 
     }
 
     
@@ -242,7 +264,8 @@ public class MainUI extends Parent {
         waveText = new Text();
         customFont = loadFont("PIXELADE.TTF", 40);
         waveText.setFont(customFont);
-        waveText.setTranslateX(350);
+        waveText.setTranslateX(380);
+        waveText.setTranslateY(50);
         getChildren().add(waveText);
     }
 
