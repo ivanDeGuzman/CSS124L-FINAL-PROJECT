@@ -154,13 +154,20 @@ public class MainUI extends Parent {
     
     public void showArmoryUI() {
         armoryMenu = new VBox();
-        armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10;");
+        armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10; -fx-border-color: black;");
         armoryMenu.setTranslateX(FXGL.getAppWidth() / 2);
         armoryMenu.setTranslateY(FXGL.getAppHeight() / 2);
-    
+        armoryMenu.setMinSize(200, 200);
+        armoryMenu.setAlignment(Pos.CENTER);
+
         Text title = new Text("Armory");
         title.setFont(Font.font("Cambria Math", 20));
         title.setFill(Color.WHITE);
+        VBox titleBox = new VBox(title);
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+                "-fx-border-insets: 6px;" +
+                "-fx-background-insets: 6px;");
         
         GridPane weaponsForSale = new GridPane();
         weaponsForSale.setHgap(10);
@@ -183,28 +190,63 @@ public class MainUI extends Parent {
             Text weaponName = new Text(weaponNames[i]);
             weaponName.setFill(Color.WHITE);
             weaponName.setFont(Font.font("Cambria Math", 14));
+            Text weaponPrice = new Text(weaponPrices[i]);
+            weaponPrice.setFill(Color.WHITE);
+            weaponPrice.setFont(Font.font("Cambria Math", 14));
 
-            Button buyButton = new Button(weaponPrices[i]);
+//            Button buyButton = new Button(weaponPrices[i]);
             final int index = i;
-            buyButton.setOnAction(e -> {
-                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
-            });
+//            buyButton.setOnAction(e -> {
+//                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+//            });
 
             VBox weaponBox = new VBox();
             weaponBox.setAlignment(Pos.CENTER);
-            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
+            weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+            weaponBox.setMinSize(85, 85);
+            weaponBox.getChildren().addAll(weaponName, weaponImage, weaponPrice);
+//            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
+            weaponBox.setOnMouseClicked(e -> {
+                System.out.println(weaponNames[index]);
+                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+            });
+
+            weaponBox.setOnMouseEntered(e -> {
+                weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+            });
+
+            weaponBox.setOnMouseExited(e -> {
+                weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+            });
 
             weaponsForSale.add(weaponBox, i % 2, i / 2);
         }
-    
-        Button backBtn = new Button("Back");
-        backBtn.setOnAction(e -> hideArmoryUI());
-    
-        armoryMenu.getChildren().addAll(title, weaponsForSale, backBtn);
+
+        Text back = new Text("Return");
+        back.setFill(Color.WHITE);
+        back.setFont(Font.font("Cambria Math", 14));
+        VBox backBtn = new VBox(back);
+        backBtn.setAlignment(Pos.CENTER);
+        backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+                "-fx-border-insets: 6px;" +
+                "-fx-background-insets: 6px;");
+        backBtn.setOnMouseEntered(e -> {
+            backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-color: black; -fx-padding: 6px;" +
+                    "-fx-border-insets: 6px;" +
+                    "-fx-background-insets: 6px;");
+        });
+        backBtn.setOnMouseExited(e -> {
+            backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+                    "-fx-border-insets: 6px;" +
+                    "-fx-background-insets: 6px;");
+        });
+        backBtn.setOnMouseClicked(e -> hideArmoryUI());
+
+        armoryMenu.getChildren().addAll(titleBox, weaponsForSale, backBtn);
         
         FXGL.getGameScene().addUINode(armoryMenu);
     }
-    
+
     public void purchaseWeapon(Entity player, String weaponName) {
         PlayerComponent pc = player.getComponent(PlayerComponent.class);
 
@@ -228,6 +270,7 @@ public class MainUI extends Parent {
         if (pc.getCurrency() >= price) {
             pc.setCurrencyFromArmory(pc.getCurrency() - price);
             pc.addWeapon(newWeapon);
+            FXGL.getNotificationService().pushNotification(weaponName + " purchased");
             hideArmoryUI();
         } else {
             FXGL.getNotificationService().pushNotification("Not enough money");
