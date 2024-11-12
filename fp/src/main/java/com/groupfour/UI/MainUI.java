@@ -1,6 +1,7 @@
 package com.groupfour.UI;
 
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.image;
 
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
@@ -14,8 +15,10 @@ import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -102,16 +105,41 @@ public class MainUI extends Parent {
 
     public void gunUI() {
         VBox gunBox = new VBox();
-        showAmmo = new Text();
+        gunBox.setMinSize(200, 200);
+
+        VBox weaponBox = new VBox();
         currentGun = new Text();
+        ImageView gunImage = new ImageView(getClass().getResource("/assets/textures/Weapons/Idle/AK47_Crop.png").toExternalForm());
+        gunImage.setRotate(gunImage.getRotate() + 90);
+        gunImage.setFitWidth(222);
+        gunImage.setFitHeight(54);
+        gunImage.setPreserveRatio(true);
+        gunImage.setSmooth(true);
+//        imagePane.getChildren().add(gunImage);
+//        gunImage.fitWidthProperty().bind(imagePane.widthProperty());
+//        gunImage.fitHeightProperty().bind(imagePane.heightProperty());
+//        imagePane.setMaxSize(70, 200);
+        weaponBox.getChildren().addAll(gunImage, currentGun);
+        weaponBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        HBox ammoBox = new HBox();
+        ImageView bulletImage = new ImageView(getClass().getResource("/assets/textures/Weapons/Idle/AK47_Idle.png").toExternalForm());
+        bulletImage.setFitHeight(30);
+        bulletImage.setFitWidth(20);
+        showAmmo = new Text();
+        ammoBox.getChildren().addAll(bulletImage, showAmmo);
+        ammoBox.setAlignment(Pos.CENTER);
+
         showAmmo.setFont(Font.font("Comic Sans MS", 15));
         currentGun.setFont(Font.font("Comic Sans MS", 20));
-        showAmmo.setTranslateX(50);
-        showAmmo.setTranslateY(130);
-        currentGun.setTranslateX(50);
-        currentGun.setTranslateY(130);
 
-        gunBox.getChildren().addAll(currentGun, showAmmo);
+
+        gunBox.setTranslateX(50);
+        gunBox.setTranslateY(130);
+
+        gunBox.getChildren().addAll(weaponBox, ammoBox);
+        gunBox.setTranslateX(FXGL.getAppWidth()*0.75);
+        gunBox.setTranslateY(FXGL.getAppHeight()*0.75);
         getChildren().add(gunBox);
     }
 
