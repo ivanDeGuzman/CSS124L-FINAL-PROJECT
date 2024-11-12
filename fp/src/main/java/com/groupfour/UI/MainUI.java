@@ -1,5 +1,7 @@
 package com.groupfour.UI;
 
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
 import static com.almasb.fxgl.dsl.FXGL.image;
 
@@ -42,16 +44,20 @@ public class MainUI extends Parent {
     private Region healthBar;
     private Region healthBarBorder;
     private int maxHealth = 100;
-    private VBox armoryMenu;
+    private VBox armoryMenu, gunBox;
     private Text waveText, clientText;
     private Font customFont;
-    
+    private PlayerComponent pc;
+    private ImageView gunImageView;
+    private Image gunImage;
+    private String gunLink;
 
     public MainUI() {
         goldUI();
         healthBar();
         gunUI();
-        waveUI();        
+        waveUI();
+                
     }
 
     public Font loadFont(String fontPath, int size) {
@@ -102,51 +108,53 @@ public class MainUI extends Parent {
         
         getChildren().addAll(healthBarBorder, stack);
     }
-
+    
     public void gunUI() {
-        VBox gunBox = new VBox();
-        gunBox.setMinSize(200, 200);
 
-        VBox weaponBox = new VBox();
-        currentGun = new Text();
-        ImageView gunImage = new ImageView(getClass().getResource("/assets/textures/Weapons/Idle/AK47_Crop.png").toExternalForm());
-        gunImage.setRotate(gunImage.getRotate() + 90);
-        gunImage.setFitWidth(222);
-        gunImage.setFitHeight(54);
-        gunImage.setPreserveRatio(true);
-        gunImage.setSmooth(true);
-//        imagePane.getChildren().add(gunImage);
-//        gunImage.fitWidthProperty().bind(imagePane.widthProperty());
-//        gunImage.fitHeightProperty().bind(imagePane.heightProperty());
-//        imagePane.setMaxSize(70, 200);
-        weaponBox.getChildren().addAll(gunImage, currentGun);
-        weaponBox.setAlignment(Pos.BOTTOM_CENTER);
-
-        HBox ammoBox = new HBox();
-        ImageView bulletImage = new ImageView(getClass().getResource("/assets/textures/Weapons/Idle/AK47_Idle.png").toExternalForm());
-        bulletImage.setFitHeight(30);
-        bulletImage.setFitWidth(20);
+        gunBox = new VBox();
+        customFont = loadFont("PIXELADE.TTF", 35);
         showAmmo = new Text();
-        ammoBox.getChildren().addAll(bulletImage, showAmmo);
-        ammoBox.setAlignment(Pos.CENTER);
+        currentGun = new Text();
 
-        showAmmo.setFont(Font.font("Comic Sans MS", 15));
-        currentGun.setFont(Font.font("Comic Sans MS", 20));
+        showAmmo.setFont(customFont);
 
+        customFont = loadFont("PIXELADE.TTF", 30);
+        currentGun.setFont(customFont);
 
-        gunBox.setTranslateX(50);
-        gunBox.setTranslateY(130);
-
-        gunBox.getChildren().addAll(weaponBox, ammoBox);
-        gunBox.setTranslateX(FXGL.getAppWidth()*0.75);
-        gunBox.setTranslateY(FXGL.getAppHeight()*0.75);
+        gunBox.setTranslateX(getAppWidth() * 0.80);
+        gunBox.setTranslateY(getAppHeight() * 0.80);
+        gunBox.getChildren().addAll(currentGun, showAmmo);
         getChildren().add(gunBox);
+
     }
 
     public void updateGunUI(int ammo, int ammoCount, String name) {
-        showAmmo.setText("" + ammo + "/" + ammoCount);
         currentGun.setText(name);
+        showAmmo.setText("" + ammo + "/" + ammoCount);
+
+        gunBox.getChildren().removeIf(node -> node instanceof ImageView);
+        gunImageView = new ImageView();
+        switch(name.toLowerCase()) {
+            case "beretta m9":
+                gunLink = "/assets/textures/Weapons/Idle/BerettaM9_Crop.png";
+                break;
+            case "famas":
+                gunLink = "/assets/textures/Weapons/Idle/FAMAS_Crop.png";
+                break;
+            case "m16a1":
+                gunLink = "/assets/textures/Weapons/Idle/M16_Crop.png";
+                break;
+            default:
+                return;
+        }
+        gunImage = new Image(gunLink);
+        gunImageView.setImage(gunImage);
+        gunImageView.setFitWidth(200);
+        gunImageView.setFitHeight(50);
+        gunImageView.setPreserveRatio(true);
+        gunBox.getChildren().add(gunImageView);
     }
+
     
     public void updateGold(int gold) {   
         goldText.setText("Gold: " + gold);
@@ -203,15 +211,16 @@ public class MainUI extends Parent {
 
     
     public void showArmoryUI() {
+        customFont = loadFont("PIXELADE.TTF", 30);
         armoryMenu = new VBox();
         armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10; -fx-border-color: black;");
-        armoryMenu.setTranslateX(FXGL.getAppWidth() / 2);
-        armoryMenu.setTranslateY(FXGL.getAppHeight() / 2);
+        armoryMenu.setTranslateX(300);
+        armoryMenu.setTranslateY(200);
         armoryMenu.setMinSize(200, 200);
         armoryMenu.setAlignment(Pos.CENTER);
 
         Text title = new Text("Armory");
-        title.setFont(Font.font("Cambria Math", 20));
+        title.setFont(customFont);
         title.setFill(Color.WHITE);
         VBox titleBox = new VBox(title);
         titleBox.setAlignment(Pos.CENTER);
@@ -227,22 +236,22 @@ public class MainUI extends Parent {
         String[] weaponNames = {"FAMAS", "M16A1"};
         String[] weaponPrices = {"$100", "$300"};
         String[] weaponImageLinks = {
-            "/assets/textures/Weapons/Idle/AK47_Idle.png", 
+            "/assets/textures/Weapons/Idle/FAMAS_Idle.png", 
             "/assets/textures/Weapons/Idle/M16_Idle.png"
         };
     
         for (int i = 0; i < weaponNames.length; i++) {
             
             ImageView weaponImage = new ImageView(getClass().getResource(weaponImageLinks[i]).toExternalForm());
-            weaponImage.setFitWidth(50);
-            weaponImage.setFitHeight(50);
-
+            weaponImage.setFitWidth(100);
+            weaponImage.setFitHeight(100);
+            customFont = loadFont("PIXELADE.TTF", 25);
             Text weaponName = new Text(weaponNames[i]);
             weaponName.setFill(Color.WHITE);
-            weaponName.setFont(Font.font("Cambria Math", 14));
+            weaponName.setFont(customFont);
             Text weaponPrice = new Text(weaponPrices[i]);
             weaponPrice.setFill(Color.WHITE);
-            weaponPrice.setFont(Font.font("Cambria Math", 14));
+            weaponPrice.setFont(customFont);
 
 //            Button buyButton = new Button(weaponPrices[i]);
             final int index = i;
@@ -252,21 +261,20 @@ public class MainUI extends Parent {
 
             VBox weaponBox = new VBox();
             weaponBox.setAlignment(Pos.CENTER);
-            weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+            weaponBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
             weaponBox.setMinSize(85, 85);
             weaponBox.getChildren().addAll(weaponName, weaponImage, weaponPrice);
 //            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
             weaponBox.setOnMouseClicked(e -> {
-                System.out.println(weaponNames[index]);
                 purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
             });
 
             weaponBox.setOnMouseEntered(e -> {
-                weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+                weaponBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.4);");
             });
 
             weaponBox.setOnMouseExited(e -> {
-                weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+                weaponBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
             });
 
             weaponsForSale.add(weaponBox, i % 2, i / 2);
@@ -298,7 +306,7 @@ public class MainUI extends Parent {
     }
 
     public void purchaseWeapon(Entity player, String weaponName) {
-        PlayerComponent pc = player.getComponent(PlayerComponent.class);
+        pc = player.getComponent(PlayerComponent.class);
 
         WeaponComponent newWeapon = null;
         int price = 0;

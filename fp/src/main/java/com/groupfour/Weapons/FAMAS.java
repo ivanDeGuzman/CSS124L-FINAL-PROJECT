@@ -22,7 +22,8 @@ public class FAMAS extends WeaponComponent {
     public void fire(Entity player) {
 
         if (ammo >= 3 && !getIsReloading() && !firingFlagger) {
-            isFiring=true;
+            isFiring = true;
+            firingFlagger=true;
             for (int i = 0; i < 3; i++) {
                 FXGL.runOnce(() -> {
                     ammo--;
@@ -32,7 +33,6 @@ public class FAMAS extends WeaponComponent {
                     spawnBullet(position, direction);
                 }, Duration.seconds(i * 0.1));
             }
-            FXGL.runOnce(() -> isFiring = false, Duration.seconds(.3));
             FXGL.runOnce(() -> firingFlagger = false, Duration.seconds(fireRate));
         } else {
             System.out.println(name + " fire rate delay");
