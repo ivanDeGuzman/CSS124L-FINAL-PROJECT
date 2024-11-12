@@ -339,6 +339,13 @@ public class MainUI extends Parent {
         FXGL.getGameScene().removeUINode(armoryMenu);
     }
 
+    public void setupMinimap() {
+        var minimap = new MinimapView(getGameWorld(), 800, 600, 200, 100);
+        minimap.setEntityColor(Color.GREEN);
+
+        addUINode(minimap, getAppWidth() - 210, getAppHeight() - 110);
+    }
+    
     public void waveUI() {
         waveText = new Text();
         customFont = loadFont("PIXELADE.TTF", 40);
