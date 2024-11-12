@@ -1,6 +1,7 @@
 package com.groupfour.UI;
 
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.image;
 
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
@@ -14,8 +15,10 @@ import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -35,13 +38,14 @@ public class MainUI extends Parent {
     private Text healthText;
     private Text showAmmo;
     private Text currentGun;
-    private StackPane stack;
+    private StackPane stack, waitLayout;
     private Region healthBar;
     private Region healthBarBorder;
     private int maxHealth = 100;
     private VBox armoryMenu;
-    private Text waveText;
+    private Text waveText, clientText;
     private Font customFont;
+    
 
     public MainUI() {
         goldUI();
@@ -71,8 +75,8 @@ public class MainUI extends Parent {
         goldText = new Text();
         goldText.setFill(Color.GOLD);
         goldText.setFont(customFont);
-        goldText.setTranslateX(20);
-        goldText.setTranslateY(70);
+        goldText.setTranslateX(50);
+        goldText.setTranslateY(120);
         getChildren().add(goldText);
     }
 
@@ -84,7 +88,8 @@ public class MainUI extends Parent {
 
         healthBarBorder = new Region();
 
-        healthBarBorder.setTranslateX(20);
+        healthBarBorder.setTranslateX(50);
+        healthBarBorder.setTranslateY(50);
 
         healthText = new Text();
         healthText.setFont(customFont);
@@ -92,24 +97,49 @@ public class MainUI extends Parent {
 
 
         stack.getChildren().addAll(healthBar, healthText);
-        stack.setTranslateX(22);
-        stack.setTranslateY(2);
+        stack.setTranslateX(52);
+        stack.setTranslateY(52);
         
         getChildren().addAll(healthBarBorder, stack);
     }
 
     public void gunUI() {
         VBox gunBox = new VBox();
-        showAmmo = new Text();
+        gunBox.setMinSize(200, 200);
+
+        VBox weaponBox = new VBox();
         currentGun = new Text();
+        ImageView gunImage = new ImageView(getClass().getResource("/assets/textures/Weapons/Idle/AK47_Crop.png").toExternalForm());
+        gunImage.setRotate(gunImage.getRotate() + 90);
+        gunImage.setFitWidth(222);
+        gunImage.setFitHeight(54);
+        gunImage.setPreserveRatio(true);
+        gunImage.setSmooth(true);
+//        imagePane.getChildren().add(gunImage);
+//        gunImage.fitWidthProperty().bind(imagePane.widthProperty());
+//        gunImage.fitHeightProperty().bind(imagePane.heightProperty());
+//        imagePane.setMaxSize(70, 200);
+        weaponBox.getChildren().addAll(gunImage, currentGun);
+        weaponBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        HBox ammoBox = new HBox();
+        ImageView bulletImage = new ImageView(getClass().getResource("/assets/textures/Weapons/Idle/AK47_Idle.png").toExternalForm());
+        bulletImage.setFitHeight(30);
+        bulletImage.setFitWidth(20);
+        showAmmo = new Text();
+        ammoBox.getChildren().addAll(bulletImage, showAmmo);
+        ammoBox.setAlignment(Pos.CENTER);
+
         showAmmo.setFont(Font.font("Comic Sans MS", 15));
         currentGun.setFont(Font.font("Comic Sans MS", 20));
-        showAmmo.setTranslateX(20);
-        showAmmo.setTranslateY(100);
-        currentGun.setTranslateX(20);
-        currentGun.setTranslateY(80);
 
-        gunBox.getChildren().addAll(currentGun, showAmmo);
+
+        gunBox.setTranslateX(50);
+        gunBox.setTranslateY(130);
+
+        gunBox.getChildren().addAll(weaponBox, ammoBox);
+        gunBox.setTranslateX(FXGL.getAppWidth()*0.75);
+        gunBox.setTranslateY(FXGL.getAppHeight()*0.75);
         getChildren().add(gunBox);
     }
 
@@ -151,16 +181,43 @@ public class MainUI extends Parent {
         return String.format("rgb(%d, %d, %d)", (int)(color.getRed() * 255), (int)(color.getGreen() * 255), (int)(color.getBlue() * 255));
     }
 
+    public void waitServerStart() {
+        waitLayout = new StackPane();
+        clientText = new Text("Server not started yet, please wait");
+        waitLayout.getChildren().add(clientText);
+
+        clientText.setFont(Font.font("Arial", 24));
+        clientText.setFill(Color.WHITE);
+        
+        waitLayout.setPrefSize(800, 600);
+        waitLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7)");
+        
+        
+        getChildren().add(waitLayout);
+        
+    }
+
+    public void removeWaitingUI() { 
+        getChildren().remove(waitLayout); 
+    }
+
     
     public void showArmoryUI() {
         armoryMenu = new VBox();
-        armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10;");
+        armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10; -fx-border-color: black;");
         armoryMenu.setTranslateX(FXGL.getAppWidth() / 2);
         armoryMenu.setTranslateY(FXGL.getAppHeight() / 2);
-    
+        armoryMenu.setMinSize(200, 200);
+        armoryMenu.setAlignment(Pos.CENTER);
+
         Text title = new Text("Armory");
         title.setFont(Font.font("Cambria Math", 20));
         title.setFill(Color.WHITE);
+        VBox titleBox = new VBox(title);
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+                "-fx-border-insets: 6px;" +
+                "-fx-background-insets: 6px;");
         
         GridPane weaponsForSale = new GridPane();
         weaponsForSale.setHgap(10);
@@ -183,28 +240,63 @@ public class MainUI extends Parent {
             Text weaponName = new Text(weaponNames[i]);
             weaponName.setFill(Color.WHITE);
             weaponName.setFont(Font.font("Cambria Math", 14));
+            Text weaponPrice = new Text(weaponPrices[i]);
+            weaponPrice.setFill(Color.WHITE);
+            weaponPrice.setFont(Font.font("Cambria Math", 14));
 
-            Button buyButton = new Button(weaponPrices[i]);
+//            Button buyButton = new Button(weaponPrices[i]);
             final int index = i;
-            buyButton.setOnAction(e -> {
-                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
-            });
+//            buyButton.setOnAction(e -> {
+//                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+//            });
 
             VBox weaponBox = new VBox();
             weaponBox.setAlignment(Pos.CENTER);
-            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
+            weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+            weaponBox.setMinSize(85, 85);
+            weaponBox.getChildren().addAll(weaponName, weaponImage, weaponPrice);
+//            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
+            weaponBox.setOnMouseClicked(e -> {
+                System.out.println(weaponNames[index]);
+                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+            });
+
+            weaponBox.setOnMouseEntered(e -> {
+                weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+            });
+
+            weaponBox.setOnMouseExited(e -> {
+                weaponBox.setStyle("-fx-background-color: rgba(0, 0, 0, 1);");
+            });
 
             weaponsForSale.add(weaponBox, i % 2, i / 2);
         }
-    
-        Button backBtn = new Button("Back");
-        backBtn.setOnAction(e -> hideArmoryUI());
-    
-        armoryMenu.getChildren().addAll(title, weaponsForSale, backBtn);
+
+        Text back = new Text("Return");
+        back.setFill(Color.WHITE);
+        back.setFont(Font.font("Cambria Math", 14));
+        VBox backBtn = new VBox(back);
+        backBtn.setAlignment(Pos.CENTER);
+        backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+                "-fx-border-insets: 6px;" +
+                "-fx-background-insets: 6px;");
+        backBtn.setOnMouseEntered(e -> {
+            backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-color: black; -fx-padding: 6px;" +
+                    "-fx-border-insets: 6px;" +
+                    "-fx-background-insets: 6px;");
+        });
+        backBtn.setOnMouseExited(e -> {
+            backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+                    "-fx-border-insets: 6px;" +
+                    "-fx-background-insets: 6px;");
+        });
+        backBtn.setOnMouseClicked(e -> hideArmoryUI());
+
+        armoryMenu.getChildren().addAll(titleBox, weaponsForSale, backBtn);
         
         FXGL.getGameScene().addUINode(armoryMenu);
     }
-    
+
     public void purchaseWeapon(Entity player, String weaponName) {
         PlayerComponent pc = player.getComponent(PlayerComponent.class);
 
@@ -228,6 +320,7 @@ public class MainUI extends Parent {
         if (pc.getCurrency() >= price) {
             pc.setCurrencyFromArmory(pc.getCurrency() - price);
             pc.addWeapon(newWeapon);
+            FXGL.getNotificationService().pushNotification(weaponName + " purchased");
             hideArmoryUI();
         } else {
             FXGL.getNotificationService().pushNotification("Not enough money");
@@ -242,7 +335,8 @@ public class MainUI extends Parent {
         waveText = new Text();
         customFont = loadFont("PIXELADE.TTF", 40);
         waveText.setFont(customFont);
-        waveText.setTranslateX(350);
+        waveText.setTranslateX(380);
+        waveText.setTranslateY(50);
         getChildren().add(waveText);
     }
 
