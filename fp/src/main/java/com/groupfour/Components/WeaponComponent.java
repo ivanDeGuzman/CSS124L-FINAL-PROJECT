@@ -68,10 +68,6 @@ public abstract class WeaponComponent extends Component {
         return isFiring;
     }
 
-    public void setFiring(boolean firing){
-        isFiring = firing;
-    }
-
     public double getFireRate() {
         return fireRate;
     }

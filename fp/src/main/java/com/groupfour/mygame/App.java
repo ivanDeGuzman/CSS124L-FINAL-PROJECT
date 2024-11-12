@@ -221,24 +221,24 @@ public class App extends GameApplication {
         getSceneService().popSubScene();
 
         FXGL.run(() -> {
-        if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
-            if (wave != 0) {
-                System.out.println(wave + " Clear");
-                waveCooldown = true;
-                isWaveSpawning = true;
-                System.out.println(waveCooldown);
+            if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
+                if (wave != 0) {
+                    System.out.println(wave + " Clear");
+                    waveCooldown = true;
+                    isWaveSpawning = true;
+                    System.out.println(waveCooldown);
 
-                runOnce(() -> {
+                    runOnce(() -> {
+                        wave++;
+                        nextWave(wave, waveMultiplier);
+                        waveCooldown = false;
+                        isWaveSpawning = false;
+                    }, Duration.seconds(20));
+                } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
-                    waveCooldown = false;
-                    isWaveSpawning = false;
-                }, Duration.seconds(20));
-            } else {
-                wave++;
-                nextWave(wave, waveMultiplier);
+                }
             }
-        }
 
             if(playerComponent.isDead()){
                 playerComponent.setDeath(false);
