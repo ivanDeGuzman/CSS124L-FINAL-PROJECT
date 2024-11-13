@@ -197,12 +197,11 @@ public class App extends GameApplication {
 
     @Override
     public void initGame() {
-        //getAudioPlayer().stopAllMusic();
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
         zombiePlayerHandler = new ZombiePlayerHandler();
-        setLevelFromMap("Lobby.tmx");
+        setLevelFromMap("Warehouse.tmx");
     }
 
     @Override
@@ -239,6 +238,7 @@ public class App extends GameApplication {
     }
 
     public void startGame1P() {
+        ui.stopTitleMusic();
         player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
@@ -342,8 +342,10 @@ public class App extends GameApplication {
            
 
     public void startMultiplayer() {
+        
         getDialogService().showConfirmationBox("Are you the host?", a -> {
             isServer = a;
+            ui.stopTitleMusic();
     
             if (isServer) {
                 server = getNetService().newTCPServer(55555);
