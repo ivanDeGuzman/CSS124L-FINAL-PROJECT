@@ -1,5 +1,8 @@
 package com.groupfour.Weapons;
 
+import static com.almasb.fxgl.dsl.FXGL.getAudioPlayer;
+
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -19,8 +22,9 @@ public class BerettaM9 extends WeaponComponent {
     @Override
     public void fire(Entity player) {
         if (ammo > 0 && !getIsReloading()) {
+            Sound sound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
             isFiring=true;
-            FXGL.play("BerettaM9_Shoot.mp3");
+            getAudioPlayer().playSound(sound);
             ammo--;
             Point2D position = player.getCenter();
             Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();

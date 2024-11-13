@@ -35,7 +35,7 @@ public class PlayerComponent extends Component {
     private double speed = originalSpeed;
     private int currentWeaponIndex = 0;
     private double reducedDamage = 1.0;
-    private int currency = 0;
+    private int currency = 100;
     private PlayerAnimComp ac;
     private Input clientInputs = new Input();
     private double angle;

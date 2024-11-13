@@ -459,7 +459,7 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-
+        ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
@@ -467,6 +467,7 @@ public class App extends GameApplication {
             playerComponent.getCurrentWeapon().getAmmoCount(),
             playerComponent.getCurrentWeapon().getName()
         );
+        
         ui.updateWave(wave);
         player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
         playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
