@@ -14,10 +14,12 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.ZombieComponents.ExplosionComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -58,6 +60,17 @@ public class SpawnFactory implements EntityFactory {
         .with(new BulletComponent()) 
         .with(expireClean)
         .build();
+    }
+
+    @Spawns("explosion")
+    public Entity newExplosion(SpawnData data) {
+        return  entityBuilder(data)
+                .type(EntityType.EXPLOSION)
+                .at(data.getX(), data.getY())
+                .viewWithBBox(new Circle(data.get("radius"), Color.RED))
+                .with(new ExplosionComponent(data.get("radius"), 100))
+                .with(new ExpireCleanComponent(Duration.seconds(2)))
+                .build();
     }
 
 
