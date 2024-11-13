@@ -42,7 +42,7 @@ public class ZombieFactory implements EntityFactory {
             new Point2D(SPAWN_DISTANCE, getAppHeight() - SPAWN_DISTANCE)
     };
 
-    // just some code i needed to test
+
 
     private static Point2D getRandomSpawnPoint() {
         var players = getGameWorld().getEntitiesByType(EntityType.PLAYER);
@@ -77,7 +77,7 @@ public class ZombieFactory implements EntityFactory {
 
     @Spawns("zombie")
     public Entity newZombie(SpawnData data) {
-        return commonZombieSetup(data, 100, 100, "normal")
+        return commonZombieSetup(data, 60, 100, "normal")
                 .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                 .with(new CellMoveComponent(40, 40, 150))
                 .build();

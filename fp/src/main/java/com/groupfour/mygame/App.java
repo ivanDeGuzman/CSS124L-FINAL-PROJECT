@@ -9,6 +9,7 @@ import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
@@ -71,6 +72,11 @@ public class App extends GameApplication {
     private MultiplayerStart multiplayerStart;
     private boolean isServerStarted = false, isNearInteractable = false;
     private ObjectsUI objectsUI;
+    private double timeSinceLastCollisionCheck = 0;
+    private double timeSinceLastUIUpdate =0;
+    private double uiUpdateInterval = 0.2;
+    private double collisionCheckInterval = 0.1;
+
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -253,24 +259,19 @@ public class App extends GameApplication {
                     waveCooldown = true;
                     isWaveSpawning = true;
                     System.out.println(waveCooldown);
-
+                    
                     runOnce(() -> {
                         wave++;
                         nextWave(wave, waveMultiplier);
                         waveCooldown = false;
                         isWaveSpawning = false;
 
-                        if (isServer) {
-                            sendWaveToClient();
-                        }
-
-                    }, Duration.seconds(1));
+                    }, Duration.seconds(20));
                 } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
-                    if (isServer) {
-                        sendWaveToClient();   
-                    }
+                    
+                        
                 }
             }
 
@@ -283,27 +284,8 @@ public class App extends GameApplication {
                         resetGameWorld();
                     }, Duration.seconds(1));
                     });
-
-                    if (isServer) {
-                        sendDeathToClient();
-                    }
                 }
             },Duration.seconds(0.1));
-    }
-
-    private void sendWaveToClient() {
-        Bundle bundle = new Bundle("waveUpdate");
-        bundle.put("wave", wave);
-        bundle.put("waveMultiplier", waveMultiplier);
-        connection.send(bundle);
-    }
-
-    private void sendDeathToClient() {
-        if (playerComponent.getEntity().getComponent(IDComponent.class) != null) {
-            Bundle bundle = new Bundle("playerDeath");
-            bundle.put("playerID", playerComponent.getEntity().getComponent(IDComponent.class).getId());
-            connection.send(bundle);
-        }
     }
 
     private void nextWave(int wave, double waveMultiplier){
@@ -357,54 +339,70 @@ public class App extends GameApplication {
            
 
     public void startMultiplayer() {
-        getDialogService().showConfirmationBox("Are you the host?", answer -> {
-            isServer = answer;
+        getDialogService().showConfirmationBox("Are you the host?", a -> {
+            isServer = a;
+    
             if (isServer) {
-                multiplayerStart = new MultiplayerStart();
-                player = spawn("player");
-                playerComponent = player.getComponent(PlayerComponent.class);
-                player.addComponent(new IDComponent("playerID", initPlayerID));
-                vmachine = spawn("vmachine");
-                microwave = spawn("microwave");
-                armory = spawn("armory");
-                players.add(player);
-                var server = getNetService().newTCPServer(55555);
-                waitingForPlayers();
-                server.startAsync();
+                server = getNetService().newTCPServer(55555);
                 server.setOnConnected(conn -> {
                     connection = conn;
                     getExecutor().startAsyncFX(() -> {
-                        if(players.size()==1){
-                            getSceneService().popSubScene();
-                            FXGL.getSceneService().pushSubScene(multiplayerStart);
-                            multiplayerStart.setOnStartClick(e-> {
-                                onServer();
-                            });
-                        }
-                        multiplayerStart.addPlayer();
-                        newPlayer = spawn("player");
-                        // newPlayer.addComponent(new IDComponent("playerID", players.size() + 1));
-                        players.add(newPlayer);
-                        // getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
-                        // newPlayer.getComponent(PlayerComponent.class).initClientInput();
-                        // getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
-                    });
-                });       
-            } 
-            //If Client WIP
-            else {
-                var client = getNetService().newTCPClient("localhost", 55555);
-                client.setOnConnected(conn -> {
-                    connection = conn;
-                    getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                    getExecutor().startAsyncFX(() -> {
-                        onClient();
+                        getSceneService().popSubScene();
+                        getSceneService().popSubScene();
+    
+                        onServer();
+                        
+                        newPlayer = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+                        players.add(newPlayer); 
                     });
                 });
-                client.connectAsync();
+                server.startAsync();
+            } else {
+                getDialogService().showConfirmationBox("Are you connecting to host?", b -> {
+                    if (b) {
+                        client = getNetService().newTCPClient("localhost", 55555);
+                        client.setOnConnected(conn -> {
+                            connection = conn;
+                            //getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                            getExecutor().startAsyncFX(() -> onClient());
+                        });
+                        client.connectAsync();
+                    }
+                });
             }
         });
     }
+    
+
+    public GameWorld onServer() {
+        isServerStarted = true;
+        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+        vmachine = spawn("vmachine");
+        armory = spawn("armory");
+        microwave = spawn("microwave");
+        playerComponent = player.getComponent(PlayerComponent.class);
+        setUpPlayer();
+        players.add(player);
+        getService(MultiplayerService.class).spawn(connection, player, "player");
+        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+        playerComponent.initClientInput();
+        getService(MultiplayerService.class).addInputReplicationReceiver(connection, playerComponent.getClientInput());
+        return getGameWorld();
+    }
+
+    public void onClient() {
+        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+        playerComponent = player.getComponent(PlayerComponent.class);
+        playerComponent.initClientInput();
+        players.add(player);
+        getService(MultiplayerService.class).spawn(connection, player, "player");
+        setUpPlayer();
+        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, onServer());
+        getService(MultiplayerService.class).addInputReplicationSender(connection, playerComponent.getClientInput());
+        getSceneService().popSubScene();
+        getSceneService().popSubScene();
+    }
+
 
     //moved it here so each player's cam is individualized instead of being cast to entity
     private void setUpPlayer() {
@@ -419,70 +417,6 @@ public class App extends GameApplication {
         FXGL.getSceneService().pushSubScene(loadingScreen);
     }
 
-    private void onServer() {
-        isServerStarted = true;
-        players.forEach(player -> {
-            connection.send(new Bundle("serverStarted"));
-            getService(MultiplayerService.class).spawn(connection, player, "player");
-            player.getComponent(PlayerComponent.class).initClientInput();
-            getService(MultiplayerService.class).addInputReplicationReceiver(connection, player.getComponent(PlayerComponent.class).getClientInput());
-            setUpPlayer();
-        });
-
-        wave = 0;
-        waveAndDeathManager();
-        
-        getSceneService().popSubScene();
-        getSceneService().popSubScene();
-        getSceneService().popSubScene();
-    }
-
-    private void onClient() {
-
-        connection.addMessageHandlerFX((conn, message) -> { 
-            if (message.getName().equals("serverStarted")) { 
-                isServerStarted = true; ui.removeWaitingUI(); 
-            } else if (message.getName().equals("waveUpdate")) { 
-                int wave = message.get("wave"); 
-                double waveMultiplier = message.get("waveMultiplier"); 
-                updateWave(wave, waveMultiplier); 
-            } else if (message.getName().equals("PlayerDeath")) { 
-                int playerId = message.get("playerID"); 
-                handlePlayerDeath(playerId); 
-            } 
-        });
-        
-        if (!isServerStarted) {
-            ui.waitServerStart();
-        } else {
-            ui.removeWaitingUI();
-        }
-
-        player = spawn("player");
-        // playerComponent.setInput(playerComponent.getClientInput());
-        setUpPlayer();
-        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
-        getSceneService().popSubScene();
-        getSceneService().popSubScene();
-        
-    }
-
-    private void updateWave(int wave, double waveMultiplier) { 
-        this.wave = wave; 
-        this.waveMultiplier = waveMultiplier; 
-        nextWave(wave, waveMultiplier); 
-    }
-
-    private void handlePlayerDeath(int playerId) {
-        getGameWorld().getEntitiesByComponent(IDComponent.class).forEach(entity -> {
-            IDComponent idComponent = entity.getComponent(IDComponent.class);
-            if (idComponent.getId() == playerId) {
-                entity.getComponent(PlayerComponent.class).setDeath(true);
-            }
-        });
-    }
-
 
 
     public void resetGameWorld() {
@@ -494,27 +428,28 @@ public class App extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        if(!player.isActive()){
-            return;
+        timeSinceLastCollisionCheck += tpf;
+        timeSinceLastUIUpdate += tpf;
+
+        if (timeSinceLastCollisionCheck >= collisionCheckInterval) {
+            timeSinceLastCollisionCheck = 0;
+            checkCollisions();
         }
 
-        if (player.distance(vmachine) < 70) {
-            isNearInteractable = true;
-        } else if (player.distance(microwave) < 70) { 
-            isNearInteractable = true;
-        } else if (player.distance(armory) < 70) {
-            if (waveCooldown)
-                isNearInteractable = true;
+
+        if (timeSinceLastUIUpdate >= uiUpdateInterval) {
+            timeSinceLastUIUpdate = 0;
+            updateUI();
+        }
+
+        if (!player.isActive()) return;
+        updateInteractableStatus();
+
+        if (isNearInteractable) {
+            if (objectsUI.canInteractNode == null) {
+                objectsUI.showCanInteract();
+            }
         } else {
-            isNearInteractable = false;
-        }
-
-        if (isNearInteractable) { 
-            if (objectsUI.canInteractNode == null) { 
-                objectsUI.showCanInteract(); 
-                
-            } 
-        } else { 
             objectsUI.hideCanInteract();
         }
 
@@ -523,19 +458,28 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        // ui.setupMinimap(getGameWorld());
+        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
+        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
+
+    }
+
+    private void updateInteractableStatus() {
+        isNearInteractable = player.distance(vmachine) < 70 ||
+                player.distance(microwave) < 70 ||
+                (player.distance(armory) < 70 && waveCooldown);
+    }
+
+    private void updateUI() {
+        ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
-            playerComponent.getCurrentWeapon().getAmmo(), 
-            playerComponent.getCurrentWeapon().getAmmoCount(),
-            playerComponent.getCurrentWeapon().getName()
+                playerComponent.getCurrentWeapon().getAmmo(),
+                playerComponent.getCurrentWeapon().getAmmoCount(),
+                playerComponent.getCurrentWeapon().getName()
         );
-        
+
         ui.updateWave(wave, waveCooldown);
-        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
-        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
-        
     }
 
     private void checkCollisions() {

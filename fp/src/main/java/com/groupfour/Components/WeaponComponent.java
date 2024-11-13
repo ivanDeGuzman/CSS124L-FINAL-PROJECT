@@ -11,6 +11,8 @@ import com.almasb.fxgl.multiplayer.MultiplayerService;
 import com.almasb.fxgl.net.Connection;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
+
+import static com.almasb.fxgl.dsl.FXGL.getEventBus;
 import static com.almasb.fxgl.dsl.FXGL.runOnce;
 
 public abstract class WeaponComponent extends Component {
@@ -31,15 +33,13 @@ public abstract class WeaponComponent extends Component {
     private Sound reloadSound;
     private AudioPlayer audioPlayer;
 
-    public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage, boolean isServer, Connection<Bundle> connection) {
+    public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage) {
         this.name = name;
         this.ammoCount = ammoCount;
         this.ammo = ammo;
         this.maxAmmo = maxAmmo;
         this.fireRate = fireRate;
         this.damage = damage;
-        this.isServer = isServer;
-        this.connection = connection;
         this.reloadSound = FXGL.getAssetLoader().loadSound("Reload.mp3");
         this.audioPlayer = FXGL.getAudioPlayer();
     }

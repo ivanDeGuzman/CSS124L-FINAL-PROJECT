@@ -92,6 +92,20 @@ public class ObjectsUI extends Parent {
             case "fizzy":
                 cansImageLink = "/assets/textures/SodaCans/Cactus_Mix.png";
                 break;
+            case "tsludge":
+                cansImageLink = "/assets/textures/SodaCans/Toxic_Sludge.png";
+                break;
+            case "icecold":
+                cansImageLink = "/assets/textures/SodaCans/Ice_Cold_Brew.png";
+                break;
+            case "atomic":
+                cansImageLink = "/assets/textures/SodaCans/Atomic_Tonic.png";
+                break;
+            case "nuke":
+                cansImageLink = "/assets/textures/SodaCans/Nuclear_Soda.png";
+                break;
+            
+            
         }
             cansImage = new ImageView(new Image(cansImageLink, 300, 300, false, true));
             cansUI.getChildren().add(cansImage);
@@ -213,14 +227,14 @@ public class ObjectsUI extends Parent {
         switch(weaponName) {
             case "FAMAS": 
                 price = 100; 
-                newWeapon = new FAMAS(false, null); 
+                newWeapon = new FAMAS(); 
                 break; 
             case "M16A1":
                 price = 300; 
-                newWeapon = new M16A1(false, null); 
+                newWeapon = new M16A1(); 
                 break; 
             // case "AK47": 
-            //     newWeapon = new AK47(false, null); 
+            //     newWeapon = new AK47(); 
             //     price = 250; 
             //     break;
         }

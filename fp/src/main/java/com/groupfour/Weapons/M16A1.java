@@ -12,8 +12,8 @@ import javafx.util.Duration;
 public class M16A1 extends WeaponComponent {
 
 
-    public M16A1(boolean isServer, Connection<Bundle> connection) {
-        super("M16A1", 180, 800, 30, 0.8, 10, isServer, connection);
+    public M16A1() {
+        super("M16A1", 180, 800, 30, 0.8, 10);
     }
 
     @Override
