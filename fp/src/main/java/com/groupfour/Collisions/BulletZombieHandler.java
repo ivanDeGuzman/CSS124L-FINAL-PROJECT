@@ -17,5 +17,16 @@ public class BulletZombieHandler extends CollisionHandler {
         zombie.getComponent(ZombieComponent.class).takeDamage((int) damage);
         bullet.removeFromWorld();
         System.out.println(zombie.getComponent(ZombieComponent.class).getHealth());
+
+        ParticleEmitter bloodEmitter = ParticleFactory.createBloodEmitter();
+        ParticleComponent bloodParticles = new ParticleComponent(bloodEmitter);
+
+        Entity bloodEffectEntity = new Entity();
+        bloodEffectEntity.setPosition(zombie.getPosition());
+        bloodEffectEntity.addComponent(bloodParticles);
+
+        FXGL.getGameWorld().addEntity(bloodEffectEntity);
+
+        FXGL.getGameTimer().runOnceAfter(bloodEffectEntity::removeFromWorld, Duration.seconds(1.5));
     }
 }
