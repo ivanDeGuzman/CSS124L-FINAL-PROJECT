@@ -19,6 +19,7 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
+import com.groupfour.Collisions.BulletWallHandler;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.EnemyProjectilePlayerHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
