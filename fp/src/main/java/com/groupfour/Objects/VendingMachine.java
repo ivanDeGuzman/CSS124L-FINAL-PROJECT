@@ -3,7 +3,7 @@ package com.groupfour.Objects;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.UI.MainUI;
+import com.groupfour.UI.ObjectsUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.util.Duration;
 
@@ -13,7 +13,7 @@ public class VendingMachine extends Component {
     private int range = max - min + 1;
     private int rand;
     private boolean canInteract = true;
-    private MainUI ui = new MainUI();
+    private ObjectsUI ui = new ObjectsUI();
 
     
     public void interact() {
@@ -25,13 +25,13 @@ public class VendingMachine extends Component {
                 canInteract = false;
                 FXGL.runOnce(() -> canInteract = true, Duration.minutes(1));
             } else {
-                System.out.println("Vending machine is cooling down. Please wait.");
+                ui.vmNoInteract();
             }
         });
     }
 
     public void buffs(int rand) {
-        switch (2) {
+        switch (1) {
             case 1:
                 // Energy Drink - increase speed of player for 1 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {

@@ -2,46 +2,52 @@ package com.groupfour.UI;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.dsl.FXGL;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-
 import static com.almasb.fxgl.dsl.FXGL.*;
-    public  class PlayerCountMenu extends FXGLMenu {
-        
-        public PlayerCountMenu(Runnable onOnePlayer, Runnable onTwoPlayer) {
-            super(MenuType.GAME_MENU);
-            playerButton OnePlayerbutton = new playerButton("Play Solo", onOnePlayer);
-            playerButton TwoPlayerbutton = new playerButton("Play With A Friend", onTwoPlayer);
 
-            playerButton RTNbutton = new playerButton("Return", () -> fireExitToMainMenu());
+public class PlayerCountMenu extends FXGLMenu {
 
-            var box = new VBox(15, OnePlayerbutton, TwoPlayerbutton, RTNbutton);
-            box.setTranslateX(100);
-            box.setTranslateY(450);
-            
-            getContentRoot().getChildren().addAll(box);
-        }
+    public PlayerCountMenu(Runnable onOnePlayer, Runnable onTwoPlayer) {
+        super(MenuType.GAME_MENU);
+        
+        playerButton onePlayerButton = new playerButton(FXGL.image("spbtn.png"), onOnePlayer);
+        playerButton twoPlayerButton = new playerButton(FXGL.image("mpbtn.png"), onTwoPlayer);
+        playerButton returnButton = new playerButton(FXGL.image("return.png"), () -> fireExitToMainMenu());
 
-        private static class playerButton extends StackPane {
-            private String name;
-            private Runnable action;
+        var box = new VBox(15, onePlayerButton, twoPlayerButton, returnButton);
+        box.setTranslateX(getAppWidth() * 0.32);
+        box.setTranslateY(getAppHeight() * 0.30);
+
+        getContentRoot().getChildren().addAll(box);
+    }
+
+    private static class playerButton extends StackPane {
+        private Image image;
+        private Runnable action;
+
+        public playerButton(Image image, Runnable action) {
+            this.image = image;
+            this.action = action;
         
-            private Text text;
-        
-            public playerButton(String name, Runnable action) {
-                this.name = name;
-                this.action = action;
-        
-                text = getUIFactoryService().newText(name, Color.BLACK, 15.0);
-                
-                getChildren().addAll(text);
-                setOnMouseClicked(e -> {
-                    action.run();
-                });
-            }
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(300);  // Set desired width
+            imageView.setFitHeight(300);  // Set desired height
+            imageView.setPreserveRatio(true);
+
+            getChildren().addAll(imageView);
+            setOnMouseClicked(e -> {
+                action.run();
+            });
+
+            setOnMouseEntered(e -> imageView.setOpacity(0.7));
+            setOnMouseExited(e -> imageView.setOpacity(1.0));
         }
     }
+}

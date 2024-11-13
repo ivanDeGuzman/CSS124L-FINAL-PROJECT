@@ -51,9 +51,14 @@ public class BoundsComponent extends Component {
     }
 
     private static void resolveCollision(Entity entity, Entity object) {
-        double overlapX = (entity.getWidth() / 2 + object.getWidth() / 2) - Math.abs(entity.getX() - object.getX());
-        double overlapY = (entity.getHeight() / 2 + object.getHeight() / 2) - Math.abs(entity.getY() - object.getY());
-
+        double halfEntityWidth = entity.getWidth() / 2;
+        double halfEntityHeight = entity.getHeight() / 2;
+        double halfObjectWidth = object.getWidth() / 2;
+        double halfObjectHeight = object.getHeight() / 2;
+    
+        double overlapX = (halfEntityWidth + halfObjectWidth) - Math.abs((entity.getX() + halfEntityWidth) - (object.getX() + halfObjectWidth));
+        double overlapY = (halfEntityHeight + halfObjectHeight) - Math.abs((entity.getY() + halfEntityHeight) - (object.getY() + halfObjectHeight));
+    
         if (overlapX > 0 && overlapY > 0) {
             if (overlapX < overlapY) {
                 if (entity.getX() < object.getX()) {
@@ -70,4 +75,5 @@ public class BoundsComponent extends Component {
             }
         }
     }
+    
 }

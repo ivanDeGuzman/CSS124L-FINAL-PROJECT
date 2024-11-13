@@ -30,6 +30,7 @@ import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.MultiplayerStart;
+import com.groupfour.UI.ObjectsUI;
 import com.groupfour.UI.PCM_BG;
 import com.groupfour.UI.PlayerCountMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
@@ -63,13 +64,14 @@ public class App extends GameApplication {
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private MultiplayerStart multiplayerStart;
-    private boolean isServerStarted = false;
+    private boolean isServerStarted = false, isNearInteractable = false;
+    private ObjectsUI objectsUI;
 
     @Override
     protected void initSettings(GameSettings settings) {
 
         settings.setTitle("Flatline: Oregon");
-        settings.setVersion("Alpha 0.19021902");
+        settings.setVersion("Beta ?");
         settings.addEngineService(MultiplayerService.class);
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
@@ -163,9 +165,9 @@ public class App extends GameApplication {
 
     private void interactWithObject() { 
         if (player.distance(vmachine) < 70) {
-            vmachine.getComponent(VendingMachine.class).interact(); 
+            vmachine.getComponent(VendingMachine.class).interact();
         } else if (player.distance(microwave) < 70) { 
-            microwave.getComponent(Microwave.class).interact(); 
+            microwave.getComponent(Microwave.class).interact();
         } else if (player.distance(armory) < 70) {
             if (waveCooldown)
                 armory.getComponent(Armory.class).interact();
@@ -190,7 +192,9 @@ public class App extends GameApplication {
             FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
         }, Duration.seconds(0.01));
         ui = new MainUI();
+        objectsUI = new ObjectsUI();
         addUINode(ui);
+        addUINode(objectsUI);
     }
 
     @Override
@@ -233,7 +237,6 @@ public class App extends GameApplication {
         FXGL.run(() -> {
             if (getGameWorld().getEntitiesByType(EntityType.ZOMBIE).isEmpty() && !isWaveSpawning) {
                 if (wave != 0) {
-                    System.out.println(wave + " Clear");
                     waveCooldown = true;
                     isWaveSpawning = true;
                     System.out.println(waveCooldown);
@@ -454,12 +457,32 @@ public class App extends GameApplication {
             return;
         }
 
+        if (player.distance(vmachine) < 70) {
+            isNearInteractable = true;
+        } else if (player.distance(microwave) < 70) { 
+            isNearInteractable = true;
+        } else if (player.distance(armory) < 70) {
+            if (waveCooldown)
+                isNearInteractable = true;
+        } else {
+            isNearInteractable = false;
+        }
+
+        if (isNearInteractable) { 
+            if (objectsUI.canInteractNode == null) { 
+                objectsUI.showCanInteract(); 
+                
+            } 
+        } else { 
+            objectsUI.hideCanInteract();
+        }
+
         if (isServer) {
             for(int i=1;i<players.size();i++){
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        ui.setupMinimap(getGameWorld());
+        //ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
@@ -468,7 +491,7 @@ public class App extends GameApplication {
             playerComponent.getCurrentWeapon().getName()
         );
         
-        ui.updateWave(wave);
+        ui.updateWave(wave, waveCooldown);
         player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
         playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
         

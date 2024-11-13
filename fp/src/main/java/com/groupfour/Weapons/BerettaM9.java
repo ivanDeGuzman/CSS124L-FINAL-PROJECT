@@ -13,7 +13,6 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import com.almasb.fxgl.audio.AudioPlayer;
-import com.almasb.fxgl.audio.Sound;
 
 public class BerettaM9 extends WeaponComponent {
 

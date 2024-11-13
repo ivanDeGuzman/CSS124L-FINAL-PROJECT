@@ -12,7 +12,7 @@ import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Objects.Armory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
-import com.groupfour.UI.MainUI;
+import com.groupfour.UI.ObjectsUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.scene.paint.Color;
@@ -64,7 +64,7 @@ public class ObjectsFactory implements EntityFactory {
         .at(200, 0)
         .collidable()
         .with(new NetworkComponent())
-        .with(new Armory(new MainUI()))
+        .with(new Armory(new ObjectsUI()))
         .build();
     }
 }
