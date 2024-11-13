@@ -27,7 +27,7 @@ public class ObjectsFactory implements EntityFactory {
         .view("Interactables/vending_machine.png")
         .bbox(new HitBox(BoundingShape.box(67, 52)))
         .collidable()
-        .at(100, 100)
+        .at(600, 400)
         .with(new NetworkComponent())
         .with(new VendingMachine())
         .build();
@@ -40,7 +40,7 @@ public class ObjectsFactory implements EntityFactory {
         .view("Interactables/microwave_close.png")
         .bbox(new HitBox(BoundingShape.box(68, 60)))
         .collidable()
-        .at(300, -100)
+        .at(800, 400)
         .with(new NetworkComponent())
         .with(new Microwave())
         .build();
@@ -61,7 +61,7 @@ public class ObjectsFactory implements EntityFactory {
         return entityBuilder(data)
         .type(EntityType.ARMORY)
         .viewWithBBox(new Rectangle(100, 50, Color.GRAY))
-        .at(200, 0)
+        .at(1000, 400)
         .collidable()
         .with(new NetworkComponent())
         .with(new Armory(new ObjectsUI()))
