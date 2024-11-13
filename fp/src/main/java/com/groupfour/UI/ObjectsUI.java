@@ -227,14 +227,14 @@ public class ObjectsUI extends Parent {
         switch(weaponName) {
             case "FAMAS": 
                 price = 100; 
-                newWeapon = new FAMAS(false, null); 
+                newWeapon = new FAMAS(); 
                 break; 
             case "M16A1":
                 price = 300; 
-                newWeapon = new M16A1(false, null); 
+                newWeapon = new M16A1(); 
                 break; 
             // case "AK47": 
-            //     newWeapon = new AK47(false, null); 
+            //     newWeapon = new AK47(); 
             //     price = 250; 
             //     break;
         }
