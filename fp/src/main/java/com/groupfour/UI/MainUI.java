@@ -1,13 +1,18 @@
 package com.groupfour.UI;
 
+import static com.almasb.fxgl.dsl.FXGL.addUINode;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.image;
 
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.views.MinimapView;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.ui.FontFactory;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.WeaponComponent;
@@ -386,9 +391,9 @@ public class MainUI extends Parent {
         FXGL.getGameScene().removeUINode(armoryMenu);
     }
 
-    // public void setupMinimap(GameWorld gameWorld) {
-    //     var minimap = new MinimapView(getGameWorld(), 800, 800, 200, 100);
-    //     minimap.setEntityColor(Color.GREEN);
+    public void setupMinimap(GameWorld gameWorld) {
+        var minimap = new MinimapView(getGameWorld(), 1300, 800, 200, 100);
+        minimap.setEntityColor(Color.GREEN);
     
     //     addUINode(minimap, getAppWidth() - 210, 50);
     // }
@@ -406,5 +411,9 @@ public class MainUI extends Parent {
         waveText.setText("Wave " + wave);
     }
 
+    public void playTitleMusic() {
+        Music bgm = getAssetLoader().loadMusic("titleBGM.mp3");
+        FXGL.getAudioPlayer().loopMusic(bgm);
+    }
     
 }
