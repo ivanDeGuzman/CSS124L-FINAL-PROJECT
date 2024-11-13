@@ -15,7 +15,6 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
-import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
 import com.groupfour.Collisions.BulletZombieHandler;
@@ -45,7 +44,6 @@ import java.util.List;
 
 import com.almasb.fxgl.app.MenuItem;
 
-import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -54,8 +52,9 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 public class App extends GameApplication {
     private List<Entity> players= new ArrayList<>();
-    private Entity player, zombie;
+    private Entity player;
     private int initPlayerID = 1;
+    private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
     private ZombiePlayerHandler zombiePlayerHandler;
@@ -72,8 +71,11 @@ public class App extends GameApplication {
     private MultiplayerStart multiplayerStart;
     private boolean isServerStarted = false, isNearInteractable = false;
     private ObjectsUI objectsUI;
-    private Server<Bundle> server;
-    private Client<Bundle> client;
+    private double timeSinceLastCollisionCheck = 0;
+    private double timeSinceLastUIUpdate =0;
+    private double uiUpdateInterval = 0.2;
+    private double collisionCheckInterval = 0.1;
+
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -218,7 +220,7 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new BulletZombieHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
-                
+                getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
@@ -256,21 +258,24 @@ public class App extends GameApplication {
                     waveCooldown = true;
                     isWaveSpawning = true;
                     System.out.println(waveCooldown);
-                    if (isServer)
-                        sendWaveToClient();
+
                     runOnce(() -> {
                         wave++;
                         nextWave(wave, waveMultiplier);
                         waveCooldown = false;
                         isWaveSpawning = false;
 
+                        if (isServer) {
+                            sendWaveToClient();
+                        }
 
                     }, Duration.seconds(20));
                 } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
-                    if (isServer)
-                        sendWaveToClient();
+                    if (isServer) {
+                        sendWaveToClient();   
+                    }
                 }
             }
 
@@ -295,18 +300,16 @@ public class App extends GameApplication {
         Bundle bundle = new Bundle("waveUpdate");
         bundle.put("wave", wave);
         bundle.put("waveMultiplier", waveMultiplier);
-        System.out.println("Sending wave update to client: wave=" + wave + ", waveMultiplier=" + waveMultiplier);
-        server.broadcast(bundle);
+        connection.send(bundle);
     }
-    
+
     private void sendDeathToClient() {
         if (playerComponent.getEntity().getComponent(IDComponent.class) != null) {
-            Bundle bundle = new Bundle("PlayerDeath");
+            Bundle bundle = new Bundle("playerDeath");
             bundle.put("playerID", playerComponent.getEntity().getComponent(IDComponent.class).getId());
-            server.broadcast(bundle);
+            connection.send(bundle);
         }
     }
-    
 
     private void nextWave(int wave, double waveMultiplier){
         int totalZombies = (int)(wave * waveMultiplier);
@@ -329,14 +332,13 @@ public class App extends GameApplication {
             player.addComponent(new IDComponent("playerID", initPlayerID));
             vmachine = spawn("vmachine");
             microwave = spawn("microwave");
-            armory = spawn("armory");
             playerComponent = player.getComponent(PlayerComponent.class);
             multiplayerStart = new MultiplayerStart();
             isServer = answer;
 
             if (isServer) {
                 players.add(player);
-                server = getNetService().newTCPServer(55555);
+                var server = getNetService().newTCPServer(55555);
                 waitingForPlayers();
                 server.startAsync();
                 server.setOnConnected(conn -> {
@@ -351,7 +353,7 @@ public class App extends GameApplication {
                         }
                         multiplayerStart.addPlayer();
                         newPlayer = spawn("player");
-                        newPlayer.addComponent(new IDComponent("playerID", players.size() + 1));
+                        // newPlayer.addComponent(new IDComponent("playerID", players.size() + 1));
                         players.add(newPlayer);
                         // getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
                         // newPlayer.getComponent(PlayerComponent.class).initClientInput();
@@ -361,9 +363,13 @@ public class App extends GameApplication {
             } 
             //If Client WIP
             else {
-                client = getNetService().newTCPClient("localhost", 55555);
+                var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
-                    onClient(conn);
+                    connection = conn;
+                    getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+                    getExecutor().startAsyncFX(() -> {
+                        onClient();
+                    });
                 });
                 client.connectAsync();
             }
@@ -391,51 +397,52 @@ public class App extends GameApplication {
             player.getComponent(PlayerComponent.class).initClientInput();
             getService(MultiplayerService.class).addInputReplicationReceiver(connection, player.getComponent(PlayerComponent.class).getClientInput());
             setUpPlayer();
-            
         });
 
         wave = 0;
         waveAndDeathManager();
         
-        List<Entity> zombies = getGameWorld().getEntitiesByType(EntityType.ZOMBIE); 
-        zombies.forEach(zombie -> getService(MultiplayerService.class).spawn(connection, zombie, "zombie"));
-        
         getSceneService().popSubScene();
         getSceneService().popSubScene();
         getSceneService().popSubScene();
     }
 
-    private void onClient(Connection<Bundle> connection) {
+    private void onClient() {
 
         connection.addMessageHandlerFX((conn, message) -> { 
-            Platform.runLater(() -> {
-                if (message.getName().equals("serverStarted")) { 
-                    isServerStarted = true; 
-                    ui.removeWaitingUI(); 
-                } else if (message.getName().equals("PlayerDeath")) { 
-                    int playerId = message.get("playerID"); 
-                    handlePlayerDeath(playerId); 
-                }
-            });
+            if (message.getName().equals("serverStarted")) { 
+                isServerStarted = true; ui.removeWaitingUI(); 
+            } else if (message.getName().equals("waveUpdate")) { 
+                int wave = message.get("wave"); 
+                double waveMultiplier = message.get("waveMultiplier"); 
+                updateWave(wave, waveMultiplier); 
+            } else if (message.getName().equals("PlayerDeath")) { 
+                int playerId = message.get("playerID"); 
+                handlePlayerDeath(playerId); 
+            } 
         });
         
-        Platform.runLater(() -> {
-            if (!isServerStarted) {
-                ui.waitServerStart();
-            } else {
-                ui.removeWaitingUI();
-            }
-    
-            player = spawn("player");
-            setUpPlayer();
-            getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-            
-            
-            getSceneService().popSubScene();
-            getSceneService().popSubScene();
-        });
+        if (!isServerStarted) {
+            ui.waitServerStart();
+        } else {
+            ui.removeWaitingUI();
+        }
+
+        player = spawn("player");
+        // playerComponent.setInput(playerComponent.getClientInput());
+        setUpPlayer();
+        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
+        getSceneService().popSubScene();
+        getSceneService().popSubScene();
+        
     }
-    
+
+    private void updateWave(int wave, double waveMultiplier) { 
+        this.wave = wave; 
+        this.waveMultiplier = waveMultiplier; 
+        nextWave(wave, waveMultiplier); 
+    }
 
     private void handlePlayerDeath(int playerId) {
         getGameWorld().getEntitiesByComponent(IDComponent.class).forEach(entity -> {
@@ -444,12 +451,6 @@ public class App extends GameApplication {
                 entity.getComponent(PlayerComponent.class).setDeath(true);
             }
         });
-    }
-
-    private void clientWaveUpd(int wave, double waveMultiplier) {
-        this.wave = wave;
-        this.waveMultiplier = waveMultiplier;
-        System.out.println(" SERVER WAVE SYNC TEST ");
     }
 
 
@@ -463,27 +464,28 @@ public class App extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        if(!player.isActive()){
-            return;
+        timeSinceLastCollisionCheck += tpf;
+        timeSinceLastUIUpdate += tpf;
+
+        if (timeSinceLastCollisionCheck >= collisionCheckInterval) {
+            timeSinceLastCollisionCheck = 0;
+            checkCollisions();
         }
 
-        if (player.distance(vmachine) < 70) {
-            isNearInteractable = true;
-        } else if (player.distance(microwave) < 70) { 
-            isNearInteractable = true;
-        } else if (player.distance(armory) < 70) {
-            if (waveCooldown)
-                isNearInteractable = true;
+
+        if (timeSinceLastUIUpdate >= uiUpdateInterval) {
+            timeSinceLastUIUpdate = 0;
+            updateUI();
+        }
+
+        if (!player.isActive()) return;
+        updateInteractableStatus();
+
+        if (isNearInteractable) {
+            if (objectsUI.canInteractNode == null) {
+                objectsUI.showCanInteract();
+            }
         } else {
-            isNearInteractable = false;
-        }
-
-        if (isNearInteractable) { 
-            if (objectsUI.canInteractNode == null) { 
-                objectsUI.showCanInteract(); 
-                
-            } 
-        } else { 
             objectsUI.hideCanInteract();
         }
 
@@ -492,19 +494,28 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        //ui.setupMinimap(getGameWorld());
+        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
+        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
+
+    }
+
+    private void updateInteractableStatus() {
+        isNearInteractable = player.distance(vmachine) < 70 ||
+                player.distance(microwave) < 70 ||
+                (player.distance(armory) < 70 && waveCooldown);
+    }
+
+    private void updateUI() {
+        ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
-            playerComponent.getCurrentWeapon().getAmmo(), 
-            playerComponent.getCurrentWeapon().getAmmoCount(),
-            playerComponent.getCurrentWeapon().getName()
+                playerComponent.getCurrentWeapon().getAmmo(),
+                playerComponent.getCurrentWeapon().getAmmoCount(),
+                playerComponent.getCurrentWeapon().getName()
         );
-        
+
         ui.updateWave(wave, waveCooldown);
-        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
-        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
-        
     }
 
     private void checkCollisions() {
