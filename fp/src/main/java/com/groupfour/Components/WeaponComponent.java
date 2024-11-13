@@ -1,5 +1,7 @@
 package com.groupfour.Components;
 
+import com.almasb.fxgl.audio.AudioPlayer;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -26,6 +28,8 @@ public abstract class WeaponComponent extends Component {
     protected int offsetX, offsetY;
     protected double playerRotation;
     protected boolean isFiring;
+    private Sound reloadSound;
+    private AudioPlayer audioPlayer;
 
     public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage, boolean isServer, Connection<Bundle> connection) {
         this.name = name;
@@ -36,6 +40,8 @@ public abstract class WeaponComponent extends Component {
         this.damage = damage;
         this.isServer = isServer;
         this.connection = connection;
+        this.reloadSound = FXGL.getAssetLoader().loadSound("Reload.mp3");
+        this.audioPlayer = FXGL.getAudioPlayer();
     }
 
     public abstract void fire(Entity player);
@@ -48,6 +54,7 @@ public abstract class WeaponComponent extends Component {
             isReloading = true;
 
             runOnce(() -> {
+                audioPlayer.playSound(reloadSound);
                 ammo += ammoToReload;
                 ammoCount -= ammoToReload;
                 isReloading = false;

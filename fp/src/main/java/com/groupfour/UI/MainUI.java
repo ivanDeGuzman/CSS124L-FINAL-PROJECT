@@ -1,10 +1,13 @@
 package com.groupfour.UI;
 
+import static com.almasb.fxgl.dsl.FXGL.addUINode;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 import static com.almasb.fxgl.dsl.FXGL.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.image;
 
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.asset.AssetType;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.views.MinimapView;
@@ -260,5 +263,9 @@ public class MainUI extends Parent {
         }
     }
 
+    public void playTitleMusic() {
+        Music bgm = getAssetLoader().loadMusic("titleBGM.mp3");
+        FXGL.getAudioPlayer().loopMusic(bgm);
+    }
     
 }

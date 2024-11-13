@@ -5,6 +5,8 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.app.scene.Viewport;
+import com.almasb.fxgl.audio.Music;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.IDComponent;
@@ -76,7 +78,7 @@ public class App extends GameApplication {
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-
+        settings.setSoundMenuPress("titleSelect.mp3");
         //implement later
         // settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         // settings.getCredits().addAll(Arrays.asList(
@@ -94,6 +96,12 @@ public class App extends GameApplication {
         });
     }
 
+    @Override
+    protected void onPreInit() {
+        Music bgm = FXGL.getAssetLoader().loadMusic("titleBGM.mp3");
+        getAudioPlayer().loopMusic(bgm);
+    }
+    
     @Override
     protected void initInput(){
         player = new Entity();
@@ -177,7 +185,7 @@ public class App extends GameApplication {
 
     @Override
     public void initGame() {
-        
+        getAudioPlayer().stopAllMusic();
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
@@ -264,6 +272,7 @@ public class App extends GameApplication {
                 if(playerComponent.isDead()){
                     playerComponent.setDeath(false);
                     getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
+                    ui.playTitleMusic();
                     getGameController().gotoMainMenu();
                     FXGL.runOnce(() -> {
                         resetGameWorld();
