@@ -392,7 +392,7 @@ public class MainUI extends Parent {
     }
 
     public void setupMinimap(GameWorld gameWorld) {
-        var minimap = new MinimapView(getGameWorld(), 800, 800, 200, 100);
+        var minimap = new MinimapView(getGameWorld(), 1300, 800, 200, 100);
         minimap.setEntityColor(Color.GREEN);
     
         addUINode(minimap, getAppWidth() - 210, 50);
