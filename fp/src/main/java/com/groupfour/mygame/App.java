@@ -324,6 +324,7 @@ public class App extends GameApplication {
             player.addComponent(new IDComponent("playerID", initPlayerID));
             vmachine = spawn("vmachine");
             microwave = spawn("microwave");
+            armory = spawn("armory");
             playerComponent = player.getComponent(PlayerComponent.class);
             multiplayerStart = new MultiplayerStart();
             isServer = answer;
@@ -485,7 +486,7 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        ui.setupMinimap(getGameWorld());
+        // ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
