@@ -1,5 +1,8 @@
 package com.groupfour.Weapons;
 
+import static com.almasb.fxgl.dsl.FXGL.getAudioPlayer;
+
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
