@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.almasb.fxgl.app.MenuItem;
+
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
@@ -185,7 +187,7 @@ public class App extends GameApplication {
 
     @Override
     public void initGame() {
-        getAudioPlayer().stopAllMusic();
+        //getAudioPlayer().stopAllMusic();
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
@@ -225,7 +227,7 @@ public class App extends GameApplication {
     }
 
     public void startGame1P() {
-        player = spawn("player");
+        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
         armory = spawn("armory");

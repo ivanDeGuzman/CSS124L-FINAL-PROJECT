@@ -63,13 +63,12 @@ public class ObjectsUI extends Parent {
     public void showCanInteract() {
         customFont = loadFont("PIXELADE.TTF", 25);
         
-        Text letterF = new Text("F");
-        letterF.setStyle("-fx-stroke: firebrick; -fx-stroke-width: 2px");
-        Text canInteract = new Text("Press " + letterF.getText() + " to interact");
-    
-        canInteract.setTranslateX(getAppWidth() * 0.2);
+        Text canInteract = new Text("Press 'F' to interact");
+        
+        canInteract.setFont(customFont);
+        canInteract.setTranslateX(getAppWidth() * 0.3);
         canInteract.setTranslateY(getAppHeight() * 0.75);
-    
+        
         FXGL.getGameScene().addUINode(canInteract);
         this.canInteractNode = canInteract;
     }
