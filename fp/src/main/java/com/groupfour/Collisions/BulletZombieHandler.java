@@ -16,5 +16,6 @@ public class BulletZombieHandler extends CollisionHandler {
         double damage = bullet.getComponent(BulletComponent.class).getDamage();
         zombie.getComponent(ZombieComponent.class).takeDamage((int) damage);
         bullet.removeFromWorld();
+        System.out.println(zombie.getComponent(ZombieComponent.class).getHealth());
     }
 }

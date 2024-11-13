@@ -19,6 +19,7 @@ import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
 import com.groupfour.Collisions.BulletZombieHandler;
+import com.groupfour.Collisions.EnemyProjectilePlayerHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
 import com.groupfour.Components.BoundsComponent;
 import com.groupfour.Components.PlayerComponent;
@@ -215,11 +216,13 @@ public class App extends GameApplication {
         physics = getPhysicsWorld();
             if (isServer) {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             }
