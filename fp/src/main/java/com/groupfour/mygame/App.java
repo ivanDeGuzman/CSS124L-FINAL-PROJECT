@@ -216,7 +216,7 @@ public class App extends GameApplication {
             }
             FXGL.run(() -> {
                 if(player.isActive()){
-                    BoundsComponent.ObjectEntityCollision(player, zombie);
+                    BoundsComponent.ObjectEntityCollision(player);
                 }}, Duration.seconds(0.017));
     }
 
