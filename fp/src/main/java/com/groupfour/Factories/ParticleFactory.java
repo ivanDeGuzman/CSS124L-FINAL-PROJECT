@@ -11,14 +11,14 @@ import javafx.util.Duration;
 public class ParticleFactory {
 
     public static ParticleEmitter createBloodEmitter() {
-        ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(5); 
-
-        emitter.setStartColor(Color.DARKRED); 
-        emitter.setEndColor(Color.BLACK);     
-        emitter.setSize(3, 5);                    
+        ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(20);
+        emitter.setStartColor(Color.RED); 
+        emitter.setEndColor(Color.DARKRED);
+        emitter.setSize(3, 5);
         emitter.setExpireFunction(i -> Duration.seconds(FXGL.random(0.3, 1.2)));
         emitter.setVelocityFunction(i -> new Point2D(FXGL.random(-15, 15), FXGL.random(-15, 15)));
-
+        emitter.setAccelerationFunction(() -> new Point2D(0, 15));
+        emitter.setBlendMode(javafx.scene.effect.BlendMode.SRC_OVER);
         return emitter;
     }
 }
