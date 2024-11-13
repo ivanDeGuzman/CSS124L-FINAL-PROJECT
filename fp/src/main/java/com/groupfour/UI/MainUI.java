@@ -406,5 +406,9 @@ public class MainUI extends Parent {
         waveText.setText("Wave " + wave);
     }
 
+    public void playTitleMusic() {
+        Music bgm = getAssetLoader().loadMusic("titleBGM.mp3");
+        FXGL.getAudioPlayer().loopMusic(bgm);
+    }
     
 }
