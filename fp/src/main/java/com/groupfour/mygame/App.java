@@ -341,17 +341,15 @@ public class App extends GameApplication {
                             FXGL.getSceneService().pushSubScene(multiplayerStart);
                             multiplayerStart.setOnStartClick(e-> {
                                 onServer();
-                                // connection.send(new Bundle("gameStart"));
                             });
                         }
                         multiplayerStart.addPlayer();
                         newPlayer = spawn("player");
-                        newPlayer.addComponent(new IDComponent("playerID", players.size() + 1));
+                        // newPlayer.addComponent(new IDComponent("playerID", players.size() + 1));
                         players.add(newPlayer);
-                        getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
-                        newPlayer.getComponent(PlayerComponent.class).setInput(new Input());
-                        newPlayer.getComponent(PlayerComponent.class).initClientInput();
-                        getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
+                        // getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
+                        // newPlayer.getComponent(PlayerComponent.class).initClientInput();
+                        // getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
                     });
                 });       
             } 
@@ -360,13 +358,6 @@ public class App extends GameApplication {
                 var client = getNetService().newTCPClient("localhost", 55555);
                 client.setOnConnected(conn -> {
                     connection = conn;
-                    // connection.addMessageHandlerFX((c, message) -> {
-                    //     if (message.getName().equals("gameStart")) {
-                    //         System.out.println("Client detect start");
-                    //         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                    //         getSceneService().popSubScene();
-                    //     }
-                    // });
                     getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                     getExecutor().startAsyncFX(() -> {
                         onClient();
@@ -395,7 +386,8 @@ public class App extends GameApplication {
         players.forEach(player -> {
             connection.send(new Bundle("serverStarted"));
             getService(MultiplayerService.class).spawn(connection, player, "player");
-            getService(MultiplayerService.class).addInputReplicationReceiver(connection, playerComponent.getClientInput());
+            player.getComponent(PlayerComponent.class).initClientInput();
+            getService(MultiplayerService.class).addInputReplicationReceiver(connection, player.getComponent(PlayerComponent.class).getClientInput());
             setUpPlayer();
         });
 
@@ -429,7 +421,7 @@ public class App extends GameApplication {
         }
 
         player = spawn("player");
-        playerComponent.setInput(playerComponent.getClientInput());
+        // playerComponent.setInput(playerComponent.getClientInput());
         setUpPlayer();
         getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
         getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
@@ -493,7 +485,7 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        //ui.setupMinimap(getGameWorld());
+        ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
