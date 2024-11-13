@@ -221,12 +221,14 @@ public class App extends GameApplication {
         physics = getPhysicsWorld();
             if (isServer) {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
