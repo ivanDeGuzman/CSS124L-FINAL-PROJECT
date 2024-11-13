@@ -31,7 +31,7 @@ public class PlayerComponent extends Component {
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
-    private double originalSpeed = 2;
+    private double originalSpeed = 1;
     private double speed = originalSpeed;
     private int currentWeaponIndex = 0;
     private double reducedDamage = 1.0;
@@ -132,7 +132,6 @@ public class PlayerComponent extends Component {
         if (!isDead) {
             damage *= reducedDamage;
             health -= damage;
-            System.out.println("Player health: " + health);
             if (health <= 0) {
                 setDeath(true);
             }

@@ -72,7 +72,6 @@ public class ZombiePlayerHandler extends CollisionHandler {
         getGameScene().getViewport().shake(15, 5);
         player.getComponent(PlayerComponent.class).takeDamage(finalDamage);
 
-        System.out.println("Inflicted Damage: " + finalDamage + " (Reduced Damage Multiplier: " + reducedDamage + ")");
         new MainUI().flashTintRed();
 
         canAttack = false;
