@@ -16,6 +16,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
+import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
 import com.groupfour.Collisions.BulletZombieHandler;
@@ -76,6 +77,8 @@ public class App extends GameApplication {
     private double timeSinceLastUIUpdate =0;
     private double uiUpdateInterval = 0.2;
     private double collisionCheckInterval = 0.1;
+    private Server<Bundle> server;
+    private Client<Bundle> client;
 
 
     @Override
@@ -470,7 +473,7 @@ public class App extends GameApplication {
     }
 
     private void updateUI() {
-        ui.setupMinimap(getGameWorld());
+        // ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
