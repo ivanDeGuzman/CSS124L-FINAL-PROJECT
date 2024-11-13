@@ -386,12 +386,12 @@ public class MainUI extends Parent {
         FXGL.getGameScene().removeUINode(armoryMenu);
     }
 
-    public void setupMinimap(GameWorld gameWorld) {
-        var minimap = new MinimapView(getGameWorld(), 800, 800, 200, 100);
-        minimap.setEntityColor(Color.GREEN);
+    // public void setupMinimap(GameWorld gameWorld) {
+    //     var minimap = new MinimapView(getGameWorld(), 800, 800, 200, 100);
+    //     minimap.setEntityColor(Color.GREEN);
     
-        addUINode(minimap, getAppWidth() - 210, 50);
-    }
+    //     addUINode(minimap, getAppWidth() - 210, 50);
+    // }
     
     public void waveUI() {
         waveText = new Text();
