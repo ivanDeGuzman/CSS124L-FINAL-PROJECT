@@ -65,19 +65,19 @@ public class ZombieFactory implements EntityFactory {
         return new Point2D(SPAWN_DISTANCE, SPAWN_DISTANCE);
     }
 
-    private EntityBuilder commonZombieSetup(SpawnData data, int health) {
+    private EntityBuilder commonZombieSetup(SpawnData data, int health, int speed, String type) {
         return entityBuilder(data)
                 .type(EntityType.ZOMBIE)
                 .at(getRandomSpawnPoint())
                 .collidable()
                 .with(new NetworkComponent())
-                .with(new ZombieComponent(health));
+                .with(new ZombieComponent(health, speed, type));
 
     }
 
     @Spawns("zombie")
     public Entity newZombie(SpawnData data) {
-        return commonZombieSetup(data, 600)
+        return commonZombieSetup(data, 100, 100, "normal")
                 .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                 .with(new CellMoveComponent(40, 40, 150))
                 .build();
@@ -85,7 +85,7 @@ public class ZombieFactory implements EntityFactory {
 
     @Spawns("spitter")
     public Entity newSpitterZombie(SpawnData data) {
-        return commonZombieSetup(data, 45)
+        return commonZombieSetup(data, 45, 125, "spitter")
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
                 .with(new CellMoveComponent(40, 40, 150))
                 .with(new SpitterZombieComponent())
@@ -113,7 +113,7 @@ public class ZombieFactory implements EntityFactory {
 
     @Spawns("doctor")
     public Entity newDoctorZombie(SpawnData data) {
-        return commonZombieSetup(data, 65)
+        return commonZombieSetup(data, 65, 125, "doctor")
                 .viewWithBBox(new Rectangle(40, 40, Color.RED))
                 .with(new CellMoveComponent(40, 40, 150))
                 .with(new DoctorZombieComponent())
@@ -132,7 +132,7 @@ public class ZombieFactory implements EntityFactory {
 
     @Spawns("guard")
     public Entity newGuardZombie(SpawnData data) {
-        return commonZombieSetup(data, 200)
+        return commonZombieSetup(data, 200, 150, "spitter")
                 .viewWithBBox(new Rectangle(40, 40, Color.PURPLE))
                 .with(new CellMoveComponent(40, 40, 250))
                 .with(new GuardZombieComponent())
@@ -149,7 +149,7 @@ public class ZombieFactory implements EntityFactory {
 
      @Spawns("welder")
      public Entity newWelderZombie(SpawnData data) {
-         return commonZombieSetup(data, 70)
+        return commonZombieSetup(data, 70, 150, "spitter")
                  .viewWithBBox(new Rectangle(40, 40, Color.ORANGE))
                  .with(new CellMoveComponent(40, 40, 150))
                  .with(new WelderZombieComponent())

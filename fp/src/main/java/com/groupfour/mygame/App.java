@@ -65,7 +65,7 @@ public class App extends GameApplication {
     private int wave;
     private Entity newPlayer;
     private PlayerComponent playerComponent;
-    private double waveMultiplier=10.5;
+    private double waveMultiplier=1; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private MultiplayerStart multiplayerStart;
@@ -264,7 +264,7 @@ public class App extends GameApplication {
                             sendWaveToClient();
                         }
 
-                    }, Duration.seconds(20));
+                    }, Duration.seconds(1));
                 } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
@@ -308,31 +308,65 @@ public class App extends GameApplication {
 
     private void nextWave(int wave, double waveMultiplier){
         int totalZombies = (int)(wave * waveMultiplier);
+        int i;
         Duration interval = Duration.seconds(1);
-        for(int i = 0; i < totalZombies ; i++) {
+
+        for(i = 0; i < totalZombies ; i++) {
             Duration delay = interval.multiply(i);
             runOnce(() -> {
-                System.out.println("zombie spawn");
                 spawn("zombie");
             }, delay);
-            // zombie = spawn("spitter");
-            // zombie.getViewComponent(); 
-            // zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        }
+
+        for(int guardWave=wave;guardWave>6;guardWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("guard");
+            }, delay);
+            i++;
+        }
+
+        for(int spitterWave=wave;spitterWave>4;spitterWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("spitter");
+            }, delay);
+            i++;
+        }
+
+        for(int doctorWave=wave;doctorWave>8;doctorWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("doctor");
+            }, delay);
+            i++;
+        }
+
+        for(int welderWave=wave;welderWave>2;welderWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("welder");
+            }, delay);
+            i++;
         }
     }
+           
 
     public void startMultiplayer() {
         getDialogService().showConfirmationBox("Are you the host?", answer -> {
-            player = spawn("player");
-            player.addComponent(new IDComponent("playerID", initPlayerID));
-            vmachine = spawn("vmachine");
-            microwave = spawn("microwave");
-            armory = spawn("armory");
-            playerComponent = player.getComponent(PlayerComponent.class);
-            multiplayerStart = new MultiplayerStart();
             isServer = answer;
-
             if (isServer) {
+                multiplayerStart = new MultiplayerStart();
+                player = spawn("player");
+                playerComponent = player.getComponent(PlayerComponent.class);
+                player.addComponent(new IDComponent("playerID", initPlayerID));
+                vmachine = spawn("vmachine");
+                microwave = spawn("microwave");
+                armory = spawn("armory");
                 players.add(player);
                 var server = getNetService().newTCPServer(55555);
                 waitingForPlayers();

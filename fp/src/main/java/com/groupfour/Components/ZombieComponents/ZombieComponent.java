@@ -12,13 +12,17 @@ import javafx.geometry.Point2D;
 public class ZombieComponent extends Component {
     private Entity target;
     private int health;
+    private int speed;
+    private String type;
     private ZombieAnimComp zac;
     private final double minRotate = 10.0;
     private final int maxHealth;
 
-    public ZombieComponent(int initialHealth) {
+    public ZombieComponent(int initialHealth, int speed, String type) {
         this.health = initialHealth;
         this.maxHealth = initialHealth;
+        this.speed = speed;
+        this.type = type;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class ZombieComponent extends Component {
         Point2D zombiePosition = entity.getPosition();
         Point2D direction = targetPosition.subtract(zombiePosition).normalize();
 
-        entity.translate(direction.multiply(100 * tpf));
+        entity.translate(direction.multiply(speed * tpf));
     }
 
     public void rotateTowardsTarget(Point2D targetPosition) {
