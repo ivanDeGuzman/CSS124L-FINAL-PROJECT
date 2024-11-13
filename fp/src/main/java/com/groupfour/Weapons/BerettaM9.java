@@ -9,18 +9,25 @@ import com.groupfour.Components.WeaponComponent;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
+import com.almasb.fxgl.audio.AudioPlayer;
+import com.almasb.fxgl.audio.Sound;
+
 public class BerettaM9 extends WeaponComponent {
 
+    private Sound shootSound;
+    private AudioPlayer audioPlayer;
+
     public BerettaM9(boolean isServer, Connection<Bundle> connection) {
-        super("Beretta M9", 100, 1000, 15, 1.0, 15, isServer, connection);
+        super("Beretta M9", 100, 15, 15, 1.0, 15, isServer, connection);
+        this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
+        this.audioPlayer = FXGL.getAudioPlayer();
     }
-    
 
     @Override
     public void fire(Entity player) {
         if (ammo > 0 && !getIsReloading()) {
-            isFiring=true;
-            FXGL.play("BerettaM9_Shoot.mp3");
+            isFiring = true;
+            audioPlayer.playSound(shootSound);
             ammo--;
             Point2D position = player.getCenter();
             Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
@@ -31,8 +38,9 @@ public class BerettaM9 extends WeaponComponent {
         FXGL.runOnce(() -> isFiring = false, Duration.seconds(.1));
     }
 
-    //placeholder
+    // Placeholder
     public void stopFiring() {
-        isFiring=false;
+        isFiring = false;
     }
 }
+

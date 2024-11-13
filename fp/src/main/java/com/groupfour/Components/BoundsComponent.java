@@ -36,29 +36,24 @@ public class BoundsComponent extends Component {
         }
     }
 
-    public static void ObjectEntityCollision(Entity player, Entity zombie) {
+    public static void ObjectEntityCollision(Entity player) {
         List<Entity> objects = new ArrayList<>();
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE));
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE));
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.WALL));
         objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.ARMORY));
-    
+
         for (Entity object : objects) {
             if (player.isColliding(object)) {
                 resolveCollision(player, object);
             }
-            if (zombie.isColliding(object)) {
-                resolveCollision(zombie, object);
-            }
         }
-    
-        handleZombieCollisions();
     }
-    
+
     private static void resolveCollision(Entity entity, Entity object) {
         double overlapX = (entity.getWidth() / 2 + object.getWidth() / 2) - Math.abs(entity.getX() - object.getX());
         double overlapY = (entity.getHeight() / 2 + object.getHeight() / 2) - Math.abs(entity.getY() - object.getY());
-    
+
         if (overlapX > 0 && overlapY > 0) {
             if (overlapX < overlapY) {
                 if (entity.getX() < object.getX()) {
@@ -71,19 +66,6 @@ public class BoundsComponent extends Component {
                     entity.setY(entity.getY() - overlapY);
                 } else {
                     entity.setY(entity.getY() + overlapY);
-                }
-            }
-        }
-    }
-
-    private static void handleZombieCollisions() {
-        List<Entity> zombies = FXGL.getGameWorld().getEntitiesByType(EntityType.ZOMBIE);
-        for (int i = 0; i < zombies.size(); i++) {
-            Entity z1 = zombies.get(i);
-            for (int j = i + 1; j < zombies.size(); j++) {
-                Entity z2 = zombies.get(j);
-                if (z1.isColliding(z2)) {
-                    resolveCollision(z1, z2);
                 }
             }
         }

@@ -85,8 +85,8 @@ public class PlayerAnimComp extends Component {
                 setY = -7;
                 break;
             case "famas":
-                idlePath = "Weapons/Idle/AK47_Idle.png";
-                attackPath = "Weapons/Shooting/AK47_Shooting.png";
+                idlePath = "Weapons/Idle/FAMAS_Idle.png";
+                attackPath = "Weapons/Shooting/FAMAS_Shooting.png";
                 width = 50;
                 height = 50;
                 frames = 2;

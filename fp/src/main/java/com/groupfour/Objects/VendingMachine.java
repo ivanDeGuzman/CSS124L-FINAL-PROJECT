@@ -3,6 +3,7 @@ package com.groupfour.Objects;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.util.Duration;
 
@@ -12,7 +13,7 @@ public class VendingMachine extends Component {
     private int range = max - min + 1;
     private int rand;
     private boolean canInteract = true;
-
+    private MainUI ui = new MainUI();
 
     
     public void interact() {
@@ -30,20 +31,20 @@ public class VendingMachine extends Component {
     }
 
     public void buffs(int rand) {
-        switch (rand) {
+        switch (2) {
             case 1:
                 // Energy Drink - increase speed of player for 1 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                     player.getComponent(PlayerComponent.class).increaseSpeed(1.2, Duration.minutes(1));
                 });
-                System.out.println("Energy");
+                ui.ammoCansUI("energy");
                 break;
             case 2:
                 // Fizzy Drink - increase attack 25% of player for 1 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                     player.getComponent(PlayerComponent.class).increaseWeaponDamage(1.25, Duration.minutes(1));
                 });
-                System.out.println("Fizzy");
+                ui.ammoCansUI("fizzy");
                 break;
             case 3:
                 // Toxic Sludge - increase attack 100% but decrease health to 1

@@ -14,7 +14,7 @@ import javafx.util.Duration;
 public class FAMAS extends WeaponComponent {
 
     public FAMAS(boolean isServer, Connection<Bundle> connection) {
-        super("FAMAS", 160, 30, 30, 1, 20, isServer, connection); 
+        super("FAMAS", 160, 30, 30, 0.8, 20, isServer, connection); 
     }
     private boolean firingFlagger=false;
 

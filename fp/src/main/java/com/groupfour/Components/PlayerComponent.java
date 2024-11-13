@@ -165,7 +165,7 @@ public class PlayerComponent extends Component {
     //cringe ass mouse
     private void mouseUpdate() {
         Point2D playerPosition = entity.getCenter();
-        Point2D mousePosition = clientInputs.getMousePositionWorld();
+        Point2D mousePosition = getInput().getMousePositionWorld();
 
         if (!mousePosition.equals(lastMousePosition)) {
             Point2D vector = mousePosition.subtract(playerPosition);

@@ -9,12 +9,10 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.physics.PhysicsComponent;
 import com.groupfour.Objects.Armory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
 import com.groupfour.UI.MainUI;
-import com.groupfour.mygame.App;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.scene.paint.Color;
