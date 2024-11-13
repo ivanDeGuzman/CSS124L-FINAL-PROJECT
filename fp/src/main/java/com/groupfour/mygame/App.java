@@ -16,7 +16,6 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
-import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
 import com.groupfour.Collisions.BulletZombieHandler;
@@ -46,8 +45,6 @@ import java.util.List;
 
 import com.almasb.fxgl.app.MenuItem;
 
-import javafx.application.Platform;
-import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -56,8 +53,9 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 public class App extends GameApplication {
     private List<Entity> players= new ArrayList<>();
-    private Entity player, zombie;
+    private Entity player;
     private int initPlayerID = 1;
+    private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
     private ZombiePlayerHandler zombiePlayerHandler;
@@ -74,8 +72,11 @@ public class App extends GameApplication {
     private MultiplayerStart multiplayerStart;
     private boolean isServerStarted = false, isNearInteractable = false;
     private ObjectsUI objectsUI;
-    private Server<Bundle> server;
-    private Client<Bundle> client;
+    private double timeSinceLastCollisionCheck = 0;
+    private double timeSinceLastUIUpdate =0;
+    private double uiUpdateInterval = 0.2;
+    private double collisionCheckInterval = 0.1;
+
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -220,7 +221,7 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new BulletZombieHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
-                
+                getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
@@ -264,7 +265,6 @@ public class App extends GameApplication {
                         nextWave(wave, waveMultiplier);
                         waveCooldown = false;
                         isWaveSpawning = false;
-
 
                     }, Duration.seconds(20));
                 } else {
@@ -393,27 +393,28 @@ public class App extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        if(!player.isActive()){
-            return;
+        timeSinceLastCollisionCheck += tpf;
+        timeSinceLastUIUpdate += tpf;
+
+        if (timeSinceLastCollisionCheck >= collisionCheckInterval) {
+            timeSinceLastCollisionCheck = 0;
+            checkCollisions();
         }
 
-        if (player.distance(vmachine) < 70) {
-            isNearInteractable = true;
-        } else if (player.distance(microwave) < 70) { 
-            isNearInteractable = true;
-        } else if (player.distance(armory) < 70) {
-            if (waveCooldown)
-                isNearInteractable = true;
+
+        if (timeSinceLastUIUpdate >= uiUpdateInterval) {
+            timeSinceLastUIUpdate = 0;
+            updateUI();
+        }
+
+        if (!player.isActive()) return;
+        updateInteractableStatus();
+
+        if (isNearInteractable) {
+            if (objectsUI.canInteractNode == null) {
+                objectsUI.showCanInteract();
+            }
         } else {
-            isNearInteractable = false;
-        }
-
-        if (isNearInteractable) { 
-            if (objectsUI.canInteractNode == null) { 
-                objectsUI.showCanInteract(); 
-                
-            } 
-        } else { 
             objectsUI.hideCanInteract();
         }
 
@@ -422,20 +423,28 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        System.out.println(players.size());
-        //ui.setupMinimap(getGameWorld());
+        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
+        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
+
+    }
+
+    private void updateInteractableStatus() {
+        isNearInteractable = player.distance(vmachine) < 70 ||
+                player.distance(microwave) < 70 ||
+                (player.distance(armory) < 70 && waveCooldown);
+    }
+
+    private void updateUI() {
+        ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
-            playerComponent.getCurrentWeapon().getAmmo(), 
-            playerComponent.getCurrentWeapon().getAmmoCount(),
-            playerComponent.getCurrentWeapon().getName()
+                playerComponent.getCurrentWeapon().getAmmo(),
+                playerComponent.getCurrentWeapon().getAmmoCount(),
+                playerComponent.getCurrentWeapon().getName()
         );
-        
+
         ui.updateWave(wave, waveCooldown);
-        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
-        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
-        
     }
 
     private void checkCollisions() {
