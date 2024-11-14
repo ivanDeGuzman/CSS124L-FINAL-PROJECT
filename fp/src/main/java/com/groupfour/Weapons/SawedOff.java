@@ -1,6 +1,7 @@
 package com.groupfour.Weapons;
 
 import static com.almasb.fxgl.dsl.FXGL.getAudioPlayer;
+import static com.almasb.fxgl.dsl.FXGL.runOnce;
 
 import java.util.Random;
 
@@ -35,8 +36,12 @@ public class SawedOff extends WeaponComponent {
             ammo--;
             Point2D position = player.getCenter();
             Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
-            spawnBullet(position, direction.add(1, 1));
-            spawnBullet(position, direction);
+            runOnce(()->spawnBullet(position, direction.add( Math.random() * 0.5,  Math.random() * 0.5)), Duration.seconds(0.1));
+            runOnce(()->spawnBullet(position, direction.add( Math.random() * 0.5,  Math.random() * 0.5)), Duration.seconds(0.1));
+            runOnce(()->spawnBullet(position, direction.add( Math.random() * 1,  Math.random() * 1)), Duration.seconds(0.1));
+            runOnce(()->spawnBullet(position, direction.add( Math.random() * -0.5,  Math.random() * -0.5)), Duration.seconds(0.1));
+            runOnce(()->spawnBullet(position, direction.add( Math.random() * -0.5,  Math.random() * -0.5)), Duration.seconds(0.1));
+            runOnce(()->spawnBullet(position, direction.add( Math.random() * 1,  Math.random() * 1)), Duration.seconds(0.1));
 
         } else {
             System.out.println(name + " is out of ammo.");

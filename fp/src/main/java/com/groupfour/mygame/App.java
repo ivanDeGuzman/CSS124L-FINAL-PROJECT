@@ -99,7 +99,7 @@ public class App extends GameApplication {
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setIntroEnabled(true);
+        // settings.setIntroEnabled(true);
         //implement later
         // settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         // settings.getCredits().addAll(Arrays.asList(
