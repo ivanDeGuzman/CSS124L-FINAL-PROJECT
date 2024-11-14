@@ -22,11 +22,14 @@ public class SpitterZombieComponent extends Component {
     private double acidDamage = 10;
     private double speed = 800;
 
+
+
     @Override
     public void onAdded() {
 
         acidCooldownTimer = FXGL.newLocalTimer();
         acidCooldownTimer.capture();
+
     }
 
     @Override
@@ -41,6 +44,7 @@ public class SpitterZombieComponent extends Component {
             acidCooldownTimer.capture();
 
         }
+
     }
 
     public Entity findClosestPlayer() {
@@ -84,8 +88,6 @@ public class SpitterZombieComponent extends Component {
 
         double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
         bullet.setRotation(angle);
-
-
     }
 
     private double getAcidDamage() {

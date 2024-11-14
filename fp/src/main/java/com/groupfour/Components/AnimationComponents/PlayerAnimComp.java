@@ -25,6 +25,7 @@ public class PlayerAnimComp extends Component {
         entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
         handleWeaponTexture();
         handlePlayerTexture();
+        entity.setZIndex(9);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class PlayerAnimComp extends Component {
 
     private void handlePlayerTexture() {
         String idlePath, walkPath;
-        if (weaponType.equalsIgnoreCase("M16A1") || weaponType.equalsIgnoreCase("FAMAS")||weaponType.equalsIgnoreCase("AK47")||weaponType.equalsIgnoreCase("Sawed Off")) {
+        if (weaponType.equalsIgnoreCase("M16A1") || weaponType.equalsIgnoreCase("FAMAS")) {
             idlePath = "Players/1P_Rifle_Shoot.png";
             walkPath = "Players/1P_Rifle_Shoot.png";
             playerFrames = 2;
@@ -103,26 +104,6 @@ public class PlayerAnimComp extends Component {
                 frameEnd = 2;
                 setX = 12;
                 setY = 0;
-                break;
-            case "ak47":
-                idlePath = "Weapons/Idle/AK47_Idle.png";
-                attackPath = "Weapons/Shooting/AK47_Shooting.png";
-                width = 50;
-                height = 50;
-                frames =2;
-                frameEnd = 1;
-                setX = 10;
-                setY = -7;
-                break;
-            case "sawed off":
-                idlePath = "Weapons/Idle/Sawed_Off_DoubleBarrel.png";
-                attackPath = "Weapons/Shooting/Sawed_Off_DoubleBarrel_Shooting.png";
-                width = 50;
-                height = 50;
-                frames =2;
-                frameEnd = 1;
-                setX = 10;
-                setY = -7;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown weapon type: " + weaponType);

@@ -11,28 +11,26 @@ import com.groupfour.Components.AnimationComponents.ZombieAnimComp;
 import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
+import javafx.util.Duration;
 
 public class ZombieComponent extends Component {
     private Entity target;
     private int health;
-    private int speed;
-    private String type;
     private ZombieAnimComp zac;
     private final double minRotate = 10.0;
     private final int maxHealth;
     private MainUI ui = new MainUI();
 
-    public ZombieComponent(int initialHealth, int speed, String type) {
+    public ZombieComponent(int initialHealth) {
         this.health = initialHealth;
         this.maxHealth = initialHealth;
-        this.speed = speed;
-        this.type = type;
     }
 
     @Override
     public void onAdded() {
         zac = new ZombieAnimComp();
         entity.addComponent(zac);
+        entity.setZIndex(10);
     }
 
     @Override
@@ -45,6 +43,7 @@ public class ZombieComponent extends Component {
             rotateTowardsTarget(targetPosition);
         }
     }
+
 
     public void findClosestPlayer() {
         var players = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER);
@@ -67,10 +66,10 @@ public class ZombieComponent extends Component {
     }
 
     public void moveTowardsTarget(Point2D targetPosition, double tpf) {
-        Point2D zombiePosition = entity.getPosition();
-        Point2D direction = targetPosition.subtract(zombiePosition).normalize();
+            Point2D zombiePosition = entity.getPosition();
+            Point2D direction = targetPosition.subtract(zombiePosition).normalize();
 
-        entity.translate(direction.multiply(speed * tpf));
+            entity.translate(direction.multiply(100 * tpf));
     }
 
     public void rotateTowardsTarget(Point2D targetPosition) {
@@ -117,11 +116,17 @@ public class ZombieComponent extends Component {
                 });
 
 
-        entity.getComponentOptional(WelderZombieComponent.class)
-                .ifPresent(component -> {
-                    SpawnData data = new SpawnData(entity.getPosition());
-                    FXGL.spawn("explosion", data.put("radius", 50.0));
-                });
+            if (entity.hasComponent(WelderZombieComponent.class)) {
+                SpawnData data = new SpawnData(entity.getPosition());
+                FXGL.spawn("explosion", data.put("radius", 50.0));
+            }
+
+
+            entity.removeFromWorld();
+
+
+
+        });
     }
 
     public void startAttacking() {
