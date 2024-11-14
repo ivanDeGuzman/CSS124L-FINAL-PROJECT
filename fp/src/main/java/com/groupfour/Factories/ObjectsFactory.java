@@ -40,7 +40,7 @@ public class ObjectsFactory implements EntityFactory {
         .view("Interactables/microwave_close.png")
         .bbox(new HitBox(BoundingShape.box(68, 60)))
         .collidable()
-        .at(800, 400)
+        .at(1600, 600)
         .with(new NetworkComponent())
         .with(new Microwave(new ObjectsUI()))
         .build();

@@ -382,7 +382,7 @@ public class App extends GameApplication {
     protected void onUpdate(double tpf) {
 
         if (!player.isActive()) return;
-        
+
         timeSinceLastCollisionCheck += tpf;
         timeSinceLastUIUpdate += tpf;
 

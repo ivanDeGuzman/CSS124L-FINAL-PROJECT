@@ -1,5 +1,7 @@
 package com.groupfour.Weapons;
 
+import com.almasb.fxgl.audio.AudioPlayer;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -11,9 +13,13 @@ import javafx.util.Duration;
 
 public class AK47 extends WeaponComponent {
 
+    private Sound shootSound;
+    private AudioPlayer audioPlayer;
 
     public AK47() {
         super("AK47", 180, 25, 25, 0.35, 15);
+        this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
+        this.audioPlayer = FXGL.getAudioPlayer();
     }
 
     @Override
@@ -22,6 +28,7 @@ public class AK47 extends WeaponComponent {
         if(!initialized){
             FXGL.run(() -> {
                 if(isFiring){
+                    audioPlayer.playSound(shootSound);
                     if (ammo < 1||getIsReloading()) {
                         isFiring=false;
                     }

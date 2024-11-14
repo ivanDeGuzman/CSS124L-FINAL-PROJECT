@@ -202,8 +202,8 @@ public class MainUI extends Parent {
 
     public void updateGunUI(int ammo, int ammoCount, String name) {
         currentGun.setText(name);
-        if (name == "FAMAS") {
-            currentGun.setText("   " + name);
+        if (name == "FAMAS" || name == "M16A1" || name == "AK47") {
+            currentGun.setText("    " + name);
         }
         showAmmo.setText("" + ammo + "/" + ammoCount);
 

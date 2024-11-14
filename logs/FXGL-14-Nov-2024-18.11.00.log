@@ -1,0 +1,138 @@
+18:10:57.021 [main                     ] DEBUG Logger               - Configured Logger
+18:10:57.055 [main                     ] DEBUG GameApplication      - Logging settings
+Title: Flatline: Oregon
+Version: Beta ?
+Width: 800
+Height: 600
+Fullscreen: false
+Intro: false
+Profiling: false
+Single step:false
+App Mode: DEVELOPER
+Menu Key: ESCAPE
+Stage Style: DECORATED
+Scene Factory: class com.groupfour.mygame.App$1
+
+18:10:57.541 [JavaFX Application Thread] DEBUG FXGLApplication      - Initializing FXGL
+18:10:57.545 [JavaFX Application Thread] INFO  Engine               - FXGL-dev-SNAPSHOT (28.07.2021 16.39) on WINDOWS (J:11.0.22 FX:16)
+18:10:57.546 [JavaFX Application Thread] DEBUG Engine               - JRE Vendor Name: Oracle Corporation
+18:10:57.546 [JavaFX Application Thread] DEBUG Engine               - Running on OS: Windows 11 version 10.0
+18:10:57.548 [JavaFX Application Thread] DEBUG Engine               - Architecture: amd64
+18:10:57.548 [JavaFX Application Thread] INFO  Engine               - Source code and latest versions at: https://github.com/AlmasB/FXGL
+18:10:57.548 [JavaFX Application Thread] INFO  Engine               -              Join the FXGL chat at: https://gitter.im/AlmasB/FXGL
+18:10:57.672 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Creating a JavaFX scene
+18:10:57.760 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Target settings size: 800.0 x 600.0
+18:10:57.761 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled scene size:    800.0 x 600.0
+18:10:57.761 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+18:10:57.762 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Set initial scene to FXGLStartupScene
+18:10:57.769 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Opening main window
+18:10:57.883 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Window border size: (14.4000244140625, 37.5999755859375)
+18:10:57.883 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled size: 800.0 x 600.0
+18:10:57.884 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+18:10:57.884 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scene size: 800.0 x 600.0
+18:10:57.884 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Stage size: 814.4000244140625 x 637.5999755859375
+18:10:57.891 [FXGL Background Thread 1 ] DEBUG Engine               - Initializing environment variables
+18:10:57.948 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class com.groupfour.mygame.App
+18:10:57.948 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Applying CSS: fxgl_dark.css
+18:10:57.949 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/css/fxgl_dark.css
+18:10:58.006 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Initializing application scenes
+18:10:58.047 [FXGL Background Thread 1 ] DEBUG GameWorld            - Game world initialized
+18:10:58.096 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Physics world initialized: appHeight=600, physics.ppm=50.0
+18:10:58.097 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+18:10:58.099 [FXGL Background Thread 1 ] DEBUG GameScene            - Game scene initialized: 800x600
+18:10:58.113 [FXGL Background Thread 1 ] DEBUG FXGL.DefaultMenu     - createMenuBodyMainMenu()
+18:10:58.129 [FXGL Background Thread 1 ] DEBUG FXGL.DefaultMenu     - createOptionsMenu()
+18:10:58.138 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/particles/smoke.png
+18:10:58.224 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/particles/trace_horizontal.png
+18:10:58.252 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/ui/fonts/PIXELADE.TTF
+18:10:58.769 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/spbtn.png
+18:10:58.791 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/return.png
+18:10:58.803 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Application scenes initialized
+18:10:58.812 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Loading FXGL system data
+18:10:58.816 [FXGL Background Thread 1 ] DEBUG FileSystemAccess     - Reading from: C:\Users\acer\OneDrive\Desktop\git pull\CSS124L-FINAL-PROJECT\system\fxgl.bundle
+18:10:58.821 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Bundle FXGL: {}
+18:10:58.822 [FXGL Background Thread 1 ] DEBUG UpdaterService       - Checking for updates
+18:10:58.848 [FXGL Background Thread 4 ] DEBUG FXGLApplication      - Loading fonts
+18:10:58.848 [FXGL Background Thread 1 ] DEBUG FXGLApplication      - Loading default localization
+18:10:58.849 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/languages/english.lang
+18:10:58.849 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/VarelaRound-Regular.ttf
+18:10:58.856 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/Abel-Regular.ttf
+18:10:58.860 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/lucida_console.ttf
+18:10:58.861 [FXGL Background Thread 1 ] INFO  FXGLApplication      - FXGL initialization took: 0.969 sec
+18:10:58.868 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/ui/fonts/Courier-Prime.ttf
+18:10:58.871 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Upwards - W
+18:10:58.872 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Down - S
+18:10:58.872 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Left - A
+18:10:58.872 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Move Right - D
+18:10:58.872 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Reload - R
+18:10:58.873 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Shoot - LMB
+18:10:58.873 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Switch Weapons - Q
+18:10:58.873 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Interact - F
+18:10:58.873 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Sprint - Space
+18:10:58.874 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/music/titleBGM.mp3
+18:10:58.962 [FXGL Background Thread 2 ] WARN  UpdaterService       - Failed to find updates: java.net.UnknownHostException: raw.githubusercontent.com
+18:10:59.009 [JavaFX Application Thread] DEBUG AudioPlayer          - Playing music com.almasb.fxgl.audio.Music@3c937f5a
+18:10:59.009 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/fxgl_icon.png
+18:10:59.032 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:///C:/Users/acer/.m2/repository/com/github/almasb/fxgl/dev-SNAPSHOT/fxgl-dev-SNAPSHOT.jar!/fxglassets/textures/fxgl_default_cursor.png
+18:10:59.034 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Screenshot - CTRL+8
+18:10:59.034 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Dev Options - 1
+18:10:59.035 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Dev Console - 2
+18:10:59.035 [JavaFX Application Thread] DEBUG Input                - Registered new binding: System info dump - CTRL+9
+18:10:59.035 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Restart - CTRL+R
+18:10:59.036 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Toggle Debug Camera - CTRL+C
+18:10:59.038 [JavaFX Application Thread] DEBUG LoopRunner           - Starting loop
+18:10:59.048 [JavaFX Application Thread] DEBUG LoopRunner           - Initializing JavaFX AnimationTimerLoop
+18:10:59.051 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:10:59.058 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLStartupScene and adding to FXGLMainMenuDummyScene
+18:10:59.065 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLStartupScene -> FXGLMainMenuDummyScene
+18:10:59.065 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: FXGLDefaultMenu
+18:10:59.068 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:10:59.073 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to FXGLDefaultMenu
+18:10:59.074 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> FXGLDefaultMenu
+18:10:59.080 [JavaFX Application Thread] DEBUG FXGLApplication      - Registering font factories with UI factory
+18:10:59.843 [JavaFX Application Thread] DEBUG Menu                 - fireNewGame()
+18:10:59.843 [JavaFX Application Thread] DEBUG GameApplicationServi - Starting new game
+18:10:59.845 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: FXGLDefaultMenu
+18:10:59.845 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:10:59.847 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLDefaultMenu and adding to FXGLMainMenuDummyScene
+18:10:59.849 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene <- FXGLDefaultMenu
+18:10:59.850 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:10:59.857 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to FXGLLoadingScene
+18:10:59.858 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> FXGLLoadingScene
+18:10:59.858 [JavaFX Application Thread] DEBUG GameApplicationServi - Clearing previous game
+18:10:59.858 [JavaFX Application Thread] DEBUG GameScene            - Clearing game scene
+18:10:59.858 [JavaFX Application Thread] DEBUG GameWorld            - Clearing game world
+18:10:59.858 [JavaFX Application Thread] DEBUG PhysicsWorld         - Clearing physics world
+18:10:59.860 [FXGL Background Thread 2 ] DEBUG FXGLApplication      - Initializing game
+18:10:59.916 [FXGL Background Thread 2 ] WARN  TMXLevelLoader       - TiledMap generated from 1.11.0. Supported version: 1.2.3. Some features may not be parsed fully.
+18:10:59.940 [FXGL Background Thread 2 ] DEBUG TMXLevelLoader       - Parsed TiledMap: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/levels/Warehouse.tmx
+18:10:59.942 [FXGL Background Thread 2 ] DEBUG TMXLevelLoader       - Creating tile layer entities
+18:10:59.944 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Loading view for layer Floor
+18:10:59.951 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Created buffer with size 2240.0x1600.0
+18:10:59.969 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Loading view for layer Wall
+18:10:59.977 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Created buffer with size 2240.0x1600.0
+18:11:00.003 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Loading view for layer Props
+18:11:00.015 [FXGL Background Thread 2 ] DEBUG TilesetLoader        - Created buffer with size 2240.0x1600.0
+18:11:00.032 [FXGL Background Thread 2 ] DEBUG TMXLevelLoader       - Creating object layer entities
+18:11:00.060 [FXGL Background Thread 2 ] DEBUG GameWorld            - Clearing removable entities
+18:11:00.060 [FXGL Background Thread 2 ] DEBUG GameWorld            - Setting level: com.almasb.fxgl.entity.level.Level@1ac0165f
+18:11:00.072 [FXGL Background Thread 2 ] INFO  FXGLApplication      - Game initialization took: 0.212 sec
+18:11:00.079 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:11:00.085 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLLoadingScene and adding to GameScene
+18:11:00.087 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLLoadingScene -> GameScene
+18:11:00.095 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/acer/OneDrive/Desktop/git%20pull/CSS124L-FINAL-PROJECT/fp/target/classes/assets/textures/banner.png
+18:11:00.148 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: PCM_BG
+18:11:00.148 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:11:00.148 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to PCM_BG
+18:11:00.149 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> PCM_BG
+18:11:00.154 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: PlayerCountMenu
+18:11:00.154 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+18:11:00.155 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from PCM_BG and adding to PlayerCountMenu
+18:11:00.159 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - PCM_BG -> PlayerCountMenu
+18:11:00.898 [JavaFX Application Thread] DEBUG FXGLApplication      - Exiting FXGL
+18:11:00.898 [JavaFX Application Thread] DEBUG LoopRunner           - Stopping loop
+18:11:00.898 [JavaFX Application Thread] DEBUG SystemBundleService  - Saving FXGL system data
+18:11:00.900 [JavaFX Application Thread] DEBUG FileSystemAccess     - Writing to: C:\Users\acer\OneDrive\Desktop\git pull\CSS124L-FINAL-PROJECT\system\fxgl.bundle
+18:11:00.903 [JavaFX Application Thread] DEBUG Async                - Shutting down background threads
+18:11:00.903 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Closing main window
+18:11:00.965 [JavaFX Application Thread] DEBUG Logger               - Closing Logger

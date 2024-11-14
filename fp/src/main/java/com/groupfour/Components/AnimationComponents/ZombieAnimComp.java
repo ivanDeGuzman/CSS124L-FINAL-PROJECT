@@ -36,27 +36,28 @@ public class ZombieAnimComp extends Component {
                 animWalk = new AnimationChannel(FXGL.image("Zombies/Spitter_Walking.png"), 11, 50, 50, Duration.seconds(1), 0, 10);
                 animAttack = new AnimationChannel(FXGL.image("Zombies/Spitter_Attack.png"), 5, 50, 50, Duration.seconds(1), 0, 4);
                 texture = new AnimatedTexture(animWalk);
+                texture.setRotate(180);
             } else if (entity.hasComponent(DoctorZombieComponent.class)) {
                 animWalk = new AnimationChannel(FXGL.image("Zombies/Healer_Zombie_Walking.png"), 11, 50, 50, Duration.seconds(1),  0,10);
                 animAttack = new AnimationChannel(FXGL.image("Zombies/Healer_Zombie_Idle.png"), 1, 50, 50, Duration.seconds(1), 0, 0);
                 animDeath = new AnimationChannel(FXGL.image("Zombies/Healer_Zombie_Death.png"), 18, 50, 50, Duration.seconds(2), 1, 17);
 
                 texture = new AnimatedTexture(animWalk);
+                texture.setRotate(180);
             } else if (entity.hasComponent(WelderZombieComponent.class)) {
                 animWalk = new AnimationChannel(FXGL.image("Zombies/Welder_Walking.png"), 10, 50, 50, Duration.seconds(1),  0,9);
                 animAttack = new AnimationChannel(FXGL.image("Zombies/Welder_Torching.png"), 12, 50, 50, Duration.seconds(1), 0, 11);
 
                 texture = new AnimatedTexture(animWalk);
+                texture.setRotate(180);
             } else {
                 animWalk = new AnimationChannel(FXGL.image("Zombies/Basic_Zombie_Walking.png"), 7, 50, 50, Duration.seconds(1), 1, 4);
                 animAttack = new AnimationChannel(FXGL.image("Zombies/Basic_Zombie_Attack.png"), 12, 50, 50, Duration.seconds(1), 0, 11);
                 texture = new AnimatedTexture(animWalk);
-                texture.setRotate(-180);
             }
                 entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21));
                 entity.getViewComponent().addChild(texture);
                 texture.loopAnimationChannel(animWalk);
-            texture.setRotate(180);
             setAdded(false);
         }
         handleAnimations();

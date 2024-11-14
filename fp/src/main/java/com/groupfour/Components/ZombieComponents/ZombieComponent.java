@@ -123,10 +123,6 @@ public class ZombieComponent extends Component {
 
 
             entity.removeFromWorld();
-
-
-
-        });
     }
 
     public void startAttacking() {

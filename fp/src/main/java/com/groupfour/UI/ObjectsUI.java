@@ -238,13 +238,7 @@ public class ObjectsUI extends Parent {
             weaponBox.getChildren().addAll(weaponName, weaponImage, weaponPrice);
 //            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
             weaponBox.setOnMouseClicked(e -> {
-                if (!isBought) {
                     purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
-                    isBought = true;
-                } else {
-                    System.out.println("YOU ALREADY BOUGHT THIS WEAPON");
-                }
-                
             });
 
             weaponBox.setOnMouseEntered(e -> {

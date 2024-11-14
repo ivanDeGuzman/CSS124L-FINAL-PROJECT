@@ -35,14 +35,14 @@ import javafx.util.Duration;
 
 public class ZombieFactory implements EntityFactory {
 
-    private static final int SPAWN_DISTANCE = 500;
+    private static final int SPAWN_DISTANCE = 1000;
 
 
     private static final Point2D[] spawnPoints = new Point2D[] {
             new Point2D(SPAWN_DISTANCE, SPAWN_DISTANCE),
-            new Point2D(getAppWidth() - SPAWN_DISTANCE, SPAWN_DISTANCE),
-            new Point2D(getAppWidth() - SPAWN_DISTANCE, getAppHeight() - SPAWN_DISTANCE),
-            new Point2D(SPAWN_DISTANCE, getAppHeight() - SPAWN_DISTANCE)
+            new Point2D(getAppWidth() - 500 + SPAWN_DISTANCE, SPAWN_DISTANCE),
+            new Point2D(getAppWidth() - 500 + SPAWN_DISTANCE, getAppHeight() - 500 + SPAWN_DISTANCE),
+            new Point2D(SPAWN_DISTANCE, getAppHeight() - 500 + SPAWN_DISTANCE)
     };
 
     // just some code i needed to test
@@ -80,7 +80,7 @@ public class ZombieFactory implements EntityFactory {
 
     @Spawns("zombie")
     public Entity newZombie(SpawnData data) {
-        return commonZombieSetup(data, 600)
+        return commonZombieSetup(data, 60)
                 .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                 .with(new CellMoveComponent(40, 40, 150))
                 .build();
@@ -138,7 +138,7 @@ public class ZombieFactory implements EntityFactory {
     @Spawns("guard")
     public Entity newGuardZombie(SpawnData data) {
         return commonZombieSetup(data, 200)
-                .viewWithBBox(new Rectangle(40, 40, Color.PURPLE))
+                .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                 .with(new CellMoveComponent(40, 40, 250))
                 .with(new GuardZombieComponent())
                 .build();
@@ -155,7 +155,7 @@ public class ZombieFactory implements EntityFactory {
      @Spawns("welder")
      public Entity newWelderZombie(SpawnData data) {
          return commonZombieSetup(data, 70)
-                 .viewWithBBox(new Rectangle(40, 40, Color.ORANGE))
+                 .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(35, 35)))
                  .with(new CellMoveComponent(40, 40, 150))
                  .with(new WelderZombieComponent())
                  .build();
