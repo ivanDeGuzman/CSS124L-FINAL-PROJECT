@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class PlayerComponent extends Component {
     private boolean isDead = false;
     private int health = 100;
+    private int stamina = 100;
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
@@ -40,6 +41,12 @@ public class PlayerComponent extends Component {
     private Input clientInputs = new Input();
     private double angle;
     private Point2D lastMousePosition;
+    private boolean isSprinting = false;
+    private double STAMINA_DECAY_RATE = 0.05;
+    private double STAMINA_RECHARGE_RATE = 10;
+    private double STAMINA_RECHARGE_DELAY = .5;
+    private double staminaRechargeTimer = 0;
+
 
     private String name="Player 1";
 
@@ -62,12 +69,20 @@ public class PlayerComponent extends Component {
         this.currency = currency;
     }
 
+    public void setSprinting(boolean sprinting) {
+        this.isSprinting = sprinting;
+    }
+
     public int getCurrency() {
         return currency;
     }
 
     public int getHealth() {
         return health;
+    }
+
+    public int getStamina() {
+        return stamina;
     }
 
     public void setInput(Input input){
@@ -156,11 +171,29 @@ public class PlayerComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
+
+        int MAX_STAMINA = 100;
         if (clientInputs != null) {
             mouseUpdate();
         }
+        
+        if (isSprinting) {
+            if (stamina > 0) {
+                stamina -= STAMINA_DECAY_RATE;
+            } else {
+                isSprinting = false;
+            }
+        } else {
+            if (stamina < MAX_STAMINA || stamina == 0) {
+                staminaRechargeTimer += tpf;
+                if (staminaRechargeTimer >= STAMINA_RECHARGE_DELAY) {
+                    stamina += STAMINA_RECHARGE_RATE;
+                    staminaRechargeTimer = 0;
+                }
+            }
+        }
     }
-
+    
     //cringe ass mouse
     private void mouseUpdate() {
         Point2D playerPosition = entity.getCenter();
@@ -183,6 +216,11 @@ public class PlayerComponent extends Component {
     public void moveX(boolean isLeft) {
 
         double tempSpeed = speed;
+        
+        if (isSprinting) {
+            tempSpeed *= 2;
+        }
+
         if (!isDead()) {
             if (isShooting()) {
                 tempSpeed /= 2;
@@ -197,6 +235,11 @@ public class PlayerComponent extends Component {
 
     public void moveY(boolean isDown) {
         double tempSpeed = speed;
+
+        if (isSprinting) {
+            tempSpeed *= 2;
+        }
+
         if (!isDead()) {
             if (isShooting()) {
                 tempSpeed /= 2;
@@ -268,6 +311,17 @@ public class PlayerComponent extends Component {
                 switchWeapon();
             }
         }, KeyCode.Q);
+        clientInputs.addAction(new UserAction("Sprint") {
+            @Override
+            protected void onAction() {
+                isSprinting = true;
+            }
+        
+            @Override
+            protected void onActionEnd() {
+                isSprinting = false;
+            }
+        }, KeyCode.SPACE);
         // clientInputs.addAction(new UserAction("Interact") {
         //     protected void onActionBegin() {
         //         interactWithObject();
