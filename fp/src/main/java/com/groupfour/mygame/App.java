@@ -16,6 +16,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.multiplayer.*;
+import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
 import com.groupfour.Collisions.BulletZombieHandler;
@@ -76,6 +77,8 @@ public class App extends GameApplication {
     private double timeSinceLastUIUpdate =0;
     private double uiUpdateInterval = 0.2;
     private double collisionCheckInterval = 0.1;
+    private Server<Bundle> server;
+    private Client<Bundle> client;
 
 
     @Override
@@ -232,7 +235,8 @@ public class App extends GameApplication {
             FXGL.run(() -> {
                 if(player.isActive()){
                     BoundsComponent.ObjectEntityCollision(player);
-                }}, Duration.seconds(0.017));
+                }
+            }, Duration.seconds(0.017));
     }
 
     public void startGame1P() {
@@ -270,8 +274,6 @@ public class App extends GameApplication {
                 } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
-                    
-                        
                 }
             }
 
@@ -317,8 +319,8 @@ public class App extends GameApplication {
     
                         onServer();
                         
-                        newPlayer = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
-                        players.add(newPlayer); 
+                        // newPlayer = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+                        // players.add(newPlayer); 
                     });
                 });
                 server.startAsync();
@@ -328,7 +330,6 @@ public class App extends GameApplication {
                         client = getNetService().newTCPClient("localhost", 55555);
                         client.setOnConnected(conn -> {
                             connection = conn;
-                            //getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                             getExecutor().startAsyncFX(() -> onClient());
                         });
                         client.connectAsync();
@@ -339,35 +340,39 @@ public class App extends GameApplication {
     }
     
 
-    public GameWorld onServer() {
+    public void onServer() {
         isServerStarted = true;
+
         player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+        getService(MultiplayerService.class).spawn(connection, player, "player");
+        player.getComponent(PlayerComponent.class).getCurrentWeapon();
+
+        newPlayer = spawn("player", new Point2D(getAppWidth() / 2 + 3, getAppHeight() / 2 + 3));
+        getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
+
         vmachine = spawn("vmachine");
+        getService(MultiplayerService.class).spawn(connection, vmachine, "vmachine");
+
         armory = spawn("armory");
+        getService(MultiplayerService.class).spawn(connection, armory, "armory");
+
         microwave = spawn("microwave");
-        playerComponent = player.getComponent(PlayerComponent.class);
+        getService(MultiplayerService.class).spawn(connection, microwave, "microwave");
+
         setUpPlayer();
         players.add(player);
-        getService(MultiplayerService.class).spawn(connection, player, "player");
-        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-        playerComponent.initClientInput();
-        getService(MultiplayerService.class).addInputReplicationReceiver(connection, playerComponent.getClientInput());
-        return getGameWorld();
+        players.add(newPlayer);
+
+        initPhysics();
+        
+        newPlayer.getComponent(PlayerComponent.class).initClientInput();
+        getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
     }
 
     public void onClient() {
-        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
-        playerComponent = player.getComponent(PlayerComponent.class);
-        playerComponent.initClientInput();
-        players.add(player);
-        getService(MultiplayerService.class).spawn(connection, player, "player");
-        setUpPlayer();
-        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, onServer());
-        getService(MultiplayerService.class).addInputReplicationSender(connection, playerComponent.getClientInput());
-        getSceneService().popSubScene();
-        getSceneService().popSubScene();
+        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
     }
-
 
     //moved it here so each player's cam is individualized instead of being cast to entity
     private void setUpPlayer() {
@@ -435,7 +440,7 @@ public class App extends GameApplication {
     }
 
     private void updateUI() {
-        ui.setupMinimap(getGameWorld());
+        //ui.setupMinimap(getGameWorld());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
