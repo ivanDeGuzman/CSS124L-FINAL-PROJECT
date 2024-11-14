@@ -1,6 +1,8 @@
 package com.groupfour.Factories;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
@@ -14,6 +16,8 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.WeaponComponent;
+import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.Components.ZombieComponents.ExplosionComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 

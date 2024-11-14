@@ -12,7 +12,6 @@ import com.almasb.fxgl.net.Connection;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGL.getEventBus;
 import static com.almasb.fxgl.dsl.FXGL.runOnce;
 
 public abstract class WeaponComponent extends Component {

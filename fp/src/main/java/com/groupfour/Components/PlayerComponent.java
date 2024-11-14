@@ -52,6 +52,7 @@ public class PlayerComponent extends Component {
         ac = new PlayerAnimComp();
         entity.addComponent(ac);
         lastMousePosition = getInput().getMousePositionWorld();
+        
     }
 
     public void setCurrencyFromZombie(int amount) { 
@@ -153,6 +154,14 @@ public class PlayerComponent extends Component {
         }, Duration.seconds(0.5));
         animWeaponSet();
     }
+
+    public void setUpPlayer() {
+        Viewport viewport = getGameScene().getViewport();
+        viewport.setLazy(true);
+        viewport.bindToEntity(entity, getAppWidth() / 2.0, getAppHeight() / 2.0);
+        viewport.setZoom(1.5);
+    }
+
 
     @Override
     public void onUpdate(double tpf) {

@@ -50,6 +50,20 @@ public class BoundsComponent extends Component {
         }
     }
 
+    public static void ZombieObjectCollision(Entity zombie) {
+        List<Entity> objects = new ArrayList<>();
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.VENDING_MACHINE));
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.MICROWAVE));
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.WALL));
+        objects.addAll(FXGL.getGameWorld().getEntitiesByType(EntityType.ARMORY));
+
+        for (Entity object : objects) {
+            if (zombie.isColliding(object)) {
+                resolveCollision(zombie, object);
+            }
+        }
+    }
+
     private static void resolveCollision(Entity entity, Entity object) {
         double halfEntityWidth = entity.getWidth() / 2;
         double halfEntityHeight = entity.getHeight() / 2;
@@ -75,5 +89,4 @@ public class BoundsComponent extends Component {
             }
         }
     }
-    
 }

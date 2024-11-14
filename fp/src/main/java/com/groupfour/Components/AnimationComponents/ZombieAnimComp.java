@@ -19,7 +19,7 @@ public class ZombieAnimComp extends Component {
         Image attackImage = FXGL.image("Zombies/Basic_Zombie_Attack.png");
 
         animWalk = new AnimationChannel(walkImage, 7, 50, 50, Duration.seconds(1), 1, 4);
-        animAttack = new AnimationChannel(attackImage, 12, 50, 50, Duration.seconds(1), 0, 11);
+        animAttack = new AnimationChannel(attackImage, 12, 50, 50, Duration.seconds(1.5), 0, 11);
         texture = new AnimatedTexture(animWalk);
     }
 

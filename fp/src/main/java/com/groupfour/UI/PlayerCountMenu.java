@@ -14,11 +14,10 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class PlayerCountMenu extends FXGLMenu {
     private MainUI ui = new MainUI();
-    public PlayerCountMenu(Runnable onOnePlayer, Runnable onTwoPlayer) {
+    public PlayerCountMenu(Runnable onOnePlayer) {
         super(MenuType.GAME_MENU);
         
         playerButton onePlayerButton = new playerButton(FXGL.image("spbtn.png"), onOnePlayer);
-        playerButton twoPlayerButton = new playerButton(FXGL.image("mpbtn.png"), onTwoPlayer);
         playerButton returnButton = new playerButton(FXGL.image("return.png"), () -> {
             FXGL.getDialogService().showConfirmationBox("Are you sure you want to return to the main menu?", answer -> {
                 if (answer) {
@@ -28,7 +27,7 @@ public class PlayerCountMenu extends FXGLMenu {
             });
         });
 
-        var box = new VBox(15, onePlayerButton, twoPlayerButton, returnButton);
+        var box = new VBox(15, onePlayerButton, returnButton);
         box.setTranslateX(getAppWidth() * 0.32);
         box.setTranslateY(getAppHeight() * 0.30);
 

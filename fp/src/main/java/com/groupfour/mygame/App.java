@@ -56,7 +56,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class App extends GameApplication {
     private List<Entity> players= new ArrayList<>();
     private Entity player;
-    private int initPlayerID = 1;
     private Entity zombie;
     private boolean isServer;
     private PhysicsWorld physics;
@@ -67,7 +66,6 @@ public class App extends GameApplication {
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
-    private PlayerComponent playerComponent;
     private double waveMultiplier=1; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
@@ -77,7 +75,7 @@ public class App extends GameApplication {
     private double timeSinceLastCollisionCheck = 0;
     private double timeSinceLastUIUpdate =0;
     private double uiUpdateInterval = 0.2;
-    private double collisionCheckInterval = 0.1;
+    private double collisionCheckInterval = 1.5;
     private Server<Bundle> server;
     private Client<Bundle> client;
 
@@ -102,8 +100,7 @@ public class App extends GameApplication {
             @Override
             public FXGLMenu newGameMenu() {
                 return new PlayerCountMenu(
-                    App.this::startGame1P,
-                    App.this::startMultiplayer 
+                    App.this::startGame1P
                 );
             }
         });
@@ -113,67 +110,66 @@ public class App extends GameApplication {
     protected void onPreInit() {
         Music bgm = FXGL.getAssetLoader().loadMusic("titleBGM.mp3");
         getAudioPlayer().loopMusic(bgm);
+        
     }
     
     @Override
     protected void initInput(){
-        player = new Entity();
-        zombie = new Entity();
 
         getInput().addAction(new UserAction("Move Upwards"){
             protected void onAction(){
-                playerComponent.moveY(false);
+                player.getComponent(PlayerComponent.class).moveY(false);
             }
             protected void onActionEnd() {
-                playerComponent.stopMoving();
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.W);
 
         getInput().addAction(new UserAction("Move Down"){
             protected void onAction(){
-                playerComponent.moveY(true);
+                player.getComponent(PlayerComponent.class).moveY(true);
             }
             protected void onActionEnd() {
-                playerComponent.stopMoving();
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.S);
 
         getInput().addAction(new UserAction("Move Left"){
             protected void onAction(){
-                playerComponent.moveX(true);   
+                player.getComponent(PlayerComponent.class).moveX(true);   
             }
             protected void onActionEnd() {
-                playerComponent.stopMoving();
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.A);
 
         getInput().addAction(new UserAction("Move Right"){
             protected void onAction(){
-                playerComponent.moveX(false);
+                player.getComponent(PlayerComponent.class).moveX(false);
             }
             protected void onActionEnd() {
-                playerComponent.stopMoving();
+                player.getComponent(PlayerComponent.class).stopMoving();
             }
         },KeyCode.D);
 
         getInput().addAction(new UserAction("Reload"){
             protected void onActionBegin(){
-                playerComponent.getCurrentWeapon().reload();
+                player.getComponent(PlayerComponent.class).getCurrentWeapon().reload();
             }
         },KeyCode.R);
 
         getInput().addAction(new UserAction("Shoot") {
             protected void onActionBegin() {
-            playerComponent.getCurrentWeapon().fire(player);
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().fire(player);
             }
             protected void onActionEnd() {
-            playerComponent.getCurrentWeapon().stopFiring();
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().stopFiring();
             }
         }, MouseButton.PRIMARY);
         
         getInput().addAction(new UserAction("Switch Weapons") {
             protected void onActionBegin() {
-                playerComponent.switchWeapon();
+                player.getComponent(PlayerComponent.class).switchWeapon();
             }
         }, KeyCode.Q);
         getInput().addAction(new UserAction("Interact") {
@@ -198,6 +194,8 @@ public class App extends GameApplication {
 
     @Override
     public void initGame() {
+        player = new Entity();
+        zombie = new Entity();
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
@@ -209,7 +207,7 @@ public class App extends GameApplication {
     protected void initUI() {
         FXGL.runOnce(() -> {
             FXGL.getSceneService().pushSubScene(new PCM_BG());
-            FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
+            FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P));
         }, Duration.seconds(0.01));
         ui = new MainUI();
         objectsUI = new ObjectsUI();
@@ -226,17 +224,18 @@ public class App extends GameApplication {
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+                
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
                 physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
-                FXGL.run(() -> checkCollisions(), Duration.seconds(1));
+                
             }
             FXGL.run(() -> {
                 if(player.isActive()){
                     BoundsComponent.ObjectEntityCollision(player);
+                    BoundsComponent.ZombieObjectCollision(zombie);
                 }
             }, Duration.seconds(0.017));
     }
@@ -247,12 +246,12 @@ public class App extends GameApplication {
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
         armory = spawn("armory");
+        player.getComponent(PlayerComponent.class).setUpPlayer();
         wave=0;
 
         waveAndDeathManager();
         
-        playerComponent = player.getComponent(PlayerComponent.class);
-        setUpPlayer();
+        
 
         getSceneService().popSubScene();
         getSceneService().popSubScene();
@@ -280,8 +279,8 @@ public class App extends GameApplication {
                 }
             }
 
-                if(playerComponent.isDead()){
-                    playerComponent.setDeath(false);
+                if(player.getComponent(PlayerComponent.class).isDead()){
+                    player.getComponent(PlayerComponent.class).setDeath(false);
                     getDialogService().showMessageBox("You Died! Back to Main Menu?", () -> {
                     ui.playTitleMusic();
                     getGameController().gotoMainMenu();
@@ -343,101 +342,18 @@ public class App extends GameApplication {
     }
            
 
-    public void startMultiplayer() {
-        
-        getDialogService().showConfirmationBox("Are you the host?", a -> {
-            isServer = a;
-            ui.stopTitleMusic();
-    
-            if (isServer) {
-                server = getNetService().newTCPServer(55555);
-                server.setOnConnected(conn -> {
-                    connection = conn;
-                    getExecutor().startAsyncFX(() -> {
-                        getSceneService().popSubScene();
-                        getSceneService().popSubScene();
-    
-                        onServer();
-                        
-                        // newPlayer = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
-                        // players.add(newPlayer); 
-                    });
-                });
-                server.startAsync();
-            } else {
-                getDialogService().showConfirmationBox("Are you connecting to host?", b -> {
-                    if (b) {
-                        client = getNetService().newTCPClient("localhost", 55555);
-                        client.setOnConnected(conn -> {
-                            connection = conn;
-                            getExecutor().startAsyncFX(() -> onClient());
-                        });
-                        client.connectAsync();
-                    }
-                });
-            }
-        });
-    }
-    
-
-    public void onServer() {
-        isServerStarted = true;
-
-        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
-        getService(MultiplayerService.class).spawn(connection, player, "player");
-        player.getComponent(PlayerComponent.class).getCurrentWeapon();
-
-        newPlayer = spawn("player", new Point2D(getAppWidth() / 2 + 3, getAppHeight() / 2 + 3));
-        getService(MultiplayerService.class).spawn(connection, newPlayer, "player");
-
-        vmachine = spawn("vmachine");
-        getService(MultiplayerService.class).spawn(connection, vmachine, "vmachine");
-
-        armory = spawn("armory");
-        getService(MultiplayerService.class).spawn(connection, armory, "armory");
-
-        microwave = spawn("microwave");
-        getService(MultiplayerService.class).spawn(connection, microwave, "microwave");
-
-        setUpPlayer();
-        players.add(player);
-        players.add(newPlayer);
-
-        initPhysics();
-        
-        newPlayer.getComponent(PlayerComponent.class).initClientInput();
-        getService(MultiplayerService.class).addInputReplicationReceiver(connection, newPlayer.getComponent(PlayerComponent.class).getClientInput());
-    }
-
-    public void onClient() {
-        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
-    }
-
-    //moved it here so each player's cam is individualized instead of being cast to entity
-    private void setUpPlayer() {
-        Viewport viewport = getGameScene().getViewport();
-        viewport.setLazy(true);
-        viewport.bindToEntity(player, getAppWidth() / 2.0, getAppHeight() / 2.0);
-        viewport.setZoom(1.5);
-    }
-
-    private void waitingForPlayers() {
-        LoadingScreen loadingScreen = new LoadingScreen("Waiting for players...");
-        FXGL.getSceneService().pushSubScene(loadingScreen);
-    }
-
 
 
     public void resetGameWorld() {
         getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
         zombie = null;
         getSceneService().pushSubScene(new PCM_BG());
-        getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P, this::startMultiplayer));
+        getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P));
     }
 
     @Override
     protected void onUpdate(double tpf) {
+        System.out.println(players.size());
         timeSinceLastCollisionCheck += tpf;
         timeSinceLastUIUpdate += tpf;
 
@@ -468,8 +384,10 @@ public class App extends GameApplication {
                 players.get(i).getComponent(PlayerComponent.class).getClientInput().update(tpf);
             }
         }
-        player.getComponent(PlayerAnimComp.class).setWeaponType(playerComponent.getCurrentWeapon().getName());
-        playerComponent.getCurrentWeapon().setPlayerRotation(player.getRotation());
+        
+        player.getComponent(PlayerAnimComp.class).setWeaponType(player.getComponent(PlayerComponent.class).getCurrentWeapon().getName());
+        player.getComponent(PlayerComponent.class).getCurrentWeapon().setPlayerRotation(player.getRotation());
+        
 
     }
 
@@ -481,12 +399,12 @@ public class App extends GameApplication {
 
     private void updateUI() {
         //ui.setupMinimap(getGameWorld());
-        ui.updateGold(playerComponent.getCurrency());
-        ui.updateHealthBar(playerComponent.getHealth());
+        ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
+        ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
         ui.updateGunUI(
-                playerComponent.getCurrentWeapon().getAmmo(),
-                playerComponent.getCurrentWeapon().getAmmoCount(),
-                playerComponent.getCurrentWeapon().getName()
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmo(),
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
+            player.getComponent(PlayerComponent.class).getCurrentWeapon().getName()
         );
 
         ui.updateWave(wave, waveCooldown);
