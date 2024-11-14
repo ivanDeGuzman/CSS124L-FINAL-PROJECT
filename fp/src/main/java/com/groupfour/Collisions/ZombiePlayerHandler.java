@@ -74,7 +74,7 @@ public class ZombiePlayerHandler extends CollisionHandler {
         int baseDamage;
         if (zombie.hasComponent(GuardZombieComponent.class)) { baseDamage = 40; } else baseDamage = 10;
         double finalDamage = (baseDamage * reducedDamage);
-        getGameScene().getViewport().shake(15, 5);
+        getGameScene().getViewport().shake(10, 3);
         player.getComponent(PlayerComponent.class).takeDamage(finalDamage);
 
         new MainUI().flashTintRed();
