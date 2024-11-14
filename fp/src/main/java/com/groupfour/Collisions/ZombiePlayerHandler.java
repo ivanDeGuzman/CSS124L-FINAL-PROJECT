@@ -3,6 +3,7 @@ package com.groupfour.Collisions;
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponents.GuardZombieComponent;
