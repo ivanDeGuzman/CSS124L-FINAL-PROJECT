@@ -7,9 +7,11 @@ import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.UI.MainUI;
+import com.groupfour.Weapons.AK47;
 import com.groupfour.Weapons.BerettaM9;
 import com.groupfour.Weapons.FAMAS;
 import com.groupfour.Weapons.M16A1;
+import com.groupfour.Weapons.SawedOff;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -32,7 +34,7 @@ public class PlayerComponent extends Component {
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
-    private double originalSpeed = 1;
+    private double originalSpeed = 3;
     private double speed = originalSpeed;
     private int currentWeaponIndex = 0;
     private double reducedDamage = 1.5;
@@ -175,6 +177,7 @@ public class PlayerComponent extends Component {
 
     public void switchWeapon() {
         runOnce(() -> {
+            getCurrentWeapon().stopFiring();
             currentWeaponIndex = (currentWeaponIndex + 1) % weapons.size();
             System.out.println("Switched to: " + getCurrentWeapon().getName());
         }, Duration.seconds(0.5));

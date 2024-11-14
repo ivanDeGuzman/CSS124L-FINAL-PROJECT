@@ -147,11 +147,13 @@ public class ObjectsUI extends Parent {
         weaponsForSale.setVgap(10);
     
         // List of weapons
-        String[] weaponNames = {"FAMAS", "M16A1"};
-        String[] weaponPrices = {"$100", "$300"};
+        String[] weaponNames = {"FAMAS", "M16A1", "AK47", "Sawed-off"};
+        String[] weaponPrices = {"$100", "$300", "$600", "$500"};
         String[] weaponImageLinks = {
             "/assets/textures/Weapons/Idle/FAMAS_UI.png", 
-            "/assets/textures/Weapons/Idle/M16A1_UI.png"
+            "/assets/textures/Weapons/Idle/M16A1_UI.png",
+            "/assets/textures/Weapons/Idle/AK47_UI.png", 
+            "/assets/textures/Weapons/Idle/Sawed_Off_Shotgun.png"
         };
     
         for (int i = 0; i < weaponNames.length; i++) {

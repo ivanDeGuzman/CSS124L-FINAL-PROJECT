@@ -31,6 +31,7 @@ public abstract class WeaponComponent extends Component {
     protected boolean isFiring;
     private Sound reloadSound;
     private AudioPlayer audioPlayer;
+    public boolean initialized=false;
 
     public WeaponComponent(String name, int ammoCount, int ammo, int maxAmmo, double fireRate, double damage) {
         this.name = name;
@@ -87,6 +88,7 @@ public abstract class WeaponComponent extends Component {
     }
 
     protected void spawnBullet(Point2D position, Point2D direction) {
+        
         double playerRotationRadians = Math.toRadians(playerRotation);
 
         double adjustedX = Math.cos(playerRotationRadians) - Math.sin(playerRotationRadians); 
@@ -95,9 +97,8 @@ public abstract class WeaponComponent extends Component {
         double bulletX = position.getX() + adjustedX;
         double bulletY = position.getY() + adjustedY;
 
-
         var data = new SpawnData(bulletX, bulletY)
-            .put("direction", direction)
+            .put("direction", new Point2D(bulletX, bulletY))
             .put("damage", getDamage());
 
         Entity bullet = FXGL.spawn("bullet", data);

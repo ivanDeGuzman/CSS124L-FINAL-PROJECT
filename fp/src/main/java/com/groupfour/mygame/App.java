@@ -80,7 +80,6 @@ public class App extends GameApplication {
     private double waveMultiplier=10.5; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
-    private MultiplayerStart multiplayerStart;
     private boolean isServerStarted = false, isNearInteractable = false;
     private ObjectsUI objectsUI;
     private double timeSinceLastCollisionCheck = 0;
@@ -300,7 +299,7 @@ public class App extends GameApplication {
                         waveCooldown = false;
                         isWaveSpawning = false;
 
-                    }, Duration.seconds(20));
+                    }, Duration.seconds(10));
                 } else {
                     wave++;
                     nextWave(wave, waveMultiplier);

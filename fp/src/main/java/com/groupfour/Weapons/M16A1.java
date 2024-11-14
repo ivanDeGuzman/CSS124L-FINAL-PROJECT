@@ -1,5 +1,8 @@
 package com.groupfour.Weapons;
 
+import java.util.Timer;
+
+import java.util.Timer;
 import com.almasb.fxgl.audio.AudioPlayer;
 import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.serialization.Bundle;
@@ -17,23 +20,25 @@ public class M16A1 extends WeaponComponent {
     private AudioPlayer audioPlayer;
 
     public M16A1() {
-        super("M16A1", 180, 800, 30, 0.8, 10);
+        super("M16A1", 180, 30, 30, 0.2, 10);
         this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer(); 
     }
-
+         
     @Override
     public void fire(Entity player) {
-        if (ammo > 0 && !getIsReloading()) {
-            isFiring = true;
+        isFiring = true;
+        if(!initialized){
             FXGL.run(() -> {
-                if (ammo > 0 && isFiring) {
+                if(isFiring){
+                    if (ammo < 1||getIsReloading()) {
+                        isFiring=false;
+                    }
                     audioPlayer.playSound(shootSound);
                     shoot(player);
-                } else {
-                    isFiring = false;
                 }
             }, Duration.seconds(fireRate));
+        initialized=true;
         }
     }
 

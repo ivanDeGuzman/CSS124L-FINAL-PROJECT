@@ -20,7 +20,7 @@ public class BerettaM9 extends WeaponComponent {
     private AudioPlayer audioPlayer;
 
     public BerettaM9() {
-        super("Beretta M9", 100, 15, 15, 1.0, 15);
+        super("Beretta M9", 70, 15, 15, 1.0, 15);
         this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer();
     }
