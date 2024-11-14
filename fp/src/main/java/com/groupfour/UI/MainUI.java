@@ -44,6 +44,10 @@ import javafx.util.Duration;
 public class MainUI extends Parent {
     private Text goldText;
     private Text healthText;
+    private Text staminaText;
+    private Region staminaBar;
+    private Region staminaBarBorder;
+    private int maxStamina = 20;
     private Text showAmmo;
     private Text currentGun;
     private StackPane stack, waitLayout;
@@ -62,6 +66,7 @@ public class MainUI extends Parent {
     public MainUI() {
         goldUI();
         healthBar();
+        staminaBar();
         gunUI();
         waveUI();
                 
@@ -120,6 +125,29 @@ public class MainUI extends Parent {
         stack.setTranslateY(72);
         
         getChildren().addAll(healthBarBorder, stack);
+    }
+
+    public void staminaBar() {
+        customFont = loadFont("PIXELADE.TTF", 29);
+        stack = new StackPane();
+        staminaBar = new Region();
+        staminaBar.setStyle("-fx-background-color: yellow; -fx-background-radius: 15px");
+
+        staminaBarBorder = new Region();
+
+        staminaBarBorder.setTranslateX(50);
+        staminaBarBorder.setTranslateY(110);
+
+        staminaText = new Text();
+        staminaText.setFont(customFont);
+        staminaText.setFill(Color.WHITE);
+
+
+        stack.getChildren().addAll(staminaBar, staminaText);
+        stack.setTranslateX(52);
+        stack.setTranslateY(112);
+        
+        getChildren().addAll(staminaBarBorder, stack);
     }
     
     public void gunUI() {
@@ -189,7 +217,7 @@ public class MainUI extends Parent {
     public void updateHealthBar(int health) {
         healthBarBorder.setMinWidth(205);
         healthBarBorder.setMinHeight(33);
-        healthBarBorder.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 15px");
+        healthBarBorder.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: black;");
     
         double healthPercent = (double) health / maxHealth;
         healthBar.setMinWidth(200 * healthPercent);
@@ -202,12 +230,32 @@ public class MainUI extends Parent {
             healthColor = Color.YELLOW.interpolate(Color.RED, (1 - (healthPercent * 2)));
         }
     
-        healthBar.setStyle("-fx-background-color: " + toRgbString(healthColor) + "; -fx-background-radius: 15px");
+        healthBar.setStyle("-fx-background-color: " + toRgbString(healthColor) + ";");
     
         if (healthPercent <= 0) {
             healthBar.setStyle("-fx-background-color: transparent");
             healthText.setFill(Color.RED);
             healthText.setText("DEAD");
+        }
+    }
+    
+    public void updatestaminaBar(int stamina) {
+        staminaBarBorder.setMinWidth(205);
+        staminaBarBorder.setMinHeight(33);
+        staminaBarBorder.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: black;");
+    
+        double staminaPercent = (double) stamina / maxStamina;
+        staminaBar.setMinWidth(40* staminaPercent);
+    
+        if (staminaPercent <= 0) {
+            staminaBar.setStyle("-fx-background-color: transparent");
+            staminaText.setFill(Color.RED);
+            staminaText.setText("RECHARGING");
+        }
+        else {
+            staminaBar.setStyle("-fx-background-color: yellow");
+            staminaText.setFill(Color.WHITE);
+            staminaText.setText("");
         }
     }
     
