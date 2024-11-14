@@ -1,7 +1,5 @@
 package com.groupfour.Weapons;
 
-import java.util.Timer;
-
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -11,13 +9,13 @@ import com.groupfour.Components.WeaponComponent;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-public class M16A1 extends WeaponComponent {
+public class AK47 extends WeaponComponent {
 
 
-    public M16A1() {
-        super("M16A1", 180, 800, 30, 0.2, 10);
+    public AK47() {
+        super("AK47", 180, 800, 30, 0.35, 15);
     }
-         
+
     @Override
     public void fire(Entity player) {
         isFiring = true;
@@ -40,7 +38,7 @@ public class M16A1 extends WeaponComponent {
 
     private void shoot(Entity player) {
         //playing with sounds, dont mind it - padua
-        //if (isFiring) FXGL.play("m16a1.wav");
+        //if (isFiring) FXGL.play("AK47.wav");
         ammo--;
         System.out.println(name + " fired. Ammo left: " + ammo);
         Point2D position = player.getCenter();

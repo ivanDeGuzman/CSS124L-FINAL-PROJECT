@@ -269,7 +269,7 @@ public class App extends GameApplication {
                         waveCooldown = false;
                         isWaveSpawning = false;
 
-                    }, Duration.seconds(20));
+                    }, Duration.seconds(10));
                 } else {
                     wave++;
                     nextWave(wave, waveMultiplier);
