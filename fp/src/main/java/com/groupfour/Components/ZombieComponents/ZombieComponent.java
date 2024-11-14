@@ -1,7 +1,5 @@
 package com.groupfour.Components.ZombieComponents;
 
-import java.util.Random;
-
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -10,27 +8,25 @@ import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.AnimationComponents.ZombieAnimComp;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
+import javafx.util.Duration;
 
 public class ZombieComponent extends Component {
     private Entity target;
     private int health;
-    private int speed;
-    private String type;
     private ZombieAnimComp zac;
     private final double minRotate = 10.0;
     private final int maxHealth;
 
-    public ZombieComponent(int initialHealth, int speed, String type) {
+    public ZombieComponent(int initialHealth) {
         this.health = initialHealth;
         this.maxHealth = initialHealth;
-        this.speed = speed;
-        this.type = type;
     }
 
     @Override
     public void onAdded() {
         zac = new ZombieAnimComp();
         entity.addComponent(zac);
+        entity.setZIndex(10);
     }
 
     @Override
@@ -43,6 +39,7 @@ public class ZombieComponent extends Component {
             rotateTowardsTarget(targetPosition);
         }
     }
+
 
     public void findClosestPlayer() {
         var players = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER);
@@ -65,10 +62,10 @@ public class ZombieComponent extends Component {
     }
 
     public void moveTowardsTarget(Point2D targetPosition, double tpf) {
-        Point2D zombiePosition = entity.getPosition();
-        Point2D direction = targetPosition.subtract(zombiePosition).normalize();
+            Point2D zombiePosition = entity.getPosition();
+            Point2D direction = targetPosition.subtract(zombiePosition).normalize();
 
-        entity.translate(direction.multiply(speed * tpf));
+            entity.translate(direction.multiply(100 * tpf));
     }
 
     public void rotateTowardsTarget(Point2D targetPosition) {
@@ -101,23 +98,28 @@ public class ZombieComponent extends Component {
     public void onDeath() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
             player.getComponent(PlayerComponent.class).setCurrencyFromZombie(10);
-            Random rand = new Random();
-            if (rand.nextInt(100) < 30)
-                player.getComponent(PlayerComponent.class).setAmmoFromZombie(5);
+
+
+
+
+
+            if (entity.hasComponent(DoctorZombieComponent.class)) {
+                SpawnData data = new SpawnData(entity.getPosition());
+                FXGL.spawn("healingCircle", data.put("radius", 100.0));
+            }
+
+
+            if (entity.hasComponent(WelderZombieComponent.class)) {
+                SpawnData data = new SpawnData(entity.getPosition());
+                FXGL.spawn("explosion", data.put("radius", 50.0));
+            }
+
+
+            entity.removeFromWorld();
+
+
+
         });
-
-        entity.getComponentOptional(DoctorZombieComponent.class)
-                .ifPresent(component -> {
-                    SpawnData data = new SpawnData(entity.getPosition());
-                    FXGL.spawn("healingCircle", data.put("radius", 100.0));
-                });
-
-
-        entity.getComponentOptional(WelderZombieComponent.class)
-                .ifPresent(component -> {
-                    SpawnData data = new SpawnData(entity.getPosition());
-                    FXGL.spawn("explosion", data.put("radius", 50.0));
-                });
     }
 
     public void startAttacking() {
