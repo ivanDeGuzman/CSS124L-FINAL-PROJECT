@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.AnimationComponents.ZombieAnimComp;
+import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
 
@@ -19,6 +20,7 @@ public class ZombieComponent extends Component {
     private ZombieAnimComp zac;
     private final double minRotate = 10.0;
     private final int maxHealth;
+    private MainUI ui = new MainUI();
 
     public ZombieComponent(int initialHealth, int speed, String type) {
         this.health = initialHealth;
@@ -102,8 +104,10 @@ public class ZombieComponent extends Component {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
             player.getComponent(PlayerComponent.class).setCurrencyFromZombie(10);
             Random rand = new Random();
-            if (rand.nextInt(100) < 30)
-                player.getComponent(PlayerComponent.class).setAmmoFromZombie(5);
+            if (rand.nextInt(100) < 10) {
+                ui.addAmmo();
+                player.getComponent(PlayerComponent.class).setAmmoFromZombie(10);
+            }
         });
 
         entity.getComponentOptional(DoctorZombieComponent.class)

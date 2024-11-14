@@ -1,5 +1,7 @@
 package com.groupfour.Objects;
 
+import com.almasb.fxgl.audio.AudioPlayer;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.Components.PlayerComponent;
@@ -14,13 +16,20 @@ public class VendingMachine extends Component {
     private int rand;
     private boolean canInteract = true;
     private ObjectsUI ui = new ObjectsUI();
+    private Sound shootSound;
+    private AudioPlayer audioPlayer;
 
-    
+    public VendingMachine() {
+        this.shootSound = FXGL.getAssetLoader().loadSound("Soda_Can_Opening.mp3");
+        this.audioPlayer = FXGL.getAudioPlayer();
+    }
+
     public void interact() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
    
             if (canInteract) {
                 rand = (int) (Math.random() * range) + min;
+                audioPlayer.playSound(shootSound);
                 buffs(rand);
                 canInteract = false;
                 FXGL.runOnce(() -> canInteract = true, Duration.minutes(1));

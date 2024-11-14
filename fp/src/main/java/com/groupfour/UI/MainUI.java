@@ -150,6 +150,24 @@ public class MainUI extends Parent {
         getChildren().addAll(staminaBarBorder, stack);
     }
     
+    public void addAmmo() {
+        customFont = loadFont("PIXELADE.TTF", 25);
+        Text cantInteract = new Text("+10 ammo");
+        cantInteract.setFont(customFont);
+        cantInteract.setTranslateX(getAppWidth() * 0.67);
+        cantInteract.setTranslateY(getAppHeight() * 0.93);
+
+        FXGL.getGameScene().addUINode(cantInteract);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), cantInteract); 
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setDelay(Duration.seconds(2.5));
+        fadeTransition.setOnFinished(e -> FXGL.getGameScene().removeUINode(cantInteract));
+
+        fadeTransition.play();
+    }
+
     public void gunUI() {
 
         VBox weaponBox = new VBox();

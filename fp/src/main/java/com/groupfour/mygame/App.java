@@ -207,7 +207,7 @@ public class App extends GameApplication {
         } else if (player.distance(armory) < 70) {
             if (waveCooldown)
                 armory.getComponent(Armory.class).interact();
-            else System.out.println("Only accessible after wave"); //placeholder, should be a UI
+            else objectsUI.armoryNoInteract();
         }
     }
 
@@ -291,7 +291,7 @@ public class App extends GameApplication {
                 if (wave != 0) {
                     waveCooldown = true;
                     isWaveSpawning = true;
-                    System.out.println(waveCooldown);
+                    
                     
                     runOnce(() -> {
                         wave++;
@@ -380,7 +380,9 @@ public class App extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        System.out.println(players.size());
+
+        if (!player.isActive()) return;
+        
         timeSinceLastCollisionCheck += tpf;
         timeSinceLastUIUpdate += tpf;
 
@@ -395,7 +397,7 @@ public class App extends GameApplication {
             updateUI();
         }
 
-        if (!player.isActive()) return;
+        
         updateInteractableStatus();
 
         if (isNearInteractable) {

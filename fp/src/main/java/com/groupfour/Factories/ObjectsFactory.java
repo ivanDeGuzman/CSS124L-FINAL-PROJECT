@@ -42,7 +42,7 @@ public class ObjectsFactory implements EntityFactory {
         .collidable()
         .at(800, 400)
         .with(new NetworkComponent())
-        .with(new Microwave())
+        .with(new Microwave(new ObjectsUI()))
         .build();
     }
 

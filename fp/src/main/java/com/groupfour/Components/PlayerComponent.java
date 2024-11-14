@@ -34,7 +34,7 @@ public class PlayerComponent extends Component {
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
-    private double originalSpeed = 3;
+    private double originalSpeed = 1.5;
     private double speed = originalSpeed;
     private int currentWeaponIndex = 0;
     private double reducedDamage = 1.5;
@@ -54,7 +54,6 @@ public class PlayerComponent extends Component {
 
     public PlayerComponent() {
         weapons.add(new BerettaM9());
-        weapons.add(new M16A1());
     }
 
     @Override
@@ -73,10 +72,7 @@ public class PlayerComponent extends Component {
     }
 
     public void setAmmoFromZombie(int amount) {
-        getCurrentWeapon().ammo += amount;
-        if (getCurrentWeapon().ammo > getCurrentWeapon().maxAmmo) {
-            getCurrentWeapon().ammo = getCurrentWeapon().maxAmmo;
-        }
+        getCurrentWeapon().ammoCount += amount;
     }
 
     public void setCurrencyFromArmory(int currency) {

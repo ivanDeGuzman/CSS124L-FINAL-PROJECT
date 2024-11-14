@@ -24,7 +24,7 @@ public class SawedOff extends WeaponComponent {
 
     public SawedOff() {
         super("Sawed Off", 20, 2, 2, 1.0, 15);
-        this.shootSound = FXGL.getAssetLoader().loadSound("SawedOff_Shoot.mp3");
+        this.shootSound = FXGL.getAssetLoader().loadSound("Sawed_Off_Shotgun_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer();
     }
 

@@ -47,7 +47,7 @@ public class ObjectsUI extends Parent {
         Text cantInteract = new Text("Vending machine on cooldown. Please wait 1 minute.");
         cantInteract.setFont(customFont);
         cantInteract.setTranslateX(getAppWidth() * 0.2);
-        cantInteract.setTranslateY(getAppHeight() * 0.75);
+        cantInteract.setTranslateY(getAppHeight() * 0.85);
 
         FXGL.getGameScene().addUINode(cantInteract);
 
@@ -59,6 +59,62 @@ public class ObjectsUI extends Parent {
 
         fadeTransition.play();
         
+    }
+
+    public void armoryNoInteract() {
+        customFont = loadFont("PIXELADE.TTF", 25);
+        Text cantInteract = new Text("Only accessible after wave finishes.");
+        cantInteract.setFont(customFont);
+        cantInteract.setTranslateX(getAppWidth() * 0.2);
+        cantInteract.setTranslateY(getAppHeight() * 0.85);
+
+        FXGL.getGameScene().addUINode(cantInteract);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), cantInteract); 
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setDelay(Duration.seconds(2.5));
+        fadeTransition.setOnFinished(e -> FXGL.getGameScene().removeUINode(cantInteract));
+
+        fadeTransition.play();
+        
+    }
+
+    public void mcNoInteract() {
+        customFont = loadFont("PIXELADE.TTF", 25);
+        Text cantInteract = new Text("Microwave on cooldown. Please wait 1 minute.");
+        cantInteract.setFont(customFont);
+        cantInteract.setTranslateX(getAppWidth() * 0.2);
+        cantInteract.setTranslateY(getAppHeight() * 0.85);
+
+        FXGL.getGameScene().addUINode(cantInteract);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), cantInteract); 
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setDelay(Duration.seconds(2.5));
+        fadeTransition.setOnFinished(e -> FXGL.getGameScene().removeUINode(cantInteract));
+
+        fadeTransition.play();
+    }
+    public void mcInteract() {
+        customFont = loadFont("PIXELADE.TTF", 40);
+        Text cantInteract = new Text("+20 HEALTH");
+        cantInteract.setFont(customFont);
+        cantInteract.setFill(Color.DARKGREEN);
+        cantInteract.setTranslateX(getAppWidth() * 0.33);
+        cantInteract.setTranslateY(getAppHeight() * 0.15);
+
+        FXGL.getGameScene().addUINode(cantInteract);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), cantInteract); 
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.setDelay(Duration.seconds(2.5));
+        fadeTransition.setOnFinished(e -> FXGL.getGameScene().removeUINode(cantInteract));
+
+        fadeTransition.play();
+
     }
 
     public void showCanInteract() {
@@ -129,7 +185,7 @@ public class ObjectsUI extends Parent {
         armoryMenu = new VBox();
         armoryMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 10; -fx-border-color: black;");
         armoryMenu.setTranslateX(300);
-        armoryMenu.setTranslateY(200);
+        armoryMenu.setTranslateY(100);
         armoryMenu.setMinSize(200, 200);
         armoryMenu.setAlignment(Pos.CENTER);
 
