@@ -14,11 +14,16 @@ import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
+import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.cutscene.Cutscene;
 import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
+import com.groupfour.Collisions.BulletArmoryHandler;
+import com.groupfour.Collisions.BulletMCHandler;
+import com.groupfour.Collisions.BulletObjectHandler;
 import com.groupfour.Collisions.BulletWallHandler;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.EnemyProjectilePlayerHandler;
@@ -48,9 +53,15 @@ import java.util.List;
 import com.almasb.fxgl.app.MenuItem;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import javafx.scene.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 public class App extends GameApplication {
@@ -66,7 +77,7 @@ public class App extends GameApplication {
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
-    private double waveMultiplier=1; //10.5 is real, nerfed to test
+    private double waveMultiplier=10.5; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private MultiplayerStart multiplayerStart;
@@ -76,9 +87,8 @@ public class App extends GameApplication {
     private double timeSinceLastUIUpdate =0;
     private double uiUpdateInterval = 0.2;
     private double collisionCheckInterval = 1.5;
-    private Server<Bundle> server;
-    private Client<Bundle> client;
-
+    private PlayerComponent playerComponent;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -89,7 +99,7 @@ public class App extends GameApplication {
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setSoundMenuPress("titleSelect.mp3");
+        //settings.setIntroEnabled(true);
         //implement later
         // settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         // settings.getCredits().addAll(Arrays.asList(
@@ -177,7 +187,17 @@ public class App extends GameApplication {
                 interactWithObject();
             }
         }, KeyCode.F);
-
+        getInput().addAction(new UserAction("Sprint") {
+            @Override
+            protected void onAction() {
+                playerComponent.setSprinting(true);
+            }
+        
+            @Override
+            protected void onActionEnd() {
+                playerComponent.setSprinting(false);
+            }
+        }, KeyCode.SPACE);
     }
 
     private void interactWithObject() { 
@@ -218,35 +238,37 @@ public class App extends GameApplication {
     @Override
     public void initPhysics() {
         physics = getPhysicsWorld();
-            if (isServer) {
-                physics.addCollisionHandler(new BulletZombieHandler());
-                physics.addCollisionHandler(new BulletWallHandler());
-                physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
-                physics.addCollisionHandler(new ZombiePlayerHandler());
-                getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
-                
-            } else {
-                physics.addCollisionHandler(new BulletZombieHandler());
-                physics.addCollisionHandler(new BulletWallHandler());
-                physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
-                physics.addCollisionHandler(new ZombiePlayerHandler());
-                
-            }
-            FXGL.run(() -> {
-                if(player.isActive()){
-                    BoundsComponent.ObjectEntityCollision(player);
+        
+        physics.addCollisionHandler(new BulletZombieHandler());
+        physics.addCollisionHandler(new BulletWallHandler());
+        physics.addCollisionHandler(new BulletObjectHandler());
+        physics.addCollisionHandler(new BulletMCHandler());
+        physics.addCollisionHandler(new BulletArmoryHandler());
+        physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
+        physics.addCollisionHandler(new ZombiePlayerHandler());
+    
+        FXGL.run(() -> {
+            if (player.isActive()) {
+                BoundsComponent.ObjectEntityCollision(player);
+                List<Entity> zombies = FXGL.getGameWorld().getEntitiesByType(EntityType.ZOMBIE);
+                for (Entity zombie : zombies) {
                     BoundsComponent.ZombieObjectCollision(zombie);
                 }
-            }, Duration.seconds(0.017));
+            }
+        }, Duration.seconds(0.017));
     }
+    
 
     public void startGame1P() {
         ui.stopTitleMusic();
-        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+        
+        player = spawn("player", new Point2D(1100, 250));
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
         armory = spawn("armory");
-        player.getComponent(PlayerComponent.class).setUpPlayer();
+
+        playerComponent = player.getComponent(PlayerComponent.class);
+        playerComponent.setUpPlayer();
         wave=0;
 
         waveAndDeathManager();
@@ -255,6 +277,12 @@ public class App extends GameApplication {
 
         getSceneService().popSubScene();
         getSceneService().popSubScene();
+
+        FXGL.runOnce(() -> {
+            var lines = getAssetLoader().loadText("startGame.txt");
+            var startCutscene = new Cutscene(lines);
+            getCutsceneService().startCutscene(startCutscene);
+        }, Duration.seconds(.5));
 
     }
 
@@ -398,9 +426,10 @@ public class App extends GameApplication {
     }
 
     private void updateUI() {
-        //ui.setupMinimap(getGameWorld());
-        ui.updateGold(player.getComponent(PlayerComponent.class).getCurrency());
-        ui.updateHealthBar(player.getComponent(PlayerComponent.class).getHealth());
+        // ui.setupMinimap(getGameWorld());
+        ui.updatestaminaBar(playerComponent.getStamina());
+        ui.updateGold(playerComponent.getCurrency());
+        ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
             player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmo(),
             player.getComponent(PlayerComponent.class).getCurrentWeapon().getAmmoCount(),
@@ -419,7 +448,6 @@ public class App extends GameApplication {
             });
         });    
     }
-
 
     public static void main(String[] args) {
         launch(args);

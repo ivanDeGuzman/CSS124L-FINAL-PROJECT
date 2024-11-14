@@ -2,6 +2,8 @@ package com.groupfour.Weapons;
 
 import static com.almasb.fxgl.dsl.FXGL.run;
 
+import com.almasb.fxgl.audio.AudioPlayer;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -13,8 +15,15 @@ import javafx.util.Duration;
 
 public class FAMAS extends WeaponComponent {
 
+    private Sound shootSound;
+    private AudioPlayer audioPlayer;
+
+
+
     public FAMAS() {
-        super("FAMAS", 160, 30, 30, 0.8, 20); 
+        super("FAMAS", 160, 30, 30, 0.8, 20);
+        this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
+        this.audioPlayer = FXGL.getAudioPlayer(); 
     }
     private boolean firingFlagger=false;
 
@@ -27,7 +36,8 @@ public class FAMAS extends WeaponComponent {
             for (int i = 0; i < 3; i++) {
                 FXGL.runOnce(() -> {
                     ammo--;
-                    System.out.println(name + " fired. Ammo left: " + ammo);
+                    audioPlayer.playSound(shootSound);
+                    
                     Point2D position = player.getCenter();
                     Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
                     spawnBullet(position, direction);

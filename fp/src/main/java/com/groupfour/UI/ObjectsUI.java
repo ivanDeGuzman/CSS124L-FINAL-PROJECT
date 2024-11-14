@@ -35,6 +35,7 @@ public class ObjectsUI extends Parent {
     private String cansImageLink;
     private PlayerComponent pc;
     public Text canInteractNode;
+    private boolean isBought = false;
 
     public Font loadFont(String fontPath, int size) {
         FontFactory fontFac = getAssetLoader().load(AssetType.FONT, fontPath);
@@ -179,7 +180,13 @@ public class ObjectsUI extends Parent {
             weaponBox.getChildren().addAll(weaponName, weaponImage, weaponPrice);
 //            weaponBox.getChildren().addAll(weaponImage, weaponName, buyButton);
             weaponBox.setOnMouseClicked(e -> {
-                purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+                if (!isBought) {
+                    purchaseWeapon(FXGL.getGameWorld().getSingleton(EntityType.PLAYER), weaponNames[index]);
+                    isBought = true;
+                } else {
+                    System.out.println("YOU ALREADY BOUGHT THIS WEAPON");
+                }
+                
             });
 
             weaponBox.setOnMouseEntered(e -> {

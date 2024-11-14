@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class PlayerComponent extends Component {
     private boolean isDead = false;
     private int health = 100;
+    private int stamina = 100;
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
@@ -40,11 +41,18 @@ public class PlayerComponent extends Component {
     private Input clientInputs = new Input();
     private double angle;
     private Point2D lastMousePosition;
+    private boolean isSprinting = false;
+    private double STAMINA_DECAY_RATE = 5;
+    private double STAMINA_RECHARGE_RATE = 15;
+    private double STAMINA_RECHARGE_DELAY = .5;
+    private double staminaRechargeTimer = 0;
+
 
     private String name="Player 1";
 
     public PlayerComponent() {
         weapons.add(new BerettaM9());
+        weapons.add(new M16A1());
     }
 
     @Override
@@ -52,6 +60,9 @@ public class PlayerComponent extends Component {
         ac = new PlayerAnimComp();
         entity.addComponent(ac);
         lastMousePosition = getInput().getMousePositionWorld();
+        run(() -> {
+            updateStamina();
+        }, Duration.seconds(0.1));
         
     }
 
@@ -59,8 +70,19 @@ public class PlayerComponent extends Component {
         this.currency += amount; 
     }
 
+    public void setAmmoFromZombie(int amount) {
+        getCurrentWeapon().ammo += amount;
+        if (getCurrentWeapon().ammo > getCurrentWeapon().maxAmmo) {
+            getCurrentWeapon().ammo = getCurrentWeapon().maxAmmo;
+        }
+    }
+
     public void setCurrencyFromArmory(int currency) {
         this.currency = currency;
+    }
+
+    public void setSprinting(boolean sprinting) {
+        this.isSprinting = sprinting;
     }
 
     public int getCurrency() {
@@ -69,6 +91,10 @@ public class PlayerComponent extends Component {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getStamina() {
+        return stamina;
     }
 
     public void setInput(Input input){
@@ -162,14 +188,37 @@ public class PlayerComponent extends Component {
         viewport.setZoom(1.5);
     }
 
+    public void updateStamina() {
+        double MAX_STAMINA = 100;
 
-    @Override
-    public void onUpdate(double tpf) {
-        if (clientInputs != null) {
-            mouseUpdate();
+        if (isSprinting) {
+            if (stamina > 0) {
+                stamina -= STAMINA_DECAY_RATE;
+            } else {
+                isSprinting = false;
+            }
+        } else {
+            if (stamina < MAX_STAMINA || stamina == 0) {
+                staminaRechargeTimer += 0.1;
+                if (staminaRechargeTimer >= STAMINA_RECHARGE_DELAY) {
+                    stamina += STAMINA_RECHARGE_RATE;
+                    staminaRechargeTimer = 0;
+                }
+            }
         }
     }
 
+
+    @Override
+    public void onUpdate(double tpf) {
+
+        int MAX_STAMINA = 100;
+        if (clientInputs != null) {
+            mouseUpdate();
+        }
+
+    }
+    
     //cringe ass mouse
     private void mouseUpdate() {
         Point2D playerPosition = entity.getCenter();
@@ -192,6 +241,11 @@ public class PlayerComponent extends Component {
     public void moveX(boolean isLeft) {
 
         double tempSpeed = speed;
+        
+        if (isSprinting) {
+            tempSpeed *= 2;
+        }
+
         if (!isDead()) {
             if (isShooting()) {
                 tempSpeed /= 2;
@@ -206,6 +260,11 @@ public class PlayerComponent extends Component {
 
     public void moveY(boolean isDown) {
         double tempSpeed = speed;
+
+        if (isSprinting) {
+            tempSpeed *= 2;
+        }
+
         if (!isDead()) {
             if (isShooting()) {
                 tempSpeed /= 2;
@@ -218,71 +277,6 @@ public class PlayerComponent extends Component {
         }
     }
 
-    public void initClientInput(){
-
-        clientInputs.addAction(new UserAction("Move Upwards"){
-            protected void onAction(){
-                moveY(false);
-            }
-            protected void onActionEnd() {
-                stopMoving();
-            }
-        },KeyCode.W);
-
-        clientInputs.addAction(new UserAction("Move Down"){
-            protected void onAction(){
-                moveY(true);
-            }
-            protected void onActionEnd() {
-                stopMoving();
-            }
-        },KeyCode.S);
-
-        clientInputs.addAction(new UserAction("Move Left"){
-            protected void onAction(){
-                moveX(true);   
-            }
-            protected void onActionEnd() {
-                stopMoving();
-            }
-        },KeyCode.A);
-
-        clientInputs.addAction(new UserAction("Move Right"){
-            protected void onAction(){
-                moveX(false);
-            }
-            protected void onActionEnd() {
-                stopMoving();
-            }
-        },KeyCode.D);
-
-        clientInputs.addAction(new UserAction("Reload"){
-            protected void onActionBegin(){
-                getCurrentWeapon().reload();
-            }
-        },KeyCode.R);
-
-        clientInputs.addAction(new UserAction("Shoot") {
-            protected void onActionBegin() {
-               getCurrentWeapon().fire(entity);
-               setShooting(true);
-            }
-            protected void onActionEnd() {
-               setShooting(false);
-               getCurrentWeapon().stopFiring();
-            }
-        }, MouseButton.PRIMARY);
-        clientInputs.addAction(new UserAction("Switch Weapons") {
-            protected void onActionBegin() {
-                switchWeapon();
-            }
-        }, KeyCode.Q);
-        // clientInputs.addAction(new UserAction("Interact") {
-        //     protected void onActionBegin() {
-        //         interactWithObject();
-        //     }
-        // }, KeyCode.F);
-    }
 
     public String getName(){
     return name;

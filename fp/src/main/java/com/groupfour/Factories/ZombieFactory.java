@@ -19,7 +19,6 @@ import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.pathfinding.CellMoveComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
-import com.almasb.fxgl.texture.Texture;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.ZombieComponents.*;
 import com.groupfour.mygame.EntityTypes.EntityType;
@@ -32,14 +31,14 @@ import javafx.util.Duration;
 
 public class ZombieFactory implements EntityFactory {
 
-    private static final int SPAWN_DISTANCE = 500;
+    private static final int SPAWN_DISTANCE = 1000;
 
 
     private static final Point2D[] spawnPoints = new Point2D[] {
             new Point2D(SPAWN_DISTANCE, SPAWN_DISTANCE),
-            new Point2D(getAppWidth() - SPAWN_DISTANCE, SPAWN_DISTANCE),
-            new Point2D(getAppWidth() - SPAWN_DISTANCE, getAppHeight() - SPAWN_DISTANCE),
-            new Point2D(SPAWN_DISTANCE, getAppHeight() - SPAWN_DISTANCE)
+            new Point2D(getAppWidth() - 500 + SPAWN_DISTANCE, SPAWN_DISTANCE),
+            new Point2D(getAppWidth() - 500 + SPAWN_DISTANCE, getAppHeight() - 500 + SPAWN_DISTANCE),
+            new Point2D(SPAWN_DISTANCE, getAppHeight() - 500 + SPAWN_DISTANCE)
     };
 
 
@@ -50,7 +49,7 @@ public class ZombieFactory implements EntityFactory {
         int maxAttempts = 1000;
 
         while (attempts < maxAttempts) {
-            Point2D potentialSpawnPoint = spawnPoints[FXGLMath.random(0, spawnPoints.length - 1)];
+            Point2D potentialSpawnPoint = spawnPoints[FXGLMath.random(1, spawnPoints.length - 1)];
             boolean isSafe = players.stream().allMatch(player -> 
                 potentialSpawnPoint.distance(player.getPosition()) >= SPAWN_DISTANCE
             );

@@ -3,6 +3,7 @@ package com.groupfour.Collisions;
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.audio.Sound;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.ZombieComponents.GuardZombieComponent;
@@ -32,6 +33,8 @@ public class ZombiePlayerHandler extends CollisionHandler {
         zombieComponent.startAttacking();
         if (canAttack) {
             handleCollision(zombie, player);
+            Sound zombieAttack = FXGL.getAssetLoader().loadSound("ZombieAttack.mp3");
+            FXGL.getAudioPlayer().playSound(zombieAttack);
         }
     }
 
@@ -71,7 +74,7 @@ public class ZombiePlayerHandler extends CollisionHandler {
         int baseDamage;
         if (zombie.hasComponent(GuardZombieComponent.class)) { baseDamage = 10; } else baseDamage = 10;
         double finalDamage = (baseDamage * reducedDamage);
-        getGameScene().getViewport().shake(15, 5);
+        getGameScene().getViewport().shake(10, 3);
         player.getComponent(PlayerComponent.class).takeDamage(finalDamage);
 
         new MainUI().flashTintRed();

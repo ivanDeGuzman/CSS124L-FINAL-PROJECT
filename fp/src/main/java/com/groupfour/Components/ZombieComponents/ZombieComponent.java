@@ -1,5 +1,7 @@
 package com.groupfour.Components.ZombieComponents;
 
+import java.util.Random;
+
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -99,6 +101,9 @@ public class ZombieComponent extends Component {
     public void onDeath() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
             player.getComponent(PlayerComponent.class).setCurrencyFromZombie(10);
+            Random rand = new Random();
+            if (rand.nextInt(100) < 30)
+                player.getComponent(PlayerComponent.class).setAmmoFromZombie(5);
         });
 
         entity.getComponentOptional(DoctorZombieComponent.class)
