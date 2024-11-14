@@ -79,13 +79,12 @@ public class App extends GameApplication {
     private double waveMultiplier=1; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
-    private MultiplayerStart multiplayerStart;
     private boolean isServerStarted = false, isNearInteractable = false;
     private ObjectsUI objectsUI;
     private double timeSinceLastCollisionCheck = 0;
     private double timeSinceLastUIUpdate =0;
     private double uiUpdateInterval = 0.2;
-    private double collisionCheckInterval = 0.1;
+    private double collisionCheckInterval = 1;
     private Server<Bundle> server;
     private Client<Bundle> client;
     private MediaPlayer mediaPlayer;
