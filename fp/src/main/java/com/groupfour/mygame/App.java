@@ -19,6 +19,7 @@ import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
+import com.groupfour.Collisions.BulletWallHandler;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.EnemyProjectilePlayerHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
@@ -67,7 +68,7 @@ public class App extends GameApplication {
     private int wave;
     private Entity newPlayer;
     private PlayerComponent playerComponent;
-    private double waveMultiplier=10.5;
+    private double waveMultiplier=1; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private MultiplayerStart multiplayerStart;
@@ -197,12 +198,11 @@ public class App extends GameApplication {
 
     @Override
     public void initGame() {
-        //getAudioPlayer().stopAllMusic();
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
         zombiePlayerHandler = new ZombiePlayerHandler();
-        setLevelFromMap("Lobby.tmx");
+        setLevelFromMap("Warehouse.tmx");
     }
 
     @Override
@@ -222,12 +222,14 @@ public class App extends GameApplication {
         physics = getPhysicsWorld();
             if (isServer) {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
@@ -240,6 +242,7 @@ public class App extends GameApplication {
     }
 
     public void startGame1P() {
+        ui.stopTitleMusic();
         player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
@@ -292,22 +295,59 @@ public class App extends GameApplication {
 
     private void nextWave(int wave, double waveMultiplier){
         int totalZombies = (int)(wave * waveMultiplier);
+        int i;
         Duration interval = Duration.seconds(1);
-        for(int i = 0; i < totalZombies ; i++) {
+
+        for(i = 0; i < totalZombies ; i++) {
             Duration delay = interval.multiply(i);
             runOnce(() -> {
-                System.out.println("zombie spawn");
                 spawn("zombie");
             }, delay);
-            // zombie = spawn("spitter");
-            // zombie.getViewComponent(); 
-            // zombie.getComponent(ZombieComponent.class).findClosestPlayer();
+        }
+
+        for(int guardWave=wave;guardWave>6;guardWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("guard");
+            }, delay);
+            i++;
+        }
+
+        for(int spitterWave=wave;spitterWave>4;spitterWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("spitter");
+            }, delay);
+            i++;
+        }
+
+        for(int doctorWave=wave;doctorWave>8;doctorWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("doctor");
+            }, delay);
+            i++;
+        }
+
+        for(int welderWave=wave;welderWave>2;welderWave/=2){
+            i = 0;
+            Duration delay = interval.multiply(i);
+            runOnce(() -> {
+                spawn("welder");
+            }, delay);
+            i++;
         }
     }
+           
 
     public void startMultiplayer() {
+        
         getDialogService().showConfirmationBox("Are you the host?", a -> {
             isServer = a;
+            ui.stopTitleMusic();
     
             if (isServer) {
                 server = getNetService().newTCPServer(55555);

@@ -171,7 +171,7 @@ public class MainUI extends Parent {
                 gunLink = "/assets/textures/Weapons/Idle/FAMAS_UI.png";
                 break;
             case "m16a1":
-                gunLink = "/assets/textures/Weapons/Idle/M16_Crop.png";
+                gunLink = "/assets/textures/Weapons/Idle/M16A1_UI.png";
                 break;
             default:
                 return;
@@ -235,14 +235,12 @@ public class MainUI extends Parent {
         getChildren().remove(waitLayout); 
     }
 
+    public void setupMinimap(GameWorld gameWorld) {
+         var minimap = new MinimapView(FXGL.getGameWorld(), 800, 800, 200, 100);
+         minimap.setEntityColor(Color.GREEN);
     
-
-    // public void setupMinimap(GameWorld gameWorld) {
-    //     var minimap = new MinimapView(FXGL.getGameWorld(), 800, 800, 200, 100);
-    //     minimap.setEntityColor(Color.GREEN);
-    
-    //     FXGL.getGameScene().addUINode(minimap);
-    // }
+         FXGL.getGameScene().addUINode(minimap);
+    }
     
     public void waveUI() {
         waveText = new Text();
@@ -267,5 +265,9 @@ public class MainUI extends Parent {
         Music bgm = getAssetLoader().loadMusic("titleBGM.mp3");
         FXGL.getAudioPlayer().loopMusic(bgm);
     }
-    
+
+    public void stopTitleMusic() {
+        // System.out.println("stopTitleMusic called " + stopMusicCallCount + " times.");
+        FXGL.getAudioPlayer().stopAllMusic();
+    }
 }

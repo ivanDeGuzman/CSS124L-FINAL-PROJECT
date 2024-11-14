@@ -69,7 +69,7 @@ public class SpawnFactory implements EntityFactory {
                 .at(data.getX(), data.getY())
                 .viewWithBBox(new Circle(data.get("radius"), Color.RED))
                 .with(new ExplosionComponent(data.get("radius"), 100))
-                .with(new ExpireCleanComponent(Duration.seconds(2)))
+                .with(new ExpireCleanComponent(Duration.seconds(0.5)))
                 .build();
     }
 
