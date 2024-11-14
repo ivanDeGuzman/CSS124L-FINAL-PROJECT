@@ -14,11 +14,14 @@ import com.almasb.fxgl.entity.components.IDComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.PhysicsWorld;
+import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.cutscene.Cutscene;
 import com.almasb.fxgl.multiplayer.*;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.net.Server;
+import com.groupfour.Collisions.BulletWallHandler;
 import com.groupfour.Collisions.BulletZombieHandler;
 import com.groupfour.Collisions.EnemyProjectilePlayerHandler;
 import com.groupfour.Collisions.ZombiePlayerHandler;
@@ -47,9 +50,15 @@ import java.util.List;
 import com.almasb.fxgl.app.MenuItem;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import javafx.scene.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 public class App extends GameApplication {
@@ -79,7 +88,7 @@ public class App extends GameApplication {
     private double collisionCheckInterval = 0.1;
     private Server<Bundle> server;
     private Client<Bundle> client;
-
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -90,7 +99,7 @@ public class App extends GameApplication {
         settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        settings.setSoundMenuPress("titleSelect.mp3");
+        settings.setIntroEnabled(true);
         //implement later
         // settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         // settings.getCredits().addAll(Arrays.asList(
@@ -180,6 +189,17 @@ public class App extends GameApplication {
                 interactWithObject();
             }
         }, KeyCode.F);
+        getInput().addAction(new UserAction("Sprint") {
+            @Override
+            protected void onAction() {
+                playerComponent.setSprinting(true);
+            }
+        
+            @Override
+            protected void onActionEnd() {
+                playerComponent.setSprinting(false);
+            }
+        }, KeyCode.SPACE);
 
     }
 
@@ -197,12 +217,12 @@ public class App extends GameApplication {
 
     @Override
     public void initGame() {
-        //getAudioPlayer().stopAllMusic();
+
         getGameWorld().addEntityFactory(new SpawnFactory());
         getGameWorld().addEntityFactory(new ZombieFactory());
         getGameWorld().addEntityFactory(new ObjectsFactory());
         zombiePlayerHandler = new ZombiePlayerHandler();
-        setLevelFromMap("Lobby.tmx");
+        setLevelFromMap("Warehouse.tmx");
     }
 
     @Override
@@ -222,12 +242,14 @@ public class App extends GameApplication {
         physics = getPhysicsWorld();
             if (isServer) {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
             } else {
                 physics.addCollisionHandler(new BulletZombieHandler());
+                physics.addCollisionHandler(new BulletWallHandler());
                 physics.addCollisionHandler(new EnemyProjectilePlayerHandler());
                 physics.addCollisionHandler(new ZombiePlayerHandler());
                 FXGL.run(() -> checkCollisions(), Duration.seconds(1));
@@ -239,7 +261,9 @@ public class App extends GameApplication {
     }
 
     public void startGame1P() {
-        player = spawn("player", new Point2D(getAppWidth() / 2, getAppHeight() / 2));
+        ui.stopTitleMusic();
+        
+        player = spawn("player", new Point2D(1100, 250));
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
         armory = spawn("armory");
@@ -252,6 +276,12 @@ public class App extends GameApplication {
 
         getSceneService().popSubScene();
         getSceneService().popSubScene();
+
+        FXGL.runOnce(() -> {
+            var lines = getAssetLoader().loadText("startGame.txt");
+            var startCutscene = new Cutscene(lines);
+            getCutsceneService().startCutscene(startCutscene);
+        }, Duration.seconds(.5));
 
     }
 
@@ -340,10 +370,11 @@ public class App extends GameApplication {
         }
     }
            
-
     public void startMultiplayer() {
+        
         getDialogService().showConfirmationBox("Are you the host?", a -> {
             isServer = a;
+            ui.stopTitleMusic();
     
             if (isServer) {
                 server = getNetService().newTCPServer(55555);
@@ -375,7 +406,6 @@ public class App extends GameApplication {
             }
         });
     }
-    
 
     public GameWorld onServer() {
         isServerStarted = true;
@@ -405,7 +435,6 @@ public class App extends GameApplication {
         getSceneService().popSubScene();
         getSceneService().popSubScene();
     }
-
 
     //moved it here so each player's cam is individualized instead of being cast to entity
     private void setUpPlayer() {
@@ -474,6 +503,7 @@ public class App extends GameApplication {
 
     private void updateUI() {
         // ui.setupMinimap(getGameWorld());
+        ui.updatestaminaBar(playerComponent.getStamina());
         ui.updateGold(playerComponent.getCurrency());
         ui.updateHealthBar(playerComponent.getHealth());
         ui.updateGunUI(
@@ -494,7 +524,6 @@ public class App extends GameApplication {
             });
         });    
     }
-
 
     public static void main(String[] args) {
         launch(args);

@@ -1,0 +1,6 @@
+1.name = John Doe
+1.image = helmet.png
+
+1: What in the hell is happening, that was far too close.
+1: Guess I just gotta wait for help to come, if it even will
+1: For now, let's try and survive
