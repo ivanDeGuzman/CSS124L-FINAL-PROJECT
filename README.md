@@ -1,4 +1,4 @@
-# Project Title
+# A Top-Down Zombie Shooter Game
 
 ## Contributing Members
 + [Azyur-i](https://github.com/Azyur-i) | Fernando, Heughric
