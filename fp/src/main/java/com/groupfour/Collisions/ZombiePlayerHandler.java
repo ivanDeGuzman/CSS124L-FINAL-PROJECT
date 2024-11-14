@@ -32,6 +32,8 @@ public class ZombiePlayerHandler extends CollisionHandler {
         zombieComponent.startAttacking();
         if (canAttack) {
             handleCollision(zombie, player);
+            Sound zombieAttack = FXGL.getAssetLoader().loadSound("ZombieAttack.mp3");
+            FXGL.getAudioPlayer().playSound(zombieAttack);
         }
     }
 
