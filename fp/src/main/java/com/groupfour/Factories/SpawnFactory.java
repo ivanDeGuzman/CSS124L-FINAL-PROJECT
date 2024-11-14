@@ -1,8 +1,6 @@
 package com.groupfour.Factories;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
 
 import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.dsl.components.ExpireCleanComponent;
@@ -16,9 +14,8 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.groupfour.Components.BulletComponent;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.Components.WeaponComponent;
-import com.groupfour.Components.AnimationComponents.PlayerAnimComp;
 import com.groupfour.Components.ZombieComponents.ExplosionComponent;
+import com.groupfour.Components.ZombieComponents.HealingCircleComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.geometry.Point2D;
@@ -73,7 +70,19 @@ public class SpawnFactory implements EntityFactory {
                 .at(data.getX(), data.getY())
                 .viewWithBBox(new Circle(data.get("radius"), Color.RED))
                 .with(new ExplosionComponent(data.get("radius"), 100))
-                .with(new ExpireCleanComponent(Duration.seconds(0.5)))
+                .with(new ExpireCleanComponent(Duration.seconds(2)))
+                .build();
+    }
+
+    @Spawns("healingCircle")
+    public Entity newHealingCircle(SpawnData data) {
+        var expireClean = new ExpireCleanComponent(Duration.seconds(10)).animateOpacity();
+        return  entityBuilder(data)
+                .type(EntityType.ENEMY_PROJECTILE)
+                .at(data.getX(), data.getY())
+                .viewWithBBox(new Circle(150, Color.rgb(0, 255, 0, 0.3)))
+                .with(new HealingCircleComponent(data.get("radius"), 0.20, Duration.seconds(1)))
+                .with(expireClean)
                 .build();
     }
 
