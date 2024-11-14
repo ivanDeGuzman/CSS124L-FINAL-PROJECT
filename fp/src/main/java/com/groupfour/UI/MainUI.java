@@ -201,6 +201,12 @@ public class MainUI extends Parent {
             case "m16a1":
                 gunLink = "/assets/textures/Weapons/Idle/M16A1_UI.png";
                 break;
+            case "sawed off":
+                gunLink = "/assets/textures/Weapons/Idle/Sawed_Off_Shotgun.png";
+                break;
+            case "ak47":
+                gunLink = "/assets/textures/Weapons/Idle/AK47_UI.png";
+                break;
             default:
                 return;
         }
