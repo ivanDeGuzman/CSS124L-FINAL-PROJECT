@@ -13,15 +13,14 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 import com.almasb.fxgl.audio.AudioPlayer;
-import com.almasb.fxgl.audio.Sound;
 
 public class BerettaM9 extends WeaponComponent {
 
     private Sound shootSound;
     private AudioPlayer audioPlayer;
 
-    public BerettaM9(boolean isServer, Connection<Bundle> connection) {
-        super("Beretta M9", 100, 15, 15, 1.0, 15, isServer, connection);
+    public BerettaM9() {
+        super("Beretta M9", 100, 15, 15, 1.0, 15);
         this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer();
     }

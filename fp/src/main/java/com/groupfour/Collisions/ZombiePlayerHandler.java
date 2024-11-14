@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.ZombieComponents.GuardZombieComponent;
 import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
@@ -67,12 +68,12 @@ public class ZombiePlayerHandler extends CollisionHandler {
 
     private void inflictDamage(Entity zombie, Entity player) {
         double reducedDamage = player.getComponent(PlayerComponent.class).getReducedDamage();
-        int baseDamage = 10;
+        int baseDamage;
+        if (zombie.hasComponent(GuardZombieComponent.class)) { baseDamage = 40; } else baseDamage = 10;
         double finalDamage = (baseDamage * reducedDamage);
         getGameScene().getViewport().shake(15, 5);
         player.getComponent(PlayerComponent.class).takeDamage(finalDamage);
 
-        System.out.println("Inflicted Damage: " + finalDamage + " (Reduced Damage Multiplier: " + reducedDamage + ")");
         new MainUI().flashTintRed();
 
         canAttack = false;

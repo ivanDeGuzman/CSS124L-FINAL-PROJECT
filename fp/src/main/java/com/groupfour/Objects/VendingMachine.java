@@ -3,7 +3,7 @@ package com.groupfour.Objects;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.groupfour.Components.PlayerComponent;
-import com.groupfour.UI.MainUI;
+import com.groupfour.UI.ObjectsUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.util.Duration;
 
@@ -13,7 +13,7 @@ public class VendingMachine extends Component {
     private int range = max - min + 1;
     private int rand;
     private boolean canInteract = true;
-    private MainUI ui = new MainUI();
+    private ObjectsUI ui = new ObjectsUI();
 
     
     public void interact() {
@@ -25,13 +25,13 @@ public class VendingMachine extends Component {
                 canInteract = false;
                 FXGL.runOnce(() -> canInteract = true, Duration.minutes(1));
             } else {
-                System.out.println("Vending machine is cooling down. Please wait.");
+                ui.vmNoInteract();
             }
         });
     }
 
     public void buffs(int rand) {
-        switch (2) {
+        switch (rand) {
             case 1:
                 // Energy Drink - increase speed of player for 1 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
@@ -52,14 +52,14 @@ public class VendingMachine extends Component {
                     player.getComponent(PlayerComponent.class).increaseWeaponDamage(2, Duration.minutes(1));
                     player.getComponent(PlayerComponent.class).setHealth(1);
                 });
-                System.out.println("Sludge");
+                ui.ammoCansUI("tsludge");
                 break;
             case 4:
                 //Ice Cold - increase player def 25% for 1 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                     player.getComponent(PlayerComponent.class).setReducedDamage(0.75, Duration.minutes(1));
                 });
-                System.out.println("Ice Cold");
+                ui.ammoCansUI("icecold");
                 break;
             case 5:
                 //Atomic Soda - boost all stats by 15% for 2 min
@@ -68,16 +68,17 @@ public class VendingMachine extends Component {
                     player.getComponent(PlayerComponent.class).setReducedDamage(0.85, Duration.minutes(2));
                     player.getComponent(PlayerComponent.class).increaseSpeed(1.15, Duration.minutes(1));
                 });
-                System.out.println("Atomic");
+                ui.ammoCansUI("atomic");
                 break;
             case 6:
-                //Nuke Soda - boost all stats by 40% for 2 min
+                //Nuke Soda - boost all stats by 40% but reduces hp for 30% for 2 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                     player.getComponent(PlayerComponent.class).increaseWeaponDamage(1.4, Duration.minutes(2));
                     player.getComponent(PlayerComponent.class).setReducedDamage(0.6, Duration.minutes(2));
                     player.getComponent(PlayerComponent.class).increaseSpeed(1.4, Duration.minutes(1));
+                    player.getComponent(PlayerComponent.class).setHealth((int) (player.getComponent(PlayerComponent.class).getHealth() * 0.7));
                 });
-                System.out.println("Nuke");
+                ui.ammoCansUI("nuke");
                 break;
         }
     }
