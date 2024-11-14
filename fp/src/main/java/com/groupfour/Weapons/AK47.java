@@ -13,7 +13,7 @@ public class AK47 extends WeaponComponent {
 
 
     public AK47() {
-        super("AK47", 180, 800, 30, 0.35, 15);
+        super("AK47", 180, 25, 25, 0.35, 15);
     }
 
     @Override

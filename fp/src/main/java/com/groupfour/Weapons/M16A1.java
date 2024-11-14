@@ -15,7 +15,7 @@ public class M16A1 extends WeaponComponent {
 
 
     public M16A1() {
-        super("M16A1", 180, 800, 30, 0.2, 10);
+        super("M16A1", 180, 30, 30, 0.2, 10);
     }
          
     @Override
