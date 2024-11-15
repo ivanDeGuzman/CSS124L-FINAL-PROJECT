@@ -77,7 +77,7 @@ public class App extends GameApplication {
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
-    private double waveMultiplier=8; //1 is actual fun gameplay try it
+    private double waveMultiplier=10; //1 is actual fun gameplay try it //respectfully, no
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private boolean isServerStarted = false, isNearInteractable = false;
