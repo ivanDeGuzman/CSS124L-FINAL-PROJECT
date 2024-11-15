@@ -19,6 +19,8 @@ import com.groupfour.Components.ZombieComponents.HealingCircleComponent;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -49,13 +51,13 @@ public class SpawnFactory implements EntityFactory {
     @Spawns("bullet")
     public Entity newBullet(SpawnData data) {
 
-        var expireClean = new ExpireCleanComponent(Duration.seconds(5)).animateOpacity();
+        var expireClean = new ExpireCleanComponent(Duration.seconds(2.5)).animateOpacity();
 
-        Rectangle bulletShape = new Rectangle(12, 3, Color.BLACK); 
+        
 
         return entityBuilder(data)
         .type(EntityType.BULLET)
-        .viewWithBBox(bulletShape)
+        .viewWithBBox(new ImageView(new Image("/assets/textures/Weapons/Ammo.png",15 ,15, true, true)))
         .with(new NetworkComponent())
         .collidable()
         .with(new BulletComponent()) 

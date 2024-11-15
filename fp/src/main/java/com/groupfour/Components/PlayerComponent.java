@@ -34,19 +34,19 @@ public class PlayerComponent extends Component {
     private boolean shooting = false;
     private double timeSinceLastShot = 0;
     private List<WeaponComponent> weapons = new ArrayList<>();
-    private double originalSpeed = 1.5;
+    private double originalSpeed = 2;
     private double speed = originalSpeed;
     private int currentWeaponIndex = 0;
     private double reducedDamage = 1.5;
-    private int currency = 100;
+    private int currency = 0;
     private PlayerAnimComp ac;
     private Input clientInputs = new Input();
     private double angle;
     private Point2D lastMousePosition;
     private boolean isSprinting = false;
     private double STAMINA_DECAY_RATE = 5;
-    private double STAMINA_RECHARGE_RATE = 15;
-    private double STAMINA_RECHARGE_DELAY = .5;
+    private double STAMINA_RECHARGE_RATE = 10;
+    private double STAMINA_RECHARGE_DELAY = 0.75;
     private double staminaRechargeTimer = 0;
 
 
@@ -175,7 +175,6 @@ public class PlayerComponent extends Component {
         runOnce(() -> {
             getCurrentWeapon().stopFiring();
             currentWeaponIndex = (currentWeaponIndex + 1) % weapons.size();
-            System.out.println("Switched to: " + getCurrentWeapon().getName());
         }, Duration.seconds(0.5));
         animWeaponSet();
     }
@@ -193,7 +192,8 @@ public class PlayerComponent extends Component {
         if (isSprinting) {
             if (stamina > 0) {
                 stamina -= STAMINA_DECAY_RATE;
-            } else {
+            } else if (stamina <= 0) {
+                stamina = 0;
                 isSprinting = false;
             }
         } else {

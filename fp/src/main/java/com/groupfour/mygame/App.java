@@ -38,12 +38,12 @@ import com.groupfour.Factories.ZombieFactory;
 import com.groupfour.Objects.Armory;
 import com.groupfour.Objects.Microwave;
 import com.groupfour.Objects.VendingMachine;
-import com.groupfour.UI.LoadingScreen;
 import com.groupfour.UI.MainUI;
 import com.groupfour.UI.MultiplayerStart;
 import com.groupfour.UI.ObjectsUI;
 import com.groupfour.UI.PCM_BG;
-import com.groupfour.UI.PlayerCountMenu;
+import com.groupfour.UI.GameMenu;
+import com.groupfour.UI.MainMenu;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 
@@ -77,7 +77,7 @@ public class App extends GameApplication {
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
-    private double waveMultiplier=10.5; //10.5 is real, nerfed to test
+    private double waveMultiplier=8; //10.5 is real, nerfed to test
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private boolean isServerStarted = false, isNearInteractable = false;
@@ -89,13 +89,13 @@ public class App extends GameApplication {
     private PlayerComponent playerComponent;
     private MediaPlayer mediaPlayer;
 
+    public static boolean isGameRunning = false;
+
     @Override
     protected void initSettings(GameSettings settings) {
 
         settings.setTitle("Flatline: Oregon");
-        settings.setVersion("Beta ?");
         settings.addEngineService(MultiplayerService.class);
-        settings.setDeveloperMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
         //settings.setIntroEnabled(true);
@@ -108,7 +108,7 @@ public class App extends GameApplication {
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newGameMenu() {
-                return new PlayerCountMenu(
+                return new MainMenu(
                     App.this::startGame1P
                 );
             }
@@ -189,7 +189,11 @@ public class App extends GameApplication {
         getInput().addAction(new UserAction("Sprint") {
             @Override
             protected void onAction() {
-                playerComponent.setSprinting(true);
+                if (playerComponent.getStamina() > 0) {
+                    playerComponent.setSprinting(true);
+                } else {
+                    playerComponent.setSprinting(false);
+                }
             }
         
             @Override
@@ -197,19 +201,32 @@ public class App extends GameApplication {
                 playerComponent.setSprinting(false);
             }
         }, KeyCode.SPACE);
+
+        getInput().addAction(new UserAction("Game Menu") {
+            @Override
+            protected void onActionBegin() {
+                FXGL.getSceneService().pushSubScene(new GameMenu());
+            }
+        }, KeyCode.ESCAPE);
     }
 
     private void interactWithObject() { 
-        if (player.distance(vmachine) < 70) {
+        if (player.distance(vmachine) < 60) {
             vmachine.getComponent(VendingMachine.class).interact();
-        } else if (player.distance(microwave) < 70) { 
+        } else if (player.distance(microwave) < 60) { 
             microwave.getComponent(Microwave.class).interact();
-        } else if (player.distance(armory) < 70) {
-            if (waveCooldown)
+        } else if (player.distance(armory) < 60) {
+            if (waveCooldown) {
                 armory.getComponent(Armory.class).interact();
-            else objectsUI.armoryNoInteract();
+            } else {
+                if (FXGL.getGameScene().getRoot().getChildrenUnmodifiable().contains(objectsUI.armoryMenu)) {
+                    objectsUI.hideArmoryUI();
+                }
+                objectsUI.armoryNoInteract();
+            }
         }
     }
+    
 
     @Override
     public void initGame() {
@@ -226,7 +243,7 @@ public class App extends GameApplication {
     protected void initUI() {
         FXGL.runOnce(() -> {
             FXGL.getSceneService().pushSubScene(new PCM_BG());
-            FXGL.getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P));
+            FXGL.getSceneService().pushSubScene(new MainMenu(this::startGame1P));
         }, Duration.seconds(0.01));
         ui = new MainUI();
         objectsUI = new ObjectsUI();
@@ -261,6 +278,12 @@ public class App extends GameApplication {
     public void startGame1P() {
         ui.stopTitleMusic();
         
+        FXGL.runOnce(() -> {
+            var lines = getAssetLoader().loadText("startGame.txt");
+            var startCutscene = new Cutscene(lines);
+            getCutsceneService().startCutscene(startCutscene);
+        }, Duration.seconds(.5));
+
         player = spawn("player", new Point2D(1100, 250));
         vmachine = spawn("vmachine");
         microwave = spawn("microwave");
@@ -270,19 +293,12 @@ public class App extends GameApplication {
         playerComponent.setUpPlayer();
         wave=0;
 
+        
         waveAndDeathManager();
         
         
-
         getSceneService().popSubScene();
         getSceneService().popSubScene();
-
-        FXGL.runOnce(() -> {
-            var lines = getAssetLoader().loadText("startGame.txt");
-            var startCutscene = new Cutscene(lines);
-            getCutsceneService().startCutscene(startCutscene);
-        }, Duration.seconds(.5));
-
     }
 
     private void waveAndDeathManager() {
@@ -375,7 +391,7 @@ public class App extends GameApplication {
         getGameWorld().getEntities().forEach(entity -> entity.removeFromWorld());
         zombie = null;
         getSceneService().pushSubScene(new PCM_BG());
-        getSceneService().pushSubScene(new PlayerCountMenu(this::startGame1P));
+        getSceneService().pushSubScene(new MainMenu(this::startGame1P));
     }
 
     @Override

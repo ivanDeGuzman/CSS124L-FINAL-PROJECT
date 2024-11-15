@@ -11,7 +11,6 @@ import com.groupfour.Components.AnimationComponents.ZombieAnimComp;
 import com.groupfour.UI.MainUI;
 import com.groupfour.mygame.EntityTypes.EntityType;
 import javafx.geometry.Point2D;
-import javafx.util.Duration;
 
 public class ZombieComponent extends Component {
     private Entity target;
@@ -101,9 +100,13 @@ public class ZombieComponent extends Component {
 
     public void onDeath() {
         FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
-            player.getComponent(PlayerComponent.class).setCurrencyFromZombie(10);
+            if (entity.hasComponent(DoctorZombieComponent.class) || entity.hasComponent(WelderZombieComponent.class))
+                player.getComponent(PlayerComponent.class).setCurrencyFromZombie(30);
+            else if (entity.hasComponent(SpitterZombieComponent.class))
+                player.getComponent(PlayerComponent.class).setCurrencyFromZombie(25);
+            else player.getComponent(PlayerComponent.class).setCurrencyFromZombie(10);
             Random rand = new Random();
-            if (rand.nextInt(100) < 10) {
+            if (rand.nextInt(100) < 20) {
                 ui.addAmmo();
                 player.getComponent(PlayerComponent.class).setAmmoFromZombie(10);
             }

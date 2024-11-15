@@ -21,7 +21,7 @@ public class FAMAS extends WeaponComponent {
 
 
     public FAMAS() {
-        super("FAMAS", 160, 30, 30, 0.8, 20);
+        super("FAMAS", 160, 30, 30, 0.8, 30);
         this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer(); 
     }

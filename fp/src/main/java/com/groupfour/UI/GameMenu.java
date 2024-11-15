@@ -8,26 +8,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class PlayerCountMenu extends FXGLMenu {
-    private MainUI ui = new MainUI();
-    public PlayerCountMenu(Runnable onOnePlayer) {
+public class GameMenu extends FXGLMenu {
+
+    public GameMenu() {
         super(MenuType.GAME_MENU);
-        
-        playerButton onePlayerButton = new playerButton(FXGL.image("spbtn.png"), onOnePlayer);
+
         playerButton returnButton = new playerButton(FXGL.image("return.png"), () -> {
-            FXGL.getDialogService().showConfirmationBox("Are you sure you want to return to the main menu?", answer -> {
-                if (answer) {
-                    getGameController().gotoMainMenu();
-                    ui.playTitleMusic();
-                }
-            });
+            fireResume();
+        });
+        playerButton mmButton = new playerButton(FXGL.image("mm.png"), () -> {
+            getGameController().gotoMainMenu();
         });
 
-        var box = new VBox(15, onePlayerButton, returnButton);
+        var box = new VBox(15, returnButton, mmButton);
         box.setTranslateX(getAppWidth() * 0.32);
         box.setTranslateY(getAppHeight() * 0.30);
 
@@ -35,23 +31,14 @@ public class PlayerCountMenu extends FXGLMenu {
     }
 
     private static class playerButton extends StackPane {
-        private Image image;
-        private Runnable action;
-
         public playerButton(Image image, Runnable action) {
-            this.image = image;
-            this.action = action;
-        
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(300);
             imageView.setFitHeight(300);
             imageView.setPreserveRatio(true);
 
             getChildren().addAll(imageView);
-            setOnMouseClicked(e -> {
-                action.run();
-            });
-
+            setOnMouseClicked(e -> action.run());
             setOnMouseEntered(e -> imageView.setOpacity(0.7));
             setOnMouseExited(e -> imageView.setOpacity(1.0));
         }

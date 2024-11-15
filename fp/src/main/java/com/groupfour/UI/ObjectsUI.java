@@ -10,13 +10,16 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.FontFactory;
 import com.groupfour.Components.PlayerComponent;
 import com.groupfour.Components.WeaponComponent;
+import com.groupfour.Weapons.AK47;
 import com.groupfour.Weapons.FAMAS;
 import com.groupfour.Weapons.M16A1;
+import com.groupfour.Weapons.SawedOff;
 import com.groupfour.mygame.EntityTypes.EntityType;
 
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -30,7 +33,7 @@ import javafx.util.Duration;
 
 public class ObjectsUI extends Parent {
     
-    private VBox armoryMenu;
+    public VBox armoryMenu;
     private Font customFont;
     private String cansImageLink;
     private PlayerComponent pc;
@@ -203,7 +206,7 @@ public class ObjectsUI extends Parent {
         weaponsForSale.setVgap(10);
     
         // List of weapons
-        String[] weaponNames = {"FAMAS", "M16A1", "AK47", "Sawed-off"};
+        String[] weaponNames = {"FAMAS", "M16A1", "AK47", "Sawed Off"};
         String[] weaponPrices = {"$100", "$300", "$600", "$500"};
         String[] weaponImageLinks = {
             "/assets/textures/Weapons/Idle/FAMAS_UI.png", 
@@ -252,21 +255,19 @@ public class ObjectsUI extends Parent {
             weaponsForSale.add(weaponBox, i % 2, i / 2);
         }
 
-        Text back = new Text("Return");
-        back.setFill(Color.WHITE);
-        back.setFont(Font.font("Cambria Math", 14));
-        VBox backBtn = new VBox(back);
+        Button backBtn = new Button("Return");
+        backBtn.setFont(customFont);
         backBtn.setAlignment(Pos.CENTER);
-        backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+        backBtn.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8); -fx-border-color: gray; -fx-padding: 6px;" +
                 "-fx-border-insets: 6px;" +
                 "-fx-background-insets: 6px;");
         backBtn.setOnMouseEntered(e -> {
-            backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5); -fx-border-color: black; -fx-padding: 6px;" +
+            backBtn.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-border-color: gray; -fx-padding: 6px;" +
                     "-fx-border-insets: 6px;" +
                     "-fx-background-insets: 6px;");
         });
         backBtn.setOnMouseExited(e -> {
-            backBtn.setStyle("-fx-background-color: rgba(0, 0, 0, 1); -fx-border-color: black; -fx-padding: 6px;" +
+            backBtn.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8); -fx-border-color: gray; -fx-padding: 6px;" +
                     "-fx-border-insets: 6px;" +
                     "-fx-background-insets: 6px;");
         });
@@ -292,10 +293,14 @@ public class ObjectsUI extends Parent {
                 price = 300; 
                 newWeapon = new M16A1(); 
                 break; 
-            // case "AK47": 
-            //     newWeapon = new AK47(); 
-            //     price = 250; 
-            //     break;
+            case "AK47": 
+                 newWeapon = new AK47(); 
+                 price = 650; 
+                 break;
+            case "Sawed Off":
+                newWeapon = new SawedOff();
+                price = 500;
+                break;
         }
         if (pc.getCurrency() >= price) {
             pc.setCurrencyFromArmory(pc.getCurrency() - price);

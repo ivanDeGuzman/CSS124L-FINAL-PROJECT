@@ -9,6 +9,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.multiplayer.MultiplayerService;
 import com.almasb.fxgl.net.Connection;
+import com.groupfour.mygame.EntityTypes.EntityType;
+
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -93,9 +95,14 @@ public abstract class WeaponComponent extends Component {
 
         double adjustedX = Math.cos(playerRotationRadians) - Math.sin(playerRotationRadians); 
         double adjustedY = Math.sin(playerRotationRadians) + Math.cos(playerRotationRadians);
-
-        double bulletX = position.getX() + adjustedX;
-        double bulletY = position.getY() + adjustedY;
+        double bulletX, bulletY;
+        if (FXGL.getGameWorld().getSingleton(EntityType.PLAYER).getComponent(PlayerComponent.class).getCurrentWeapon().getName() == "Beretta M9") {
+            bulletX = position.getX() * 1.005 + adjustedX - 15;
+            bulletY = position.getY() + adjustedY - 10;
+        } else {
+            bulletX = position.getX() * 1.01 + adjustedX - 22;
+            bulletY = position.getY() + adjustedY - 10;
+        }
 
         var data = new SpawnData(bulletX, bulletY)
             .put("direction", new Point2D(bulletX, bulletY))
@@ -106,11 +113,8 @@ public abstract class WeaponComponent extends Component {
         bullet.getComponent(BulletComponent.class).setDirection(direction);
 
         double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
-        bullet.setRotation(angle);
+        bullet.setRotation(angle + 90);
 
-        if (isServer) {
-            FXGL.getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
-        }
     }
 
     public String getName() {

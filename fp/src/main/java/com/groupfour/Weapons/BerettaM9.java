@@ -30,6 +30,7 @@ public class BerettaM9 extends WeaponComponent {
         if (ammo > 0 && !getIsReloading()) {
             isFiring = true;
             audioPlayer.playSound(shootSound);
+            
             ammo--;
             Point2D position = player.getCenter();
             Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();

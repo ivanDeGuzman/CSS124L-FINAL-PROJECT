@@ -16,21 +16,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 
-public class PCM_BG extends FXGLMenu {
+public class PCM_BG extends SubScene {
 
     public PCM_BG() {
-        super(MenuType.GAME_MENU);
         StackPane stackpane = new StackPane();
         Image bgImage = FXGL.image("banner.png");
 
-        BoxBlur bb = new BoxBlur();
-        bb.setIterations(1);
 
         ImageView backgroundImageView = new ImageView(bgImage);
         backgroundImageView.setFitWidth(getAppWidth());
         backgroundImageView.setFitHeight(getAppHeight());
-        backgroundImageView.setPreserveRatio(false);
-        backgroundImageView.setEffect(bb);
+        
         stackpane.getChildren().add(backgroundImageView);
         getContentRoot().getChildren().add(stackpane);
     }

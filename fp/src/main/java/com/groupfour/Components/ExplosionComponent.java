@@ -1,4 +1,4 @@
-package com.groupfour.Components.ZombieComponents;
+package com.groupfour.Components;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
@@ -6,6 +6,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import com.groupfour.Components.PlayerComponent;
+import com.groupfour.Components.ZombieComponents.ZombieComponent;
 import com.groupfour.mygame.EntityTypes;
 import javafx.util.Duration;
 

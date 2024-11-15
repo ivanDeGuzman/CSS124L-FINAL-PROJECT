@@ -17,7 +17,7 @@ public class AK47 extends WeaponComponent {
     private AudioPlayer audioPlayer;
 
     public AK47() {
-        super("AK47", 180, 25, 25, 0.35, 15);
+        super("AK47", 180, 25, 25, 0.35, 20);
         this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer();
     }
@@ -28,11 +28,10 @@ public class AK47 extends WeaponComponent {
         if(!initialized){
             FXGL.run(() -> {
                 if(isFiring){
-                    audioPlayer.playSound(shootSound);
-                    if (ammo < 1||getIsReloading()) {
-                        isFiring=false;
-                    }
-                    shoot(player);
+                    if (ammo > 0 && !getIsReloading()) {
+                        audioPlayer.playSound(shootSound);
+                        shoot(player);
+                    } else isFiring = false;
                 }
             }, Duration.seconds(fireRate));
         initialized=true;
@@ -44,15 +43,9 @@ public class AK47 extends WeaponComponent {
     }
 
     private void shoot(Entity player) {
-        //playing with sounds, dont mind it - padua
-        //if (isFiring) FXGL.play("AK47.wav");
         ammo--;
-        System.out.println(name + " fired. Ammo left: " + ammo);
         Point2D position = player.getCenter();
         Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
         spawnBullet(position, direction);
-        if (ammo == 0) {
-            System.out.println(name + " out of ammo");
-        }
     }
 }

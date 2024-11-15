@@ -124,17 +124,6 @@ public class ZombieFactory implements EntityFactory {
                 .build();
     }
 
-//    @Spawns("healingCircle")
-//    public Entity newHealingCircle(SpawnData data) {
-//        return entityBuilder(data)
-//                .at(data.getX(), data.getY())
-//                .type(EntityType.ENEMY_PROJECTILE)
-//                .viewWithBBox(new Circle(200, Color.rgb(0, 255, 0)))
-//                .with(new HealingCircleComponent(data.get("radius"), 0.20, Duration.seconds(1)))
-//                .with(new ExpireCleanComponent(Duration.seconds(10))) // lasts for 10 seconds
-//                .build();
-//    }
-
     @Spawns("guard")
     public Entity newGuardZombie(SpawnData data) {
         return commonZombieSetup(data, 200)

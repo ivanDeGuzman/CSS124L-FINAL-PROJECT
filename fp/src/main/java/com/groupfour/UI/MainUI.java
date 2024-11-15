@@ -89,16 +89,17 @@ public class MainUI extends Parent {
     }
 
     public void goldUI() {
-        customFont = loadFont("PIXELADE.TTF", 50);
-        ImageView goldImage = new ImageView(new Image("/assets/textures/Players/Gold.png"));
         HBox goldBox = new HBox();
+        customFont = loadFont("PIXELADE.TTF", 50);
+        ImageView goldImage = new ImageView(new Image("/assets/textures/Players/Gold.png", 50, 50, true, false));
+        
 
         goldText = new Text();
         goldText.setFill(Color.GOLD);
         goldText.setFont(customFont);
         goldBox.setTranslateX(50);
         goldBox.setTranslateY(20);
-        goldImage.setTranslateY(15);
+        goldImage.setTranslateY(3);
         HBox.setMargin(goldText, new Insets(0, 0, 0, 10));
         goldBox.getChildren().addAll(goldImage, goldText);
         getChildren().add(goldBox);
@@ -108,7 +109,7 @@ public class MainUI extends Parent {
         customFont = loadFont("PIXELADE.TTF", 29);
         stack = new StackPane();
         healthBar = new Region();
-        healthBar.setStyle("-fx-background-color: green; -fx-background-radius: 15px");
+        healthBar.setStyle("-fx-background-color: green;");
 
         healthBarBorder = new Region();
 
@@ -178,19 +179,13 @@ public class MainUI extends Parent {
         currentGun = new Text();
 
         showAmmo.setFont(customFont);
-
+        showAmmo.setTranslateX(20);
         customFont = loadFont("PIXELADE.TTF", 30);
         currentGun.setFont(customFont);
-        ImageView ammoImage = new ImageView(new Image("/assets/textures/Weapons/Ammo.png"));
-        ammoImage.setTranslateY(3);
 
-        HBox.setMargin(showAmmo, new Insets(0, 0, 0, 10));
-        //ammoBox.setTranslateX(-30);
-        ammoBox.getChildren().addAll(ammoImage, showAmmo);
+        ammoBox.getChildren().addAll(showAmmo);
 
-
-        weaponBox.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: black; -fx-border-radius: 15px");
-        ammoBox.setStyle("-fx-background-color: gray; -fx-background-radius: 0px 0px 15px 15px");
+        ammoBox.setMinWidth(125);
         gunBox.setPadding(new Insets(0, 0, 0, 5));
         weaponBox.setTranslateX(getAppWidth() * 0.80);
         weaponBox.setTranslateY(getAppHeight() * 0.67);
@@ -340,7 +335,6 @@ public class MainUI extends Parent {
     }
 
     public void stopTitleMusic() {
-        // System.out.println("stopTitleMusic called " + stopMusicCallCount + " times.");
         FXGL.getAudioPlayer().stopAllMusic();
     }
 }

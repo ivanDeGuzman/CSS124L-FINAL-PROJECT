@@ -20,7 +20,7 @@ public class M16A1 extends WeaponComponent {
     private AudioPlayer audioPlayer;
 
     public M16A1() {
-        super("M16A1", 180, 30, 30, 0.2, 10);
+        super("M16A1", 180, 30, 30, 0.2, 15);
         this.shootSound = FXGL.getAssetLoader().loadSound("BerettaM9_Shoot.mp3");
         this.audioPlayer = FXGL.getAudioPlayer(); 
     }
@@ -31,11 +31,10 @@ public class M16A1 extends WeaponComponent {
         if(!initialized){
             FXGL.run(() -> {
                 if(isFiring){
-                    if (ammo < 1||getIsReloading()) {
-                        isFiring=false;
-                    }
-                    audioPlayer.playSound(shootSound);
-                    shoot(player);
+                    if (ammo > 0 && !getIsReloading()) {
+                        audioPlayer.playSound(shootSound);
+                        shoot(player);
+                    } else isFiring = false;
                 }
             }, Duration.seconds(fireRate));
         initialized=true;
@@ -47,15 +46,9 @@ public class M16A1 extends WeaponComponent {
     }
 
     private void shoot(Entity player) {
-        //playing with sounds, dont mind it - padua
-        //if (isFiring) FXGL.play("m16a1.wav");
         ammo--;
-        System.out.println(name + " fired. Ammo left: " + ammo);
         Point2D position = player.getCenter();
         Point2D direction = FXGL.getInput().getMousePositionWorld().subtract(position).normalize();
         spawnBullet(position, direction);
-        if (ammo == 0) {
-            System.out.println(name + " out of ammo");
-        }
     }
 }
