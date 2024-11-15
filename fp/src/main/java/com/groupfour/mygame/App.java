@@ -284,7 +284,7 @@ public class App extends GameApplication {
             loreVideo.setFitWidth(getAppWidth());
             loreVideo.setFitHeight(getAppHeight());
             getCutsceneService().startVideoCutscene(loreVideo);
-        }, Duration.seconds(.2));
+        }, Duration.seconds(.3));
         
         FXGL.runOnce(() -> {
             var lines = getAssetLoader().loadText("startGame.txt");
