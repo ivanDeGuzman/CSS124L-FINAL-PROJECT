@@ -15,6 +15,6 @@ A Top-Down Shooter Game where you try to survive as long as you can with the var
 + [Azyur-i](https://github.com/Azyur-i) | Fernando, Heughric
 + [XenDeQwak](https://github.com/XenDeQwak) | Padua, Xean Xyrone
 + [Tataroos](https://github.com/Tataroos) | Almandres, Villy Joel
-+ [Centhor](../CONTRIBUTING.md) | Hizon, Vincent
++ [Centbhi](../CONTRIBUTING.md) | Hizon, Vincent
 + [Viercee](https://github.com/Viercee) | Jacob, John Andrew
 + [deGuzman](https://github.com/deguzman0528) | De Guzman, Ivan
