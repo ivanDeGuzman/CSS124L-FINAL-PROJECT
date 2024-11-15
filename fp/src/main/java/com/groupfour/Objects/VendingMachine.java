@@ -80,12 +80,12 @@ public class VendingMachine extends Component {
                 ui.ammoCansUI("atomic");
                 break;
             case 6:
-                //Nuke Soda - boost all stats by 40% but reduces hp for 30% for 2 min
+                //Nuke Soda - boost all stats by 40% for 2 min
                 FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).forEach(player -> {
                     player.getComponent(PlayerComponent.class).increaseWeaponDamage(1.4, Duration.minutes(2));
                     player.getComponent(PlayerComponent.class).setReducedDamage(0.6, Duration.minutes(2));
                     player.getComponent(PlayerComponent.class).increaseSpeed(1.4, Duration.minutes(1));
-                    player.getComponent(PlayerComponent.class).setHealth((int) (player.getComponent(PlayerComponent.class).getHealth() * 0.7));
+                    
                 });
                 ui.ammoCansUI("nuke");
                 break;

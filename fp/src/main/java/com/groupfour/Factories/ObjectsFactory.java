@@ -60,7 +60,7 @@ public class ObjectsFactory implements EntityFactory {
     public Entity newArmory(SpawnData data) {
         return entityBuilder(data)
         .type(EntityType.ARMORY)
-        .viewWithBBox(new Rectangle(100, 50, Color.GRAY))
+        .viewWithBBox("ArmoryTileset.png")
         .at(1000, 400)
         .collidable()
         .with(new NetworkComponent())

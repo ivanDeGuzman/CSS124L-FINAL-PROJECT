@@ -121,7 +121,7 @@ public class ObjectsUI extends Parent {
     }
 
     public void showCanInteract() {
-        customFont = loadFont("PIXELADE.TTF", 25);
+        customFont = loadFont("PIXELADE.TTF", 30);
         
         Text canInteract = new Text("Press 'F' to interact");
         
@@ -144,31 +144,42 @@ public class ObjectsUI extends Parent {
 
     public void ammoCansUI(String name) {
         StackPane cansUI = new StackPane();
+        customFont = loadFont("PIXELADE.TTF", 75);
+        
         ImageView cansImage;
+        Text canName = new Text();
         switch(name) {
             case "energy":
                 cansImageLink = "/assets/textures/SodaCans/Energy_Drink.png";
+                canName.setText("Speed up!");
                 break;
             case "fizzy":
                 cansImageLink = "/assets/textures/SodaCans/Cactus_Mix.png";
+                canName.setText("Annihilate them!");
                 break;
             case "tsludge":
                 cansImageLink = "/assets/textures/SodaCans/Toxic_Sludge.png";
+                canName.setText("Kill or be killed");
                 break;
             case "icecold":
                 cansImageLink = "/assets/textures/SodaCans/Ice_Cold_Brew.png";
+                canName.setText("Defense > Offense");
                 break;
             case "atomic":
                 cansImageLink = "/assets/textures/SodaCans/Atomic_Tonic.png";
+                canName.setText("ALL STAT UP!");
                 break;
             case "nuke":
                 cansImageLink = "/assets/textures/SodaCans/Nuclear_Soda.png";
+                canName.setText("MAJOR STAT BOOST!");
                 break;
             
             
         }
             cansImage = new ImageView(new Image(cansImageLink, 300, 300, false, true));
-            cansUI.getChildren().add(cansImage);
+            canName.setFont(customFont);
+            canName.setFill(Color.WHITE);
+            cansUI.getChildren().addAll(cansImage, canName);
             cansUI.setPrefSize(800, 600);
             cansUI.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5)");
 

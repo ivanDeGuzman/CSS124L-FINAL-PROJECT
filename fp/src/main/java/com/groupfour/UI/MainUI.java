@@ -68,6 +68,7 @@ public class MainUI extends Parent {
         healthBar();
         staminaBar();
         gunUI();
+        controls();
         waveUI();
                 
     }
@@ -282,32 +283,20 @@ public class MainUI extends Parent {
     private String toRgbString(Color color) {
         return String.format("rgb(%d, %d, %d)", (int)(color.getRed() * 255), (int)(color.getGreen() * 255), (int)(color.getBlue() * 255));
     }
-
-    public void waitServerStart() {
-        waitLayout = new StackPane();
-        clientText = new Text("Server not started yet, please wait");
-        waitLayout.getChildren().add(clientText);
-
-        clientText.setFont(Font.font("Arial", 24));
-        clientText.setFill(Color.WHITE);
-        
-        waitLayout.setPrefSize(800, 600);
-        waitLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7)");
-        
-        
-        getChildren().add(waitLayout);
-        
-    }
+    
 
     public void removeWaitingUI() { 
         getChildren().remove(waitLayout); 
     }
 
-    public void setupMinimap(GameWorld gameWorld) {
-         var minimap = new MinimapView(FXGL.getGameWorld(), 800, 800, 200, 100);
-         minimap.setEntityColor(Color.GREEN);
-    
-         FXGL.getGameScene().addUINode(minimap);
+    public void controls() {
+        customFont = loadFont("PIXELADE.TTF", 25);
+        Text ctrlText = new Text("'R': Reload\n'SPACE': Sprint\n'Q': Swap weapons");
+        ctrlText.setFont(customFont);
+        ctrlText.setTranslateX(25);
+        ctrlText.setTranslateY(getAppHeight() * 0.9);
+        getChildren().add(ctrlText);
+
     }
     
     public void waveUI() {
