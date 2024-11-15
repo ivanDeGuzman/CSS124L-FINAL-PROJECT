@@ -77,7 +77,7 @@ public class App extends GameApplication {
     private MainUI ui;
     private int wave;
     private Entity newPlayer;
-    private double waveMultiplier=8; //10.5 is real, nerfed to test
+    private double waveMultiplier=8; //1 is actual fun gameplay try it
     private boolean waveCooldown = false;
     private boolean isWaveSpawning;
     private boolean isServerStarted = false, isNearInteractable = false;
@@ -348,7 +348,6 @@ public class App extends GameApplication {
         }
 
         for(int guardWave=wave;guardWave>6;guardWave/=2){
-            i = 0;
             Duration delay = interval.multiply(i);
             runOnce(() -> {
                 spawn("guard");
@@ -357,7 +356,7 @@ public class App extends GameApplication {
         }
 
         for(int spitterWave=wave;spitterWave>4;spitterWave/=2){
-            i = 0;
+
             Duration delay = interval.multiply(i);
             runOnce(() -> {
                 spawn("spitter");
@@ -366,7 +365,7 @@ public class App extends GameApplication {
         }
 
         for(int doctorWave=wave;doctorWave>8;doctorWave/=2){
-            i = 0;
+
             Duration delay = interval.multiply(i);
             runOnce(() -> {
                 spawn("doctor");
@@ -375,7 +374,7 @@ public class App extends GameApplication {
         }
 
         for(int welderWave=wave;welderWave>2;welderWave/=2){
-            i = 0;
+
             Duration delay = interval.multiply(i);
             runOnce(() -> {
                 spawn("welder");
