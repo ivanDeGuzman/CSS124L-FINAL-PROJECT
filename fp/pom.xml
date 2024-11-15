@@ -13,7 +13,7 @@
          <dependency>
             <groupId>com.github.almasb</groupId>
             <artifactId>fxgl</artifactId>
-            <version>dev-SNAPSHOT</version>
+            <version>21.1</version>
         </dependency>
         <!-- <dependency>
             <groupId>org.openjfx</groupId>
