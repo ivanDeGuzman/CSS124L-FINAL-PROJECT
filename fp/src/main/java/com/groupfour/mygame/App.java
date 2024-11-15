@@ -98,7 +98,7 @@ public class App extends GameApplication {
         settings.addEngineService(MultiplayerService.class);
         settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true);
-        //settings.setIntroEnabled(true);
+        settings.setIntroEnabled(true);
         //implement later
         // settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
         // settings.getCredits().addAll(Arrays.asList(
@@ -277,6 +277,14 @@ public class App extends GameApplication {
 
     public void startGame1P() {
         ui.stopTitleMusic();
+
+        FXGL.runOnce(() -> {
+            var loreVideo = getAssetLoader().loadVideo("loreVideo.mp4");
+            System.out.println("Width: " + getAppWidth() + " Height: " + getAppHeight());
+            loreVideo.setFitWidth(getAppWidth());
+            loreVideo.setFitHeight(getAppHeight());
+            getCutsceneService().startVideoCutscene(loreVideo);
+        }, Duration.seconds(.2));
         
         FXGL.runOnce(() -> {
             var lines = getAssetLoader().loadText("startGame.txt");
