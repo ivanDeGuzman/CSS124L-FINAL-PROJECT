@@ -13,6 +13,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class GameMenu extends FXGLMenu {
 
+     MainUI ui = new MainUI();
+    
     public GameMenu() {
         super(MenuType.GAME_MENU);
 
@@ -20,6 +22,7 @@ public class GameMenu extends FXGLMenu {
             fireResume();
         });
         playerButton mmButton = new playerButton(FXGL.image("mm.png"), () -> {
+            ui.playTitleMusic();
             getGameController().gotoMainMenu();
         });
 
